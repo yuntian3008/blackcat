@@ -1,0 +1,74 @@
+.badge-color-red {
+  background-color: rgb(255, 99, 132);
+  color: #ffffff;
+}
+
+.badge-color-orange {
+  background-color: rgb(255, 159, 64);
+  color: #ffffff;
+}
+
+.badge-color-yellow {
+  background-color: rgb(255, 205, 86);
+  color: #ffffff;
+}
+
+.badge-color-green {
+  background-color: rgb(75, 192, 192);
+  color: #ffffff;
+}
+
+.badge-color-blue {
+  background-color: rgb(54, 162, 235);
+  color: #ffffff;
+}
+
+.badge-color-purple {
+  background-color: rgb(153, 102, 255);
+  color: #ffffff;
+}
+
+.badge-color-grey {
+  background-color: rgb(201, 203, 207);
+}
+
+
+
+@for $i from 0 through 10 {
+  $key: $i * 0.1;
+  .badge-color-red-#{$i} {
+    background-color: rgb(255, 99, 132, $key);
+  }
+
+  .badge-color-orange-#{$i} {
+    background-color: rgb(255, 159, 64, $key);
+  }
+
+  .badge-color-yellow-#{$i} {
+    background-color: rgb(255, 205, 86, $key);
+  }
+
+  .badge-color-green-#{$i} {
+    background-color: rgb(75, 192, 192, $key);
+  }
+
+  .badge-color-blue-#{$i} {
+    background-color: rgb(54, 162, 235, $key);
+  }
+
+  .badge-color-purple-#{$i} {
+    background-color: rgb(153, 102, 255, $key);
+  }
+
+  .badge-color-grey-#{$i} {
+    background-color: rgb(201, 203, 207, $key);
+  }
+}
+
+@for $i from 1 through 16 {
+  $size: 8*$i;
+
+  .fsize-#{$size} {
+    font-size: $size + px;
+  }
+}
