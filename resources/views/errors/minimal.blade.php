@@ -66,7 +66,7 @@
             </div>
 
             <div class="next">
-                <a style="text-decoration: none; color: green" href="{{ route('admin.index') }}"> Back
+                <a style="text-decoration: none; color: green" href="#{{-- {{ route('admin.index') }} --}}"> Back
                 </a>/
                 <a style="text-decoration: none; color: orange" href="{{ route('logout') }}"
                    onclick="event.preventDefault();

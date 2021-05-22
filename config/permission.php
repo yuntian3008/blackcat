@@ -11,7 +11,7 @@ return [
 
 	'api' => [
 		'Api\V1\CategoriesController' => 'contentmanagement',
-		'Api\V1\PlantsController' => 'contentmanagement',
+		'Api\V1\ProductsController' => 'productmanager',
 		'Api\V1\UsersController' => '*',
 		'Api\V1\PermissionsController' => 'superadmin',
 	],

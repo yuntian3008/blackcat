@@ -26,8 +26,12 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.0",
         "chart.js": "^2.9.3",
+        "hover.css": "^2.3.2",
         "vue-chartjs": "^3.5.1",
+        "vue-confirm-dialog": "^1.0.2",
+        "vue-currency-input": "^1.22.6",
         "vue-loading-overlay": "^3.4.2",
+        "vue-numeric": "^2.4.2",
         "vue-router": "^3.4.5",
         "vue2-dropzone": "^3.6.0"
     }

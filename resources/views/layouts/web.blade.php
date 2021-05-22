@@ -1,147 +1,136 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <meta name="api-token" content="null">
     <title>@yield('title') - {{ config('app.name', 'Miaogo') }}</title>
 
-    <link rel="shortcut icon" type="image/png" href="{{asset('favicon.ico')}}"/>
-    <!-- Scripts -->
+    {{-- <link rel="shortcut icon" href="../_public/images/logo/favicon.ico" type="image/x-icon"> --}}
+
+    {{-- <link rel="icon" href="../_public/images/logo/favicon.ico" type="image/x-icon"> --}}
+
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <!-- Google Analytics -->
-    <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-XXXXX-Y', 'auto');
-    ga('send', 'pageview');
-    </script>
-    <!-- End Google Analytics -->
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149774644-1"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-149774644-1');
-    </script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{asset('css/fontawesome/css/all.css')}}">
 
     <!-- Styles -->
+    <link href="{{ asset('css/utilities.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <style>
-        body {
-        background: url('/assets/images/default/home-background.jpeg');
-        background-size: 100% auto;
-        background-repeat: no-repeat;   
-        min-height: 100vh;
-    }
-        .navbar-dark a
-        {
-            color: #000000;
-        }
-        .navbar-dark a:hover
-        {
-            color: #b3ffb3;
-            background: #5D8A4B;
-            transition: 0.4s;
-        }
-        .navbar-toggler {
-            font-size: 1.125rem;
-            line-height: 1;
-            background-color: #5D8A4B;
-            border: 1px solid #ffffff;
-            border-radius: 0.25rem;
-        }
-        .bd-footer {
-            background-color: transparent;
-        }
-    </style>
+    
     @yield('style')
+    
 </head>
+
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-lg pt-3">
-            <div class="container-fluid">
-                <div class="row w-100">
-                    <a class="col navbar-brand m-0" href="{{ route('home')}}"><img src="{{asset("assets/images/default/Miaogo.png")}}" alt="Brand" height="100px" width="100px"></a>
-                    <button class="navbar-toggler p-0" data-target="#my-nav" data-toggle="collapse" aria-controls="my-nav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"><i class="fas fa-bars py-1 text-white"></i></span>
-                    </button>
-                    <div id="my-nav" class="collapse navbar-collapse col-md-9">
-                        
-                        <ul class="navbar-nav navbar-dark mr-auto">
-                            {{-- 
-                             --}}
-                            <li class="nav-item">
-                                <a class="nav-link px-3 rounded-pill" href="/">HOME</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link px-3 rounded-pill" href="{{route('categories')}}">PRODUCTS</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link px-3 rounded-pill" href="https://github.com/thiensgith/web0001">GITHUB</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link px-3 rounded-pill" href="{{route('admin.index')}}">ADMIN (WARNING!! DEVVV)</a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav navbar-dark    ml-auto">
-                            {{-- @guest
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                    
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @else
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('user_dashboard')}}">
-                                        {{ Auth::user()->fname }} <span class="caret"></span>
-                                    </a>
-    
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
-                                           onclick="event.preventDefault();
-                                                         document.getElementById('logout-form').submit();">
-                                            {{ __('Logout') }}
-                                        </a>
-    
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            @csrf
-                                        </form>
-                                    </div>
-                                </li>
-                            @endguest --}}
+    <!-- ============= MENU ============== -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-light fixed-top fsize-20 p-md-0">
+        <a class="navbar-brand abs fsize-40 mx-md-3 text-brown" href="#">
+            {{-- <img src="{{ asset('assets/images/logo/WantedCoffee.png') }}" width="100" height="100" class="d-inline-block align-top mr-2" alt="" loading="lazy"> --}}WANTED COFFEE
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse pl-3" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link hvr-underline-from-left py-3 mr-2 text-brown" href="{{ route('home') }}">HOME</a>
+                </li>
+                <li class="nav-item subnav">
+                    <a class="nav-link hvr-underline-from-left py-3 mr-2 dropdown-toggle text-brown" href="#">CATEGORY</a>
+                    <div class="subnav-content p-3">
+                        <div class="single category">
+                            <h3 class="side-title">Category</h3>
+                            <ul class="list-unstyled">
+                                @foreach ($navbar_data as $category)
+                                    <li><a href="{{ route('products', $category->category_slug) }}" title="">{{ $category->category_name }} <span class="float-right">{{ $category->products()->where('product_visible', 1)->count() }}</span></a></li>
+                                @endforeach
+                                
+                            </ul>
+                       </div>
+                        {{-- <div class="row no-gutters">
+                            <div class="col-md-3 p-1">
+                                <h5 class="m-0 text-brown mb-3">BARISTA</h5>
+                                <ul class="list-unstyled text-small">
+                                    <li><a class="text-warning subimg" href="#">BARISTA TOOLS</a></li>
+                                    <li><a class="text-warning subimg" href="#">BOOKS</a></li>
+                                    <li><a class="text-warning subimg" href="#">CUPS AND MUGS</a></li>
+                                    <li><a class="text-warning subimg" href="#">MILK JUGS & LATTE ART</a></li>
+                                    <li><a class="text-warning subimg" href="#">TEMPERS</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="col-md-3 p-1">
+                                <h5 class="m-0 text-brown mb-3">BREWING</h5>
+                                <ul class="list-unstyled text-small">
+                                    <li><a class="text-warning subimg" href="#">BREWERS</a></li>
+                                    <li><a class="text-warning subimg" href="#">FILTERS</a></li>
+                                    <li><a class="text-warning subimg" href="#">GRINDERS & ACCESSORIES</a></li>
+                                    <li><a class="text-warning subimg" href="#">KATTLES AND SCALES</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="col-md-3 p-1">
+                                <h5 class="m-0 text-brown mb-3">MACHINES</h5>
+                                <ul class="list-unstyled text-small">
+                                    <li><a class="text-warning subimg" href="#">MACHINES</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="col-md-3 p-1">
+                                <h5 class="m-0 text-brown mb-3">ROASTING</h5>
+                                <ul class="list-unstyled text-small">
+                                    <li><a class="text-warning subimg" href="#">ROASTING</a></li>
+                                </ul>
+                            </div>
+                        </div> --}}
+                    </div>
+                </li>
+                {{-- <li class="nav-item">
+                    <div id="searchzone">
+                        <a id="ad-search" class="text-white" href="#">Advanced search</a>
+                        <div class="search-container">
+                            <input type="text" placeholder="Search..." id="search-bar">
+                            <div class="search"></div>
+                            <a href="#" id="advanced-search">Search more</a>
+                        </div>
+                        <ul class="search-bar list-group" id="search-result">   
                         </ul>
                     </div>
-                </div>
-            </div>
-        </nav>
-        <main>
-                @yield('content')
-        </main>
-    </div>
-    <footer class="bd-footer text-muted">
-        <div class="container-fluid p-3 p-md-5">
-            <ul class="bd-footer-links">
-            <li><a href="https://github.com/thiensgith/web0001">GitHub</a></li>
-            <li><a href="https://www.facebook.com/borntodiee">A Cute Cat</a></li>
-            <li><a href="#">About</a></li>
+                    
+                    
+                    <!-- <a class="nav-link hvr-underline-from-left py-3 mr-2 text-brown" href="#"><i class="fas fa-search mx-2"></i></a> -->
+                </li> --}}
             </ul>
-            <p>Designed and built with all the love of <a href="https://www.facebook.com/borntodiee">A Cute Cat</a> with the help of <a href="#">open source</a>.</p>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link hvr-underline-from-left py-3 mr-2 text-brown" href="#"><i class="fas fa-shopping-cart mx-2" id="iconCartCount"></i></a>
+                </li>
+                <li class="nav-item" id="auth">
+                    
+                </li>
+            </ul>
         </div>
-    </footer>
+    </nav>
+    <!-- =========================== -->
+    <main class="@yield('main-class')">
+        @yield('content')
+    </main>
+
+    {{-- <script type="text/javascript">
+        // $.getJSON( "../data.json", function( data ) {
+        //     alert(data.logged);
+        // });
+    </script>
+    <div insert-html="../_template/footer_category_coffee.html"></div>
+    <script src="../_public/js/lib/jquery-3.5.1.min.js"></script>
+    <script data-main="../_public/js/main" src="../_public/js/require.js"></script> --}}
+    @yield('script')
 </body>
+
 </html>

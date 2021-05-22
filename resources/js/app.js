@@ -9,7 +9,8 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router';
 
 window.Vue.use(VueRouter);
-
+Vue.config.debug = true;
+Vue.config.devtools = true;
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -30,15 +31,18 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 // PERSONAL
+import VueConfirmDialog from 'vue-confirm-dialog';
+Vue.use(VueConfirmDialog)
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 import Security from './components/Security.vue';
 
 // MANAGER
 import DashboardIndex from './components/dashboard/DashboardIndex.vue';
 
-import UsersIndex from './components/users/UsersIndex.vue';
-import UsersCreate from './components/users/UsersCreate.vue';
-import UsersEdit from './components/users/UsersEdit.vue';
+import CustomersIndex from './components/customers/CustomersIndex.vue';
+import CustomersCreate from './components/customers/CustomersCreate.vue';
+import CustomersEdit from './components/customers/CustomersEdit.vue';
 
 import PermissionsIndex from './components/permissions/PermissionsIndex.vue';
 import PermissionsCreate from './components/permissions/PermissionsCreate.vue';
@@ -47,33 +51,33 @@ import CategoriesIndex from './components/categories/CategoriesIndex.vue';
 import CategoriesCreate from './components/categories/CategoriesCreate.vue';
 import CategoriesEdit from './components/categories/CategoriesEdit.vue';
 
-import PlantsIndex from './components/plants/PlantsIndex.vue';
-import PlantsCreate from './components/plants/PlantsCreate.vue';
-import PlantsEdit from './components/plants/PlantsEdit.vue';
+import ProductsIndex from './components/products/ProductsIndex.vue';
+import ProductsCreate from './components/products/ProductsCreate.vue';
+import ProductsEdit from './components/products/ProductsEdit.vue';
 
 const routes = [
     {
         path: '/',
         components: {
             security: Security,
-        	usersIndex: UsersIndex,
+        	customersIndex: CustomersIndex,
             categoriesIndex: CategoriesIndex,
-            plantsIndex: PlantsIndex,
+            productsIndex: ProductsIndex,
             dashboardIndex: DashboardIndex,
             permissionsIndex: PermissionsIndex,
         }
     },
 
-    {path: '/create-user', component: UsersCreate, name: 'createUser'},
-    {path: '/edit-user/:id', component: UsersEdit, name: 'editUser'},
+    {path: '/create-customer', component: CustomersCreate, name: 'createCustomer'},
+    {path: '/edit-customer/:id', component: CustomersEdit, name: 'editCustomer'},
 
     {path: '/create-permission', component: PermissionsCreate, name: 'createPermission'},
 
     {path: '/create-category', component: CategoriesCreate, name: 'createCategory'},
     {path: '/edit-category/:id', component: CategoriesEdit, name: 'editCategory'},
 
-    {path: '/create-plant', component: PlantsCreate, name: 'createPlant'},
-    {path: '/edit-plant/:id', component: PlantsEdit, name: 'editPlant'},
+    {path: '/create-product', component: ProductsCreate, name: 'createProduct'},
+    {path: '/edit-product/:id', component: ProductsEdit, name: 'editProduct'},
 ]
 //GLOBAL DATA
 Vue.prototype.$bearerAPITOKEN = {
@@ -85,3 +89,4 @@ const router = new VueRouter({
 })
 
 const app = new Vue({ router }).$mount('#app')
+

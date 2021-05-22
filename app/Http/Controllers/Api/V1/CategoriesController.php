@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 use App\Category;
 use App\Components\Helper\ImageProcessing;
+use Illuminate\Support\Facades\Storage;
 
 class CategoriesController extends Controller
 {
@@ -28,10 +29,10 @@ class CategoriesController extends Controller
         $this->middleware('permission:1');
         $categories = Category::all();
         
-        foreach ($categories as $category) {
-            // $id_images = collect(json_decode($category['category_image'],true))->collapse();
-            $category['category_image'] = $this->imageProcessing->getURL($category['category_image'],'sm');
-        }
+        // foreach ($categories as $category) {
+        //     // $id_images = collect(json_decode($category['category_image'],true))->collapse();
+        //     $category['category_image'] = $this->imageProcessing->getURL($category['category_image'],'sm');
+        // }
         return $categories;
     }
 
@@ -54,7 +55,6 @@ class CategoriesController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-           'category_image' => $this->imageProcessing->run($request->category_image[0]['dataURL'],'categories'),
            'category_slug' => $this->sluger($request->category_name),
         ]);
         $category = Category::create($request->all());
@@ -71,7 +71,13 @@ class CategoriesController extends Controller
     public function show($id)
     {
         $category = Category::findOrFail($id);
-        $category['category_image'] = $this->imageProcessing->getURL($category['category_image'],'sm');
+        $category['products'] = $category->products()->with('category:id,category_name')->get();
+        foreach ($category['products'] as $product) {
+            $product['product_image'] = Storage::url('public/sm_'.$product['product_image'].'.png');
+            // $id_images = collect(json_decode($product['product_image'],true))->collapse();
+            // $product['product_image'] = self::DRIVE_CONFIG_URL.$id_images['sm'];
+            //asset('storage/sm_'.$product['product_image']);
+        }
         return $category;
     }
 
@@ -98,19 +104,11 @@ class CategoriesController extends Controller
         $category = Category::findOrFail($id);
         
         
-        if ($request->category_image) {
-            $request->merge([ 
-            'category_image' => $this->imageProcessing->run($request->category_image[0]['dataURL'],'categories'),
-            'category_slug' => $this->sluger($request->category_name)
-        ]);
-            $category->update($request->all());
-        } else {
+        
             $request->merge([
                 'category_slug' => $this->sluger($request->category_name)
             ]);
-            $category->update($request->except(['category_image']));
-        }
-
+            $category->update($request->toArray());
         return $category;
     }
 

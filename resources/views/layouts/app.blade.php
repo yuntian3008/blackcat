@@ -6,7 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="api-token" content="{{ Auth::check() ? Auth::user()->api_token : '' }}">
+    <meta name="api-token" content="{{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->api_token : '' }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -34,23 +34,23 @@
     @else
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="{{route('admin.index')}}">Dashboard</a>
-        @if (Auth::user()->hasPermission('superadmin'))
-        <a href="{{route('admin.users.index')}}">Users</a>
-        <a href="{{route('admin.permissions.index')}}">Permissions</a>
+        <a href="{{route('admin.manager.dashboard')}}">Dashboard</a>
+        @if (Auth::guard('admin')->user()->hasAnyRole(['admin','superadmin']))
+        <a href="{{route('admin.manager.customer')}}">Customer</a>
+        <a href="{{route('admin.manager.role')}}">Permissions</a>
         @endif
-        @if (Auth::user()->hasAnyPermission(['productmanagement','superadmin']))
-        <a href="{{route('admin.categories.index')}}">Categories</a>
-        <a href="{{route('admin.plants.index')}}">Plants</a>
+        @if (Auth::guard('admin')->user()->hasAnyRole(['productmanager','superadmin']))
+        <a href="{{route('admin.manager.category')}}">Categories</a>
+        <a href="{{route('admin.manager.product')}}">Products</a>
         @endif
     </div>
     @endguest
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
-                <a class="navbar-brand" href="{{route('admin.index')}}">
+                {{-- <a class="navbar-brand" href="{{route('admin.index')}}">
                     {{ config('app.name', 'Laravel') }} Manager
-                </a>
+                </a> --}}
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -65,31 +65,31 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
-                            @endif
+                            @endif --}}
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="btn btn-outline-dark dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->fname }} <span class="caret"></span>
+                                    {{ Auth::guard('admin')->user()->first_name }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     {{-- <a class="dropdown-item" href="{{ route('user_dashboard') }}">Dashboard</a> --}}
-                                    <a class="dropdown-item" href="{{ route('user_profile') }}">Profile</a>
-                                    <a class="dropdown-item" href="{{ route('user_security') }}">Security</a>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                    {{-- <a class="dropdown-item" href="{{ route('user_profile') }}">Profile</a>
+                                    <a class="dropdown-item" href="{{ route('user_security') }}">Security</a> --}}
+                                    <a class="dropdown-item" href="{{ route('admin.logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
                                 </div>

@@ -10,10 +10,14 @@
 // FontAwesome
 @import '~@fortawesome/fontawesome-free/scss/fontawesome';
 @import '~@fortawesome/fontawesome-free/scss/solid';
+// HoverCss
+@import '~hover.css/scss/hover';
+
 // Sidenav
 @import 'sidenav';
 
 @import 'utilities';
+
 
 .navbar-laravel {
     background-color: #fff;

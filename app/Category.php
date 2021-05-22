@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    public function plants()
+    public function products()
     {
-        return $this->hasMany('App\Plant');
+        return $this->hasMany('App\Product');
     }
 
     protected $fillable = [

@@ -52,7 +52,7 @@ class ImageProcessing
 
 	public function getURL(String $name,String $size)
 	{
-		return Storage::url('public/'.$size.'_'.$name.'.jpg');
+		return Storage::url('public/'.$size.'_'.$name.'.png');
 	}
 
 	protected function createName(String $key)

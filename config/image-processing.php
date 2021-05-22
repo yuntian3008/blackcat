@@ -13,7 +13,7 @@ return [
             'y' => 240,
         ]
     ],
-    'format' => 'jpg',
+    'format' => 'png',
     /**
      *	Local: 'local'
      * 	Google Drive: 'gdrive'

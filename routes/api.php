@@ -24,11 +24,11 @@ Route::group(['middleware' => 'auth:api'], function() {
 		'as' => 'api.',
 	], function () {
 		Route::resource('categories', 'CategoriesController', ['except' => ['create', 'edit']])
-			->middleware('permission:'.config('permission.api.CategoriesController'));
-		Route::resource('users', 'UsersController', ['except' => ['create', 'edit']])
-			->middleware('permission:'.config('permission.api.UsersController'));
-		Route::resource('plants', 'PlantsController', ['except' => ['create', 'edit']])
-			->middleware('permission:'.config('permission.api.PlantsController'));
+			->middleware('api.role:productmanager');
+		Route::resource('customers', 'CustomersController', ['except' => ['create', 'edit']])
+			->middleware('api.role:admin');
+		Route::resource('products', 'ProductsController', ['except' => ['create', 'edit']])
+			->middleware('api.role:productmanager');
 		Route::resource('permissions', 'PermissionsController', ['except' => ['create', 'edit']])
 			->middleware('permission:'.config('permission.api.PermissionsController'));
 	}

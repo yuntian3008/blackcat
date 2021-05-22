@@ -14,16 +14,8 @@ class CheckPermission
      * @param String $role [From ROUTE]
      * @return mixed
      */
-    public function handle($request, Closure $next, $permission = '')
+    public function handle($request, Closure $next, ...$roles)
     {
-        /**
-        *   Check isAdmin
-        *
-        */
-        if (! $request->user()->isAdmin) {
-            return abort(401, 'You are not admin!');
-        }
-
 
         /**
         *   Check Permission
@@ -32,21 +24,18 @@ class CheckPermission
 
 
         // "*" block all and only superadmin can access
-        if ($permission == '*') {
+        if (empty($roles)) {
             // isn't superadmin OR isn't user->isAdmin
-            if (! $request->user()->hasPermission('superadmin')) {
+            if (! $request->user()->hasRole('superadmin')) {
                 return abort(401, 'You don\'t have permission to access.');
             }
             return $next($request);
         }
-        // "" allow all can accesss
-        if ($permission == '')
-            return $next($request);
 
-
+        //var_dump( $request->user()->hasRole('superadmin') );
         // "[permission]" can access or Superadmin can access
-        if (! $request->user()->hasPermission($permission) && ! $request->user()->hasPermission('superadmin')  ) {
-            return abort(401, 'You don\'t have ['.$permission.'] permission to access.');
+        if (! $request->user()->hasAnyRole($roles) && ! $request->user()->hasRole('superadmin')  ) {
+            return abort(401, 'You don\'t have permission to access.');
         }
         return $next($request);
     }

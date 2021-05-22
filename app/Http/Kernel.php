@@ -35,6 +35,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBlocked::class,
         ],
 
         'api' => [
@@ -58,11 +59,12 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'permission' => \App\Http\Middleware\CheckPermission::class,
-        'apipermission' => \App\Http\Middleware\CheckApiPermission::class,
-        'permission' => \App\Http\Middleware\CheckPermission::class,
+        'api.role' => \App\Http\Middleware\CheckApiPermission::class,
+        'role' => \App\Http\Middleware\CheckPermission::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'verified.phone' => \App\Http\Middleware\CheckPhoneIsVerified::class,
     ];
 
     /**
