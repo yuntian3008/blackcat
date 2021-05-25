@@ -27,8 +27,12 @@ Route::group(['middleware' => 'auth:api'], function() {
 			->middleware('api.role:productmanager');
 		Route::resource('customers', 'CustomersController', ['except' => ['create', 'edit']])
 			->middleware('api.role:admin');
+		Route::resource('staff', 'StaffController', ['except' => ['create', 'edit']])
+			->middleware('api.role:admin');
 		Route::resource('products', 'ProductsController', ['except' => ['create', 'edit']])
 			->middleware('api.role:productmanager');
+		Route::resource('orders', 'OrdersController', ['except' => ['create', 'edit']])
+			->middleware('api.role:ordermanager,api.role:shipper');
 		Route::resource('permissions', 'PermissionsController', ['except' => ['create', 'edit']])
 			->middleware('permission:'.config('permission.api.PermissionsController'));
 	}

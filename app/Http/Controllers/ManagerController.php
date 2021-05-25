@@ -45,4 +45,24 @@ class ManagerController extends Controller
     {
         return view('staff.manager.product');
     }
+
+    public function staff()
+    {
+        return view('staff.manager.staff');
+    }
+
+    public function getOrders()
+    {
+        return view('staff.manager.get_order');
+    }
+
+    public function shipOrders()
+    {
+        return view('staff.manager.ship_order');
+    }
+
+    public function completeOrders()
+    {
+        return view('staff.manager.complete_order');
+    }
 }

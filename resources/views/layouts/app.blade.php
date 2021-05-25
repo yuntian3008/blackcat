@@ -37,11 +37,18 @@
         <a href="{{route('admin.manager.dashboard')}}">Dashboard</a>
         @if (Auth::guard('admin')->user()->hasAnyRole(['admin','superadmin']))
         <a href="{{route('admin.manager.customer')}}">Customer</a>
-        <a href="{{route('admin.manager.role')}}">Permissions</a>
+        <a href="{{route('admin.manager.staff')}}">Staff</a>
         @endif
         @if (Auth::guard('admin')->user()->hasAnyRole(['productmanager','superadmin']))
         <a href="{{route('admin.manager.category')}}">Categories</a>
         <a href="{{route('admin.manager.product')}}">Products</a>
+        @endif
+        @if (Auth::guard('admin')->user()->hasAnyRole(['ordermanager','superadmin']))
+        <a href="{{route('admin.manager.get-orders')}}">Get orders</a>
+        <a href="{{route('admin.manager.ship-orders')}}">Ship orders</a>
+        @endif
+        @if (Auth::guard('admin')->user()->hasAnyRole(['shipper','superadmin']))
+        <a href="{{route('admin.manager.complete-orders')}}">Complete orders</a>
         @endif
     </div>
     @endguest

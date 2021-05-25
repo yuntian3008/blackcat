@@ -57,6 +57,11 @@ class RegisterController extends Controller
             'phone' => ['required', 'digits:10', 'unique:customers'],
             'dob' => ['required', 'date_format:Y-m-d','before:today'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'country' => ['required', 'string', 'max:255'],
+            'province' => ['required', 'string', 'max:255'],
+            'district' => ['required', 'string', 'max:255'],
+            'ward' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],       
         ]);
     }
 
@@ -77,6 +82,13 @@ class RegisterController extends Controller
             'dob' => $data['dob'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
+        ]);
+        $user->addresses()->create([
+            'country' => $data['country'],
+            'province' => $data['province'],
+            'district' => $data['district'],
+            'ward' => $data['ward'],
+            'address' => $data['address'],
         ]);
         //default users have a basic role
         //$user->roles()->attach(Role::where('name', 'basic')->first());

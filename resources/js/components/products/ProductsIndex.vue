@@ -112,7 +112,7 @@
                     var app = this;
                     this.$confirm(
                         {
-                            message: 'Are you sure?',
+                            message: app.products[index].product_visible ? 'Are you sure you want to HIDE '+app.products[index].product_name : 'Are you sure you want to SHOW '+app.products[index].product_name,
                             button: {
                                 no: 'No',
                                 yes: 'Yes'

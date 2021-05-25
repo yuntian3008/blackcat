@@ -19,4 +19,14 @@ class Product extends Model
     protected $fillable = [
         'product_name', 'product_image', 'product_slug', 'category_id', 'product_price', 'product_visible', 'product_desc',
     ];
+
+    public function cartItems()
+    {
+        return $this->hasMany('App\CartItem');
+    }
+
+    public function orderDetail()
+    {
+        return $this->hasMany('App\OrderDetail');
+    }
 }

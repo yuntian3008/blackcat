@@ -21,6 +21,14 @@
 
 @endsection
 
+@section('main-class')
+mt-5
+@endsection
+
+@section('nav-cart-class')
+style="display:none;"
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="row">

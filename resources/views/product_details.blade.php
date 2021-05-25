@@ -120,7 +120,7 @@
 @endsection
 
 @section('content')
-<div class="container bg-white py-3 mt-4">
+<div class="container bg-white py-3 mt-4" id="product">
         <div class="col-12">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-white">
@@ -147,15 +147,9 @@
                         <div class="d-block bg-light p-3">
                             <span class="h3" id="price">$ {{ $product->product_price }}</span>
                         </div>
-                        <div id="option">
-                            <div class="spinner-width py-2">
-                                <span>Quantity:</span>
-                                <input class="input-spinner form-control-sm" type="number" value="1" min="1" max="100" step="1"/>
-                            </div>
-                        </div>
+                        <change-qty></change-qty>
                         
-                        <a href="#" class="btn btn-brown btn-lg" id="btnAdd">Add to cart</a>
-                        <a href="#" class="btn btn-danger btn-lg" id="btnBuy">Buy now</a>
+                        <add-to-cart :product_id="{{ $product->id }}" :quantity="1"></add-to-cart>
                     </div>
                     
                 </div>         

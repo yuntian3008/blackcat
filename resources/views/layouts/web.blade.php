@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="api-token" content="null">
+    <meta name="api-token" content="{{ Auth::guard('web')->check() ? Auth::guard('web')->user()->firebase_uid : "" }}">
     <title>@yield('title') - {{ config('app.name', 'Miaogo') }}</title>
 
     {{-- <link rel="shortcut icon" href="../_public/images/logo/favicon.ico" type="image/x-icon"> --}}
@@ -28,10 +28,11 @@
 </head>
 
 <body>
+    <div id="app">
     <!-- ============= MENU ============== -->
     <nav class="navbar navbar-expand-md navbar-dark bg-light fixed-top fsize-20 p-md-0">
-        <a class="navbar-brand abs fsize-40 mx-md-3 text-brown" href="#">
-            {{-- <img src="{{ asset('assets/images/logo/WantedCoffee.png') }}" width="100" height="100" class="d-inline-block align-top mr-2" alt="" loading="lazy"> --}}WANTED COFFEE
+        <a class="navbar-brand abs fsize-40 mx-md-3 text-brown" href="{{ route('home') }}">
+            <img src="{{ asset('assets/images/logo/blackcat.png') }}" width="150" height="150" class="d-inline-block align-top" alt="" loading="lazy">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -108,12 +109,50 @@
                 </li> --}}
             </ul>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link hvr-underline-from-left py-3 mr-2 text-brown" href="#"><i class="fas fa-shopping-cart mx-2" id="iconCartCount"></i></a>
+                <li class="nav-item" @yield('nav-search-class')>
+                    <a class="nav-link hvr-underline-from-left py-2 mr-2 fsize-32 text-brown" href="{{ route('search.form') }}">
+                        <span class="fa-1x fa-layers fa-fw">
+                              <i class="fas fa-search"></i>
+                        </span>
+                    </a>
                 </li>
-                <li class="nav-item" id="auth">
-                    
+                <li class="nav-item dropdown">
+                    @guest
+                    <a class="nav-link hvr-underline-from-left py-2 mr-2 fsize-32 text-brown" href="{{ route('login') }}">
+                        <span class="fa-1x fa-layers fa-fw">
+                              <i class="fas fa-user-circle"></i>
+                        </span>
+                    </a>
+                    @else
+                    <a class="nav-link hvr-underline-from-left py-2 mr-2 fsize-32 text-brown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="fa-1x fa-layers fa-fw">
+                              <i class="fas fa-user-circle"></i>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ route('customer.manage') }}">Manage</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                         document.getElementById('logout-form').submit();">
+                            {{ __('Log out') }}
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                    @endguest
                 </li>
+                <li class="nav-item" @yield('nav-cart-class')>
+                    <a class="nav-link hvr-underline-from-left py-2 mr-2 fsize-32 text-brown" href="{{ route('show.cart') }}">
+                        <span class="fa-1x fa-layers fa-fw">
+                              <i class="fas fa-shopping-cart"></i>
+                              @auth<cart-count></cart-count>@endauth
+                        </span>
+                    </a>
+                </li>
+                
             </ul>
         </div>
     </nav>
@@ -121,7 +160,7 @@
     <main class="@yield('main-class')">
         @yield('content')
     </main>
-
+    </div>
     {{-- <script type="text/javascript">
         // $.getJSON( "../data.json", function( data ) {
         //     alert(data.logged);

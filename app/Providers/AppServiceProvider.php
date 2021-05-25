@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Facades\View;
-
+use App\Category;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -28,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(UrlGenerator $url)
     {
+
+        View::share('navbar_data', Category::where('category_visible',1)->get());
         Schema::defaultStringLength(191);
         if(env('REDIRECT_HTTPS')) {
             $url->formatScheme('https');

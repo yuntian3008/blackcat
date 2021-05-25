@@ -50,7 +50,7 @@ class ImageProcessing
 		return $name;
 	}
 
-	public function getURL(String $name,String $size)
+	public static function getURL(String $name,String $size)
 	{
 		return Storage::url('public/'.$size.'_'.$name.'.png');
 	}

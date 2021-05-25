@@ -16,7 +16,7 @@ class Customer extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'firstname', 'lastname', 'gender', 'email', 'password', 'phone','avatar', 'dob', 'username','block'
+        'firstname', 'lastname', 'gender', 'email', 'password', 'phone','avatar', 'dob', 'username','block',
     ];
 
     /**
@@ -25,7 +25,7 @@ class Customer extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token','firebase_uid',
     ];
 
     /**
@@ -36,4 +36,19 @@ class Customer extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function cartItems()
+    {
+        return $this->hasMany('App\CartItem');
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany('App\Address');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany('App\Order');
+    }
 }

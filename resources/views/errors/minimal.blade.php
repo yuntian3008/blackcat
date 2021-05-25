@@ -66,8 +66,8 @@
             </div>
 
             <div class="next">
-                <a style="text-decoration: none; color: green" href="#{{-- {{ route('admin.index') }} --}}"> Back
-                </a>/
+                <a style="text-decoration: none; color: green" href="{{ url()->previous() }}"> Back
+                </a>@auth/
                 <a style="text-decoration: none; color: orange" href="{{ route('logout') }}"
                    onclick="event.preventDefault();
                                  document.getElementById('logout-form').submit();">
@@ -77,6 +77,7 @@
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
+                @endauth
             </div>
         </div>
     </body>

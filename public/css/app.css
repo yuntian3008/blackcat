@@ -21900,8 +21900,16 @@ h3.half-underline:after {
   font-size: 32px;
 }
 
+.fsize-36 {
+  font-size: 32px;
+}
+
 .fsize-40 {
   font-size: 40px;
+}
+
+.fsize-44 {
+  font-size: 44px;
 }
 
 .fsize-48 {

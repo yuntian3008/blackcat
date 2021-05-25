@@ -28,6 +28,18 @@ Route::group(['as' => 'admin.'], function() {  //route name = admin.*
 		Route::get('/customers', 'ManagerController@customer')->name('customer')
 			->middleware('role:admin');
 
+		Route::get('/staff', 'ManagerController@staff')->name('staff')
+			->middleware('role:admin');
+
+		Route::get('/get-orders', 'ManagerController@getOrders')->name('get-orders')
+			->middleware('role:ordermanager');
+
+		Route::get('/ship-orders', 'ManagerController@shipOrders')->name('ship-orders')
+			->middleware('role:ordermanager');
+
+		Route::get('/complete-orders', 'ManagerController@completeOrders')->name('complete-orders')
+			->middleware('role:shipper');
+
 	    Route::get('/permissions', 'ManagerController@role')->name('role')
 	    	->middleware('role:admin');
 	    

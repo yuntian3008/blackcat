@@ -25,6 +25,11 @@ Route::get('login', 'Customer\Auth\LoginController@showLoginForm')->name('login'
 Route::post('login', 'Customer\Auth\LoginController@login');
 Route::post('logout', 'Customer\Auth\LoginController@logout')->name('logout');
 Route::middleware('auth')->group(function (){
+	Route::get('cart', 'CartController@showCart')->name('show.cart');
+	Route::post('checkout', 'CartController@showCheckout')->name('show.checkout');
+	Route::post('order/create', 'OrderController@create')->name('order.create');
+	Route::get('manage', 'OrderController@history')->name('customer.manage');
+	Route::get('order-details/{id}', 'OrderController@show')->name('order.details');
     //Route::get('/', 'Customer\HomeController@index')->name('home');
 });
 // Registration Routes...
@@ -95,7 +100,19 @@ Route::post('password/reset', 'Customer\Auth\ResetPasswordController@reset')->na
 	/{category_slug}
 	/{category_slug}/{plant_slug}
  */
+
+Route::get('search/{keyword?}','CoreController@search')->name('search');
+
+Route::get('advanced-search-form','CoreController@showFormSearch')->name('search.form');
+
+Route::get('advanced-search','CoreController@advancedSearch')->name('search.advanced');
+
 Route::get('/', 'CoreController@home')->name('home');
+Route::post('carts/add', 'CartController@store');
+Route::post('carts', 'CartController@index');
+Route::post('carts/change-quantity','CartController@changeQty');
+Route::post('carts/remove-item','CartController@removeItem');
+
 //Route::get('/controllers', 'HomeController@controllers')->name('home');
 //Route::get('/categories', 'CoreController@categories')->name('categories');
 Route::get('/{category_slug}', 'CoreController@products')->name('products');

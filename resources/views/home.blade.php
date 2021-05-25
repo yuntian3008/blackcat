@@ -6,7 +6,18 @@ Home
 
 @section('style')
 <style type="text/css">
-
+.search-filter-input {
+    border: 1px solid #bb6b24;
+    width: 40%;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 80px;
+    padding-left: 90px;
+    font-weight: 300;
+    color: #000;
+    background: url(assets/images/default/search.svg) no-repeat scroll 35px 25px;
+    background-size: 30px 30px;
+}
 </style>
 @endsection
 
@@ -23,25 +34,25 @@ mt-0
             <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
         </ol>
         <div class="carousel-inner">
-            <div class="carousel-item active">
+            <div class="carousel-item active" data-interval="3000">
                 <img src="{{ asset('assets/images/carousel/1.jpg') }}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h1 class="fsize-48">First slide label</h1>
-                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                    <h1 class="fsize-48">Excited and intoxicated.</h1>
+                    <p>Experience love at first sip.</p>
                 </div>
             </div>
-            <div class="carousel-item">
+            <div class="carousel-item" data-interval="3000">
                 <img src="{{ asset('assets/images/carousel/2.jpg') }}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h1 class="fsize-48">Second slide label</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <h1 class="fsize-48">Life begins after coffee.</h1>
+                    <p>No one can stop me from drinking this whole pot of coffee. Don’t even try getting in my way!</p>
                 </div>
             </div>
-            <div class="carousel-item">
+            <div class="carousel-item" data-interval="3000">
                 <img src="{{ asset('assets/images/carousel/3.jpg') }}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h1 class="fsize-48">Third slide label</h1>
-                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                    <h1 class="fsize-48">Shout-out to wifi, coffee and ambition</h1>
+                    <p>Way too much coffee? But if it weren't for coffee, I wouldn’t be able to manifest my real self.</p>
                 </div>
             </div>
         </div>
@@ -56,9 +67,15 @@ mt-0
     </div>
 {{-- </div>
 <div class="container"> --}}
+    <div class="d-flex justify-content-center mt-4">
         
+            <input id="search-filter-input" class="search-filter-input" type="text" placeholder="Search"/>
+        
+        
+    </div>
+            
             @foreach ($data as $index => $category)
-            <div class="row mt-3 mx-5 px-5">
+            <div class="row mt-4 mx-5 px-5">
                 <h3 class="font-weight-bold col-12 text-brown fsize-36 half-underline ml-5">{{ $category->category_name }}</h3>
                 <div class="col-md-12 ">
                     <div class="row">
@@ -74,8 +91,10 @@ mt-0
                                         <h5 class="card-title text-brown opensans mt-3 fsize-16 text-wrap"><strong>{{$product->product_brand}}</strong> - {{$product->product_name}}</h5>
                                         <div class="card-text fsize-20">$ {{$product->product_price}}</div>
                                         <div class="row no-gutters mt-3">
-                                            <a href="#" class="btn btn-outline-dark mr-1 col btnBuy" product="category[i].id" color="category[i].color[0]">Buy now</a>
-                                            <a href="#" class="btn btn-outline-brown col btnAdd" product="category[i].id" color="category[i].color[0]">Add to cart</a>
+                                            <a href="#"></a>
+                                            {{-- <a href="#" class="btn btn-outline-brown col btnAdd" product="category[i].id" color="category[i].color[0]">Add to cart</a>
+ --}}                                        
+                                            <add-to-cart :product_id="{{ $product->id }}" :quantity="1"></add-to-cart>
                                         </div>
                                     </div>
                                     
@@ -99,7 +118,6 @@ mt-0
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
   crossorigin="anonymous"></script>
 <script type="text/javascript">
-
 
 </script>
 @endsection

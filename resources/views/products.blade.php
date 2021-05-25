@@ -19,7 +19,6 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-white">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-brown">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#" class="text-brown">Category</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{$current_category}}</li>
                 </ol>
             </nav>
@@ -31,11 +30,11 @@
                     <div class="card-body p-4">
                         <img src="{{$item->product_image}}" class="card-img-top" alt="test">
                         <div class=" align-self-end">
-                            <h5 class="card-title text-brown opensans mt-3 fsize-16 text-wrap"><strong>{{$item->product_brand}}</strong> - {{$item->product_name}}</h5>
+                            <h5 class="card-title text-brown opensans mt-3 fsize-16 text-wrap">@empty(!$item->product_brand)<strong>{{$item->product_brand}}</strong> - @endisset{{$item->product_name}}</h5>
                             <div class="card-text fsize-20">$ {{$item->product_price}}</div>
                             <div class="row no-gutters mt-3">
-                                <a href="#" class="btn btn-outline-dark mr-1 col btnBuy" product="category[i].id" color="category[i].color[0]">Buy now</a>
-                                <a href="#" class="btn btn-outline-brown col btnAdd" product="category[i].id" color="category[i].color[0]">Add to cart</a>
+                                <a href="#"></a>
+                                <add-to-cart :product_id="{{ $item->id }}" :quantity="1"></add-to-cart>
                             </div>
                         </div>
                         
@@ -44,6 +43,12 @@
             </a>
             @endforeach
         </div>
+        <div class="justify-content-center row mt-4">
+            <div class="d-block">
+                {{ $data->links() }}
+            </div>
+        </div>
+        
 </div>
 {{-- <div class="container-fluid pt-4">
         <div class="row justify-content-center">

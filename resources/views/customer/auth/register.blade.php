@@ -21,17 +21,26 @@
 
 @endsection
 
+@section('main-class')
+mt-5
+@endsection
+
+@section('nav-cart-class')
+style="display:none;"
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
         <div class="col"></div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="login-form border p-4">
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
                     <h3 class="text-center pb-2">{{ __('Đăng kí') }}</h3>
+                    <h5>Infomation</h5>
                     <div class="form-group row">
-                        <div class="col-sm-12 mb-1">
+                        <div class="col-sm-4 mb-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fas fa-phone-alt"></i></div>
@@ -45,7 +54,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-sm-12 mb-1">
+                        <div class="col-sm-5 mb-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fas fa-envelope"></i></div>
@@ -59,35 +68,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-sm-12 mb-1">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text"><i class="fas fa-user-alt"></i></div>
-                                </div>
-                                <input type="text" id="firstname" name="firstname" class="form-control @error('firstname') is-invalid @enderror" placeholder="Tên" value="{{ old('firstname') }}" required autocomplete="firstname">
-
-                                @error('firstname')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mb-1">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text"><i class="fas fa-user-alt"></i></div>
-                                </div>
-                                <input type="text" id="lastname" name="lastname" class="form-control @error('lastname') is-invalid @enderror" placeholder="Họ và tên lót" value="{{ old('lastname') }}" required autocomplete="lastname">
-
-                                @error('lastname')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mb-1">
+                        <div class="col-sm-3 mb-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fas fa-transgender-alt"></i></div>
@@ -104,7 +85,35 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-sm-12 mb-1">
+                        <div class="col-sm-4 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-user-alt"></i></div>
+                                </div>
+                                <input type="text" id="firstname" name="firstname" class="form-control @error('firstname') is-invalid @enderror" placeholder="Tên" value="{{ old('firstname') }}" required autocomplete="firstname">
+
+                                @error('firstname')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-user-alt"></i></div>
+                                </div>
+                                <input type="text" id="lastname" name="lastname" class="form-control @error('lastname') is-invalid @enderror" placeholder="Họ và tên lót" value="{{ old('lastname') }}" required autocomplete="lastname">
+
+                                @error('lastname')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mb-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fas fa-birthday-cake"></i></div>
@@ -117,7 +126,83 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-sm-12 mb-1">
+                    </div>
+                    <h5>Address</h5>
+                    <div class="form-group row">
+                        <div class="col-sm-4 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-user-alt"></i></div>
+                                </div>
+                                <input type="text" id="country" name="country" class="form-control @error('country') is-invalid @enderror" placeholder="Country" value="{{ old('country') }}" required autocomplete="country">
+
+                                @error('country')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-user-alt"></i></div>
+                                </div>
+                                <input type="text" id="province" name="province" class="form-control @error('province') is-invalid @enderror" placeholder="Province/City" value="{{ old('province') }}" required autocomplete="province">
+
+                                @error('province')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-user-alt"></i></div>
+                                </div>
+                                <input type="text" id="district" name="district" class="form-control @error('district') is-invalid @enderror" placeholder="District" value="{{ old('district') }}" required autocomplete="district">
+
+                                @error('district')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-user-alt"></i></div>
+                                </div>
+                                <input type="text" id="ward" name="ward" class="form-control @error('ward') is-invalid @enderror" placeholder="Ward" value="{{ old('ward') }}" required autocomplete="ward">
+
+                                @error('ward')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-user-alt"></i></div>
+                                </div>
+                                <input type="text" id="address" name="address" class="form-control @error('address') is-invalid @enderror" placeholder="Address" value="{{ old('address') }}" required autocomplete="address">
+
+                                @error('address')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <h5>Account</h5>
+                    <div class="form-group row">
+                        <div class="col-sm-4 mb-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fas fa-user-alt"></i></div>
@@ -131,7 +216,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-sm-12 mb-1">
+                        <div class="col-sm-4 mb-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fas fa-key"></i></div>
@@ -145,7 +230,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-sm-12 mb-1">
+                        <div class="col-sm-4 mb-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fas fa-key"></i></div>

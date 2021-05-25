@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+require('@fortawesome/fontawesome-free/js/all')
 window.Vue = require('vue');
 import VueRouter from 'vue-router';
 
@@ -21,9 +22,16 @@ Vue.config.devtools = true;
 
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-
+import VueConfirmDialog from 'vue-confirm-dialog';
+Vue.use(VueConfirmDialog)
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
+Vue.component('add-to-cart', require('./components/AddToCart.vue').default);
+Vue.component('change-qty', require('./components/ChangeQuantity.vue').default);
+Vue.component('cart-count', require('./components/CartCount.vue').default);
+Vue.component('cart-view', require('./components/CartView.vue').default);
+Vue.component('checkout-view', require('./components/CheckoutView.vue').default);
+Vue.component('cart-view-total-amount', require('./components/CartViewTotalAmount.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -31,9 +39,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 // PERSONAL
-import VueConfirmDialog from 'vue-confirm-dialog';
-Vue.use(VueConfirmDialog)
-Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
+
 
 import Security from './components/Security.vue';
 
@@ -51,9 +57,17 @@ import CategoriesIndex from './components/categories/CategoriesIndex.vue';
 import CategoriesCreate from './components/categories/CategoriesCreate.vue';
 import CategoriesEdit from './components/categories/CategoriesEdit.vue';
 
+import StaffIndex from './components/staff/StaffIndex.vue';
+import StaffCreate from './components/staff/StaffCreate.vue';
+import StaffEdit from './components/staff/StaffEdit.vue';
+
 import ProductsIndex from './components/products/ProductsIndex.vue';
 import ProductsCreate from './components/products/ProductsCreate.vue';
 import ProductsEdit from './components/products/ProductsEdit.vue';
+
+import GetOrdersIndex from './components/orders/GetOrdersIndex.vue';
+import ShipOrdersIndex from './components/orders/ShipOrdersIndex.vue';
+import CompleteOrdersIndex from './components/orders/CompleteOrdersIndex.vue';
 
 const routes = [
     {
@@ -65,6 +79,10 @@ const routes = [
             productsIndex: ProductsIndex,
             dashboardIndex: DashboardIndex,
             permissionsIndex: PermissionsIndex,
+            staffIndex: StaffIndex,
+            getordersIndex: GetOrdersIndex,
+            shipordersIndex: ShipOrdersIndex,
+            completeordersIndex: CompleteOrdersIndex,
         }
     },
 
@@ -78,15 +96,24 @@ const routes = [
 
     {path: '/create-product', component: ProductsCreate, name: 'createProduct'},
     {path: '/edit-product/:id', component: ProductsEdit, name: 'editProduct'},
+
+    {path: '/create-staff', component: ProductsCreate, name: 'createStaff'},
+    {path: '/edit-staff/:id', component: ProductsEdit, name: 'editStaff'},
 ]
 //GLOBAL DATA
+Vue.prototype.$csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute('content');
 Vue.prototype.$bearerAPITOKEN = {
                 'Accept' : 'application/json',
                 'Authorization' : 'Bearer ' + document.querySelector("meta[name='api-token']").getAttribute('content'),
                 }
+
 const router = new VueRouter({
 	routes,
 })
-
 const app = new Vue({ router }).$mount('#app')
 
+$("#search-filter-input").on('keypress',function (e) {
+   if (e.keyCode == 13) {
+       window.location.replace("/search/"+$("#search-filter-input").val())
+   }
+});
