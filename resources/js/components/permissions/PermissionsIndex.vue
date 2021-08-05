@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-between">
                 <div class="card-title h4 m-0">Permissions list</div>
                 <div class="form-group">
-                <router-link :to="{name: 'createPermission'}" class="btn btn-outline-dark">Create new permission</router-link>
+                <router-link :to="{name: 'createPermission'}" class="add-enti-btn">Create<i class="bi bi-plus"></i></router-link>
                 </div>
             </div>
             <table class="table">

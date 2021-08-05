@@ -68,7 +68,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 form-group">
-                        <router-link to="/" class="m-1 btn btn-outline-secondary">Back</router-link>
+                        <router-link :to="{ name: 'indexProduct' }" class="m-1 btn btn-outline-secondary">Back</router-link>
                         <button class="m-1 btn btn-outline-primary">Edit</button>
                     </div>
                 </div>

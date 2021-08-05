@@ -5,7 +5,7 @@
             <div class="d-flex justify-content-between">
                 <div class="card-title h4 m-0">Staff list</div>
                 <div class="form-group">
-                <router-link :to="{name: 'createStaff'}" class="btn btn-outline-dark">Create new staff</router-link>
+                <router-link :to="{name: 'createStaff'}" class="add-enti-btn">Create<i class="bi bi-plus"></i></router-link>
                 </div>
             </div>
             <table class="table">

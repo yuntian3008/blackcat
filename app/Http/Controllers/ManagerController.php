@@ -23,7 +23,7 @@ class ManagerController extends Controller
      */
     public function dashboard(Request $request)
     {
-        return view('staff.manager.dashboard');
+        return view('staff.manager.one');
     }
 
     public function category()

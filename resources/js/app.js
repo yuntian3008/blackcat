@@ -23,7 +23,32 @@ Vue.config.devtools = true;
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 import VueConfirmDialog from 'vue-confirm-dialog';
+import VueSweetalert2 from 'vue-sweetalert2';
+import '@sweetalert2/theme-bootstrap-4/bootstrap-4.css';
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
+
+const loading_options = {
+    backgroundColor: '#000000',
+    color: '#ffffff',
+};
+
+
+const swal_options = {
+    showClass: {
+        popup: 'animate__animated animate__bounceIn animate__faster',
+      },
+    hideClass: {
+        popup: 'animate__animated animate__bounceOut animate__faster'
+      },
+  };
+Vue.use(Loading, loading_options);
+Vue.use(VueSweetalert2, swal_options);
 Vue.use(VueConfirmDialog)
+
+
+
+
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('add-to-cart', require('./components/AddToCart.vue').default);
@@ -86,17 +111,22 @@ const routes = [
         }
     },
 
+    {path: '/customer', component: CustomersIndex, name: 'indexCustomer'},
     {path: '/create-customer', component: CustomersCreate, name: 'createCustomer'},
     {path: '/edit-customer/:id', component: CustomersEdit, name: 'editCustomer'},
 
+    {path: '/permission', component: PermissionsIndex, name: 'indexPermission'},
     {path: '/create-permission', component: PermissionsCreate, name: 'createPermission'},
 
+    {path: '/category', component: CategoriesIndex, name: 'indexCategory'},
     {path: '/create-category', component: CategoriesCreate, name: 'createCategory'},
     {path: '/edit-category/:id', component: CategoriesEdit, name: 'editCategory'},
 
+    {path: '/product', component: ProductsIndex, name: 'indexProduct'},
     {path: '/create-product', component: ProductsCreate, name: 'createProduct'},
     {path: '/edit-product/:id', component: ProductsEdit, name: 'editProduct'},
 
+    {path: '/staff', component: StaffIndex, name: 'indexStaff'},
     {path: '/create-staff', component: ProductsCreate, name: 'createStaff'},
     {path: '/edit-staff/:id', component: ProductsEdit, name: 'editStaff'},
 ]
@@ -105,7 +135,7 @@ Vue.prototype.$csrfToken = document.querySelector("meta[name='csrf-token']").get
 Vue.prototype.$bearerAPITOKEN = {
                 'Accept' : 'application/json',
                 'Authorization' : 'Bearer ' + document.querySelector("meta[name='api-token']").getAttribute('content'),
-                }
+                };
 
 const router = new VueRouter({
 	routes,

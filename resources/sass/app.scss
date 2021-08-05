@@ -1,39 +1,49 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Quicksand');
 
 // Variables
 @import 'variables';
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
-
-// FontAwesome
-@import '~@fortawesome/fontawesome-free/scss/fontawesome';
-@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~bootstrap-icons/font/bootstrap-icons';
+// // FontAwesome
+// @import '~@fortawesome/fontawesome-free/scss/fontawesome';
+// @import '~@fortawesome/fontawesome-free/scss/solid';
 // HoverCss
 @import '~hover.css/scss/hover';
+
+//animate.css
+
+@import '~animate.css/animate';
 
 // Sidenav
 @import 'sidenav';
 
 @import 'utilities';
 
+@import 'item';
+
+
+.table-hover tbody tr:hover > td {
+  cursor: pointer;
+}
 
 .navbar-laravel {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-.btn:focus, .btn:active {
-    outline: none !important;
-    box-shadow: none !important;
-  }
+// .btn:focus, .btn:active {
+//     outline: none !important;
+//     box-shadow: none !important;
+//   }
 
-input:focus, input:active,
-select:focus, select:active{
-    outline: none !important;
-    box-shadow: none !important;
-  }
+// input:focus, input:active,
+// select:focus, select:active{
+//     outline: none !important;
+//     box-shadow: none !important;
+//   }
 
 // Dropzone Override
 .dropzone {

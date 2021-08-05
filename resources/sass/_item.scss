@@ -1,0 +1,9 @@
+.add-enti-btn {
+    @extend .btn;
+    @extend .btn-primary;
+}
+
+.filter-enti-btn {
+    @extend .btn;
+    @extend .btn-secondary;
+}

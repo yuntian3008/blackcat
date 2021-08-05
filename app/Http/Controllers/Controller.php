@@ -26,6 +26,8 @@ class Controller extends BaseController
     //protected $client;
     //public $imgProcess = new ImageProcessing();
     
+    
+
     public function __construct(/*GoogleClient $client*/){
         //$this->imgProcess = "ok";//new ImageProcessing();
         //$this->client = $client->getClient();
@@ -36,7 +38,7 @@ class Controller extends BaseController
 
     public function sluger(String $str)
     {
-    	$str = strtolower($str);
+    	$str = mb_strtolower($str,'UTF-8');
         foreach($this->unicode as $nonUnicode=>$uni){
             $str = preg_replace("/($uni)/i", $nonUnicode, $str);
         }

@@ -10,29 +10,35 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
+        "@popperjs/core": "^2.9.3",
         "axios": "^0.19.2",
-        "bootstrap": "^4.5.2",
+        "bootstrap": "^5.0.2",
         "cross-env": "^5.2.1",
-        "jquery": "^3.5.1",
+        "jquery": "^3.6.0",
         "laravel-mix": "^5.0.5",
-        "lodash": "^4.17.20",
-        "popper.js": "^1.16.1",
+        "lodash": "^4.17.21",
+        "popper.js": "^2.9.2",
         "resolve-url-loader": "^2.3.1",
-        "sass": "^1.26.11",
+        "sass": "^1.37.5",
         "sass-loader": "^7.3.1",
-        "vue": "^2.6.12",
-        "vue-template-compiler": "^2.6.12"
+        "vue": "^2.6.14",
+        "vue-template-compiler": "^2.6.14"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free": "^5.15.0",
-        "chart.js": "^2.9.3",
+        "@fortawesome/fontawesome-free": "^5.15.3",
+        "@sweetalert2/theme-bootstrap-4": "^5.0.2",
+        "animate.css": "^4.1.1",
+        "bootstrap-icons": "^1.5.0",
+        "chart.js": "^2.9.4",
         "hover.css": "^2.3.2",
+        "sweetalert2": "^11.1.2",
         "vue-chartjs": "^3.5.1",
         "vue-confirm-dialog": "^1.0.2",
         "vue-currency-input": "^1.22.6",
         "vue-loading-overlay": "^3.4.2",
-        "vue-numeric": "^2.4.2",
-        "vue-router": "^3.4.5",
+        "vue-numeric": "^2.4.3",
+        "vue-router": "^3.5.2",
+        "vue-sweetalert2": "^5.0.2",
         "vue2-dropzone": "^3.6.0"
     }
 }

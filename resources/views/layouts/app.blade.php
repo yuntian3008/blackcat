@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
@@ -15,11 +16,15 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
+    body {
+        font-family: 'Quicksand', 'Open Sans';
+        padding-top: 0;
+    }
     .zoom {
     transition: transform .2s; /* Animation */
     }
@@ -32,29 +37,37 @@
 <body>
     @guest
     @else
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="{{route('admin.manager.dashboard')}}">Dashboard</a>
-        @if (Auth::guard('admin')->user()->hasAnyRole(['admin','superadmin']))
-        <a href="{{route('admin.manager.customer')}}">Customer</a>
-        <a href="{{route('admin.manager.staff')}}">Staff</a>
-        @endif
-        @if (Auth::guard('admin')->user()->hasAnyRole(['productmanager','superadmin']))
-        <a href="{{route('admin.manager.category')}}">Categories</a>
-        <a href="{{route('admin.manager.product')}}">Products</a>
-        @endif
-        @if (Auth::guard('admin')->user()->hasAnyRole(['ordermanager','superadmin']))
-        <a href="{{route('admin.manager.get-orders')}}">Get orders</a>
-        <a href="{{route('admin.manager.ship-orders')}}">Ship orders</a>
-        @endif
-        @if (Auth::guard('admin')->user()->hasAnyRole(['shipper','superadmin']))
-        <a href="{{route('admin.manager.complete-orders')}}">Complete orders</a>
-        @endif
-    </div>
-    @endguest
     <div id="app">
+        <div class="offcanvas offcanvas-start bg-dark text-light" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Menu</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body navbar-dark">
+                <ul class="navbar-nav flex-column fsize-24 text-light">
+                    <li class="nav-item">
+                        <router-link to="/" class="nav-link" data-bs-dismiss="offcanvas">Dashboard</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{name: 'indexCustomer'}" class="nav-link" data-bs-dismiss="offcanvas">Customer</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{name: 'indexPermission'}" class="nav-link" data-bs-dismiss="offcanvas">Permission</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{name: 'indexStaff'}" class="nav-link" data-bs-dismiss="offcanvas">Staff</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{name: 'indexCategory'}" class="nav-link" data-bs-dismiss="offcanvas">Category</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{name: 'indexProduct'}" class="nav-link" data-bs-dismiss="offcanvas">Product</router-link>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
+            <div class="container px-3">
                 {{-- <a class="navbar-brand" href="{{route('admin.index')}}">
                     {{ config('app.name', 'Laravel') }} Manager
                 </a> --}}
@@ -65,7 +78,12 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        
+                        {{-- <li class="nav-item">
+                            <a class="btn btn-light text-dark btn-sm mr-2" href="#" onclick="openNav()"><i class="fas fa-bars"></i></a>
+                        </li> --}}
+                        <li class="nav-item">
+                            <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="bi bi-list"></i></button>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -108,10 +126,13 @@
         </nav>
 
         <main class="pb-4">
+            <div class="container">
             @yield('content')
+            </div>  
         </main>
+        @endguest
         <footer class="bd-footer text-muted">
-            <div class="container-fluid p-3 p-md-5">
+            <div class="container p-3 p-md-5">
                 <ul class="bd-footer-links">
                 <li><a href="https://github.com/thiensgith/web0001">GitHub</a></li>
                 <li><a href="https://www.facebook.com/borntodiee">A Cute Cat</a></li>

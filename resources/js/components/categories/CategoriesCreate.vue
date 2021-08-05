@@ -68,11 +68,22 @@
                 headers: app.$bearerAPITOKEN
             })
                         .then(function (resp) {
-                            app.$router.push({path: '/'});
+                            app.$swal.fire({
+                                icon: 'success',
+                                title: 'Created!',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    app.$router.push({path: '/'});
+                                }
+                            });
                         })
                         .catch(function (resp) {
                             console.log(resp);
-                            alert("Could not create your category");
+                            app.$swal.fire(
+                                'Error!',
+                                'Could not create category!',
+                                'error',
+                            );
                         });
                 }
             }

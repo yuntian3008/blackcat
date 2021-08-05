@@ -11,13 +11,14 @@ use Illuminate\Support\Facades\Storage;
 
 class CategoriesController extends Controller
 {
-
     private $imageProcessing;
 
     function __construct()
     {
         $this->imageProcessing = new ImageProcessing();
     }
+
+
 
     /**
      * Display a listing of the resource.
@@ -54,14 +55,14 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+        
         $request->merge([
-           'category_slug' => $this->sluger($request->category_name),
+           'category_slug' => $this->sluger( $request->category_name),
         ]);
         $category = Category::create($request->all());
-        return $category;
         
+        return $category;
     }
-
     /**
      * Display the specified resource.
      *
@@ -127,7 +128,7 @@ class CategoriesController extends Controller
         //     Storage::disk('local')->delete('public/plants/lg_'.$plant->plant_image);
         //     Storage::disk('local')->delete('public/plants/sm_'.$plant->plant_image);
         // }
-        $category->plants()->delete();
+        $category->products()->delete();
         $category->delete();
         return '';
     }

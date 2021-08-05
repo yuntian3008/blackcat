@@ -1,8 +1,5 @@
 <template>
-    <div class="vld-parent">
-        <loading :active.sync="isLoading" 
-        :can-cancel="false"
-        :is-full-page="fullPage"></loading>
+    <div>
         <h4 class="card-title">Create new product</h4>
         <div class="card-body row">
             <div class="col"></div>
@@ -67,7 +64,7 @@
                 
                 <div class="row">
                     <div class="col-sm-12 form-group">
-                        <router-link to="/" class="m-1 btn btn-outline-secondary">Back</router-link>
+                        <router-link :to="{ name: 'indexProduct' }" class="m-1 btn btn-outline-secondary">Back</router-link>
                         <button class="m-1 btn btn-outline-primary">Create</button>
                     </div>
                 </div>
@@ -80,14 +77,11 @@
  
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/vue-loading.css'
 import VueNumeric from 'vue-numeric'
 
     export default {
         components: {
             vueDropzone: vue2Dropzone,
-            Loading,
             VueNumeric,
         },
         data: function () {
@@ -120,9 +114,6 @@ import VueNumeric from 'vue-numeric'
                 },
                 categories: [],
                 errors: [],
-                //Vue Loading Overlay
-                isLoading: false,
-                fullPage: true,
             }
         },
         mounted() {
@@ -179,20 +170,31 @@ import VueNumeric from 'vue-numeric'
                 app.validate();
                 if (app.errors.length == 0)
                 {
-                    app.isLoading = true;
+                    let loader = app.$loading.show();
                     var newProduct = app.product;
                     newProduct.product_image = this.$refs.myVueDropzone.getAcceptedFiles();
                     axios.post('/api/v1/products', newProduct,{
                 headers: app.$bearerAPITOKEN
             })
                         .then(function (resp) {
-                            app.isLoading = false;
-                            app.$router.push({path: '/'});
+                            loader.hide();
+                            app.$swal.fire({
+                                icon: 'success',
+                                title: 'Created!',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    app.$router.push({name: 'indexProduct'});
+                                }
+                            });
                         })
                         .catch(function (resp) {
                             console.log(resp);
-                            app.isLoading = false;
-                            alert("Could not create your product");
+                            loader.hide();
+                            app.$swal.fire(
+                                'Error!',
+                                'Could not create product!',
+                                'error',
+                            );
                         });
                 }
             }
