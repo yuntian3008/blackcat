@@ -94,6 +94,8 @@ class StaffController extends Controller
     {
         $staff = Staff::findOrFail($id);
         if ($request->only_edit_block) {
+            if($staff->hasRole('superadmin'))
+            return response('Sorry! You can\'t block Superadmin!',405);
             $staff->update(['block' => $request->block]);
             return $staff;
         }

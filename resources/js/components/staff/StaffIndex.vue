@@ -15,7 +15,7 @@
                     <th>Last name</th>
                     <th>Username</th>
                     <th>Role</th>
-                    <th>Status</th>
+                    <th class="text-danger">Status</th>
                     <th width="100">&nbsp;</th>
                 </tr>
                 </thead>
@@ -27,8 +27,8 @@
                     <td><span class="badge badge-success" v-for="role, i in stafff.roles">{{ role.name}}</span></td>
                     <td>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox"  class="custom-control-input" id="customSwitch1" v-model="stafff.block" v-on:click="deleteEntry(stafff.id, index)">
-                            <label class="custom-control-label custom-switch-danger" for="customSwitch1">{{ stafff.block ? "Blocked" : "Unblocked" }}</label>
+                            <input type="checkbox"  class="custom-control-input" :id="'blockat_'+stafff.id" v-model="stafff.block" v-on:click="deleteEntry(stafff.id, index)">
+                            <label class="custom-control-label custom-switch-danger" :for="'blockat_'+stafff.id">{{ stafff.block ? "Blocked" : "Unblocked" }}</label>
                         </div>
                     </td>
                     <td>
@@ -45,13 +45,16 @@
 </template>
 
 <script>
+import responseHelper from '../../mixins/responseHelper'
     export default {
+        mixins: [responseHelper],
         data: function () {
             return {
                 staff: []
             }
         },
         mounted() {
+            
             var app = this;
             axios.get('/api/v1/staff',{
                 headers: app.$bearerAPITOKEN
@@ -61,50 +64,51 @@
                 })
                 .catch(function (resp) {
                     console.log(resp);
-                    alert("Could not load staff");
+                    app.handingError(resp,'Could not load staff!');
                 });
         },
         methods: {
             deleteEntry(id, index) {
-                alert(id+'-'+index)
                 var app = this;
-                this.$confirm(
-                    {
-                        message: 'Are you sure you want to '+(app.staff[index].block ? 'un' : '' )+'block '+app.staff[index].first_name+' ?',
-                        button: {
-                            no: 'No',
-                            yes: 'Yes'
-                        },
-                        /**
-                        * Callback Function
-                        * @param {Boolean} confirm 
-                        */
-                        callback: confirm => {
-                            var status = app.staff[index].block;
-                            if (confirm) {
-                                
-                                axios.patch('/api/v1/staff/' + id,{
-                                        block: status,
-                                        only_edit_block: true,
-                                    }
-                                        
-                                    ,{
-                                        headers: app.$bearerAPITOKEN
-                                    })
-                                    .then(function (resp) {
-                                        //app.products.splice(index, 1);
-                                    })
-                                    .catch(function (resp) {
-                                        console.log(resp);
-                                        alert("Could not block staff");
-                                    });
+                app.$swal.fire({
+                    title: 'Are you sure?',
+                    html: 'Are you sure you want to '+(app.staff[index].block ? 'un' : '' )+'block <strong>'+app.staff[index].first_name+'</strong> ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    showClass: {
+                        popup: 'animate__animated animate__headShake',
+                        icon: 'animate__animated animate__shakeX',
+                    },
+                    confirmButtonColor: 'orange',
+                    confirmButtonText: 'Yes!'
+                }).then((result) => {
+                    var status = app.staff[index].block;
+                    if (result.isConfirmed) {
+                        axios.patch('/api/v1/staff/' + id,{
+                                block: status,
+                                only_edit_block: true,
                             }
-                            else {
+                            ,{
+                                headers: app.$bearerAPITOKEN
+                            })
+                            .then(function (resp) {
+                                app.$swal.fire(
+                                    'Changed!',
+                                    'Staff status has been changed.',
+                                    'success'
+                                )
+                            })
+                            .catch(function (resp) {
+                                console.log(resp);
                                 app.staff[index].block = !status;
-                            } 
-                        }
+                                app.handingError(resp,'Could not change staff status!');
+                            });
+                        
                     }
-                )
+                    else if (result.isDismissed) {
+                        app.staff[index].block = !status;
+                    }
+                })
             }
         }
     }

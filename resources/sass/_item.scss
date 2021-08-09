@@ -2,6 +2,10 @@
     @extend .btn;
     @extend .btn-primary;
 }
+.back-enti-btn {
+    @extend .btn;
+    @extend .btn-secondary;
+}
 
 .filter-enti-btn {
     @extend .btn;

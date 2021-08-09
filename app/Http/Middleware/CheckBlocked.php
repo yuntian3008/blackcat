@@ -17,9 +17,11 @@ class CheckBlocked
     {
          if (auth()->check() && auth()->user()->block ) {
             $message = 'Your account has been blocked. Please contact administrator.';
-            auth()->logout();     
+            auth()->logout();
+            if($request->is('admin') || $request->is('admin/*'))
+                return redirect()->route('admin.login')->withMessage($message);
             return redirect()->route('login')->withMessage($message); 
-                }
+        }
         return $next($request);
     }
 }

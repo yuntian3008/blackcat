@@ -35,9 +35,8 @@
 </style>
 </head>
 <body>
-    @guest
-    @else
     <div id="app">
+        @auth
         <div class="offcanvas offcanvas-start bg-dark text-light" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Menu</h5>
@@ -48,47 +47,61 @@
                     <li class="nav-item">
                         <router-link to="/" class="nav-link" data-bs-dismiss="offcanvas">Dashboard</router-link>
                     </li>
+                    @if (Auth::guard('admin')->user()->hasAnyRole(['admin','superadmin']))
                     <li class="nav-item">
                         <router-link :to="{name: 'indexCustomer'}" class="nav-link" data-bs-dismiss="offcanvas">Customer</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexPermission'}" class="nav-link" data-bs-dismiss="offcanvas">Permission</router-link>
-                    </li>
-                    <li class="nav-item">
                         <router-link :to="{name: 'indexStaff'}" class="nav-link" data-bs-dismiss="offcanvas">Staff</router-link>
                     </li>
+                    @endif
+                    @if (Auth::guard('admin')->user()->hasAnyRole(['productmanager','superadmin']))
                     <li class="nav-item">
                         <router-link :to="{name: 'indexCategory'}" class="nav-link" data-bs-dismiss="offcanvas">Category</router-link>
                     </li>
                     <li class="nav-item">
                         <router-link :to="{name: 'indexProduct'}" class="nav-link" data-bs-dismiss="offcanvas">Product</router-link>
                     </li>
+                    @endif
+                    @if (Auth::guard('admin')->user()->hasAnyRole(['ordermanager','superadmin']))
+                    
+                    @endif
+                    @if (Auth::guard('admin')->user()->hasAnyRole(['shipper','superadmin']))
+                    
+                    @endif
+                    
+                    {{-- <li class="nav-item">
+                        <router-link :to="{name: 'indexPermission'}" class="nav-link" data-bs-dismiss="offcanvas">Permission</router-link>
+                    </li> --}}
+                    
+                    
                 </ul>
             </div>
         </div>
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container px-3">
-                {{-- <a class="navbar-brand" href="{{route('admin.index')}}">
-                    {{ config('app.name', 'Laravel') }} Manager
-                </a> --}}
+        @endauth
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fsize-20">
+            <div class="container">
+                <a class="navbar-brand py-0" href="#"><strong>Black</strong>Cat - Admin Page</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav me-auto">
                         {{-- <li class="nav-item">
                             <a class="btn btn-light text-dark btn-sm mr-2" href="#" onclick="openNav()"><i class="fas fa-bars"></i></a>
                         </li> --}}
+                        @auth
                         <li class="nav-item">
-                            <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="bi bi-list"></i></button>
+                            <a href="#" class="nav-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="bi bi-list"></i>Menu</a>
                         </li>
+                        @endauth
+                        
                     </ul>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
+
+                    <ul class="navbar-nav d-flex">
                         @guest
                             {{-- <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -99,26 +112,29 @@
                                 </li>
                             @endif --}}
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="btn btn-outline-dark dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::guard('admin')->user()->first_name }} <span class="caret"></span>
-                                </a>
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::guard('admin')->user()->first_name }} <span class="caret"></span>
+                            </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    {{-- <a class="dropdown-item" href="{{ route('user_dashboard') }}">Dashboard</a> --}}
-                                    {{-- <a class="dropdown-item" href="{{ route('user_profile') }}">Profile</a>
-                                    <a class="dropdown-item" href="{{ route('user_security') }}">Security</a> --}}
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                {{-- <a class="dropdown-item" href="{{ route('user_dashboard') }}">Dashboard</a> --}}
+                                {{-- <a class="dropdown-item" href="{{ route('user_profile') }}">Profile</a>
+                                <a class="dropdown-item" href="{{ route('user_security') }}">Security</a> --}}
+                                <li>
                                     <a class="dropdown-item" href="{{ route('admin.logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                        onclick="event.preventDefault();
+                                                        document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
-                                </div>
-                            </li>
+                                </li>
+                                
+                            </ul>
+                        </li>
                         @endguest
                     </ul>
                 </div>
@@ -130,7 +146,6 @@
             @yield('content')
             </div>  
         </main>
-        @endguest
         <footer class="bd-footer text-muted">
             <div class="container p-3 p-md-5">
                 <ul class="bd-footer-links">

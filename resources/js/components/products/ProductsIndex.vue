@@ -1,9 +1,8 @@
 <template>
     <div>
-        <vue-confirm-dialog></vue-confirm-dialog>
         <div class="card-body">
             <div class="d-flex justify-content-between mb-2">
-                <div class="card-title h3 m-0">Products list</div>
+                <div class="card-title h3 m-0">List of products</div>
                 <router-link :to="{name: 'createProduct'}" class="add-enti-btn"><i class="bi bi-plus-lg"></i>&ensp;Create</router-link>
             </div>
             <div class="row gx-1 gy-2">
@@ -53,9 +52,9 @@
                     <td v-on:click="actionEntry(product.id,index)">{{ product.product_price }}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.product_desc }}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.category.category_name }}</td>
-                    <td><div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" :id="product.id" v-model="product.product_visible" v-on:click="deleteEntry(product.id, index)">
-                            <label class="custom-control-label" :for="product.id">{{ product.product_visible ? "Yes" : "No" }}</label>
+                    <td><div class="form-check form-switch">
+                            <input type="checkbox" class="form-check-input" :id="'blockat_'+product.id" v-model="product.product_visible" v-on:click="deleteEntry(product.id, index)">
+                            <label class="form-check-label" :for="'blockat_'+product.id">{{ product.product_visible ? "Yes" : "No" }}</label>
                         </div></td>
                 </tr>
                 </tbody>
@@ -68,8 +67,9 @@
 <script>
 
 import VueNumeric from 'vue-numeric'
-
+import responseHelper from '../../mixins/responseHelper'
     export default {
+        mixins: [responseHelper],
         components: {
             VueNumeric,
         },
@@ -91,7 +91,6 @@ import VueNumeric from 'vue-numeric'
         mounted() {
             var app = this;
             app.loader = app.loader.show();
-            console.log(app.loader);
             axios.get('/api/v1/products',{
                 headers: app.$bearerAPITOKEN
             })
@@ -100,7 +99,8 @@ import VueNumeric from 'vue-numeric'
                 })
                 .catch(function (resp) {
                     console.log(resp);
-                    alert("Could not load products");
+                    app.loader.hide();
+                    app.handingError(resp,'Could not load products','back');
                 });
             axios.get('/api/v1/categories',{
                 headers: app.$bearerAPITOKEN
@@ -110,7 +110,8 @@ import VueNumeric from 'vue-numeric'
                 })
                 .catch(function (resp) {
                     console.log(resp);
-                    alert("Could not load list categories");
+                    app.loader.hide();
+                    app.handingError(resp,'Could not load category','back');
                 });
         },
         methods: {
@@ -152,7 +153,6 @@ import VueNumeric from 'vue-numeric'
                                 headers: app.$bearerAPITOKEN
                             })
                             .then(function (resp) {
-                                app.categories.splice(index, 1);
                                 app.$swal.fire(
                                     'Changed!',
                                     'Product status has been changed.',
@@ -161,11 +161,7 @@ import VueNumeric from 'vue-numeric'
                             })
                             .catch(function (resp) {
                                 console.log(resp);
-                                app.$swal.fire(
-                                    'Error!',
-                                    'Could not hide product!',
-                                    'error',
-                                )
+                                app.handingError(resp,'Could not change product status');
                             });
                         
                     }

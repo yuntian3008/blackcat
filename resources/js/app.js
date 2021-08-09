@@ -28,6 +28,8 @@ import '@sweetalert2/theme-bootstrap-4/bootstrap-4.css';
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 
+
+
 const loading_options = {
     backgroundColor: '#000000',
     color: '#ffffff',
@@ -47,6 +49,9 @@ Vue.use(VueSweetalert2, swal_options);
 Vue.use(VueConfirmDialog)
 
 
+//MIXINS
+//import responseHelper from './mixins/responseHelper'
+
 
 
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
@@ -64,6 +69,8 @@ Vue.component('cart-view-total-amount', require('./components/CartViewTotalAmoun
  */
 
 // PERSONAL
+
+
 
 
 import Security from './components/Security.vue';
@@ -127,8 +134,8 @@ const routes = [
     {path: '/edit-product/:id', component: ProductsEdit, name: 'editProduct'},
 
     {path: '/staff', component: StaffIndex, name: 'indexStaff'},
-    {path: '/create-staff', component: ProductsCreate, name: 'createStaff'},
-    {path: '/edit-staff/:id', component: ProductsEdit, name: 'editStaff'},
+    {path: '/create-staff', component: StaffCreate, name: 'createStaff'},
+    {path: '/edit-staff/:id', component: StaffEdit, name: 'editStaff'},
 ]
 //GLOBAL DATA
 Vue.prototype.$csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute('content');
@@ -140,7 +147,17 @@ Vue.prototype.$bearerAPITOKEN = {
 const router = new VueRouter({
 	routes,
 })
-const app = new Vue({ router }).$mount('#app')
+
+
+
+
+
+
+const app = new Vue({ 
+    router 
+}).$mount('#app')
+
+
 
 $("#search-filter-input").on('keypress',function (e) {
    if (e.keyCode == 13) {

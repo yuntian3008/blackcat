@@ -2631,9 +2631,11 @@ textarea.form-control-lg {
 
 .btn-check[disabled] + .btn,
 .btn-check[disabled] + .filter-enti-btn,
+.btn-check[disabled] + .back-enti-btn,
 .btn-check[disabled] + .add-enti-btn,
 .btn-check:disabled + .btn,
 .btn-check:disabled + .filter-enti-btn,
+.btn-check:disabled + .back-enti-btn,
 .btn-check:disabled + .add-enti-btn {
   pointer-events: none;
   filter: none;
@@ -2860,6 +2862,7 @@ textarea.form-control-lg {
 
 .input-group .btn,
 .input-group .filter-enti-btn,
+.input-group .back-enti-btn,
 .input-group .add-enti-btn {
   position: relative;
   z-index: 2;
@@ -2867,6 +2870,7 @@ textarea.form-control-lg {
 
 .input-group .btn:focus,
 .input-group .filter-enti-btn:focus,
+.input-group .back-enti-btn:focus,
 .input-group .add-enti-btn:focus {
   z-index: 3;
 }
@@ -2891,6 +2895,7 @@ textarea.form-control-lg {
 .input-group-lg > .input-group-text,
 .input-group-lg > .btn,
 .input-group-lg > .filter-enti-btn,
+.input-group-lg > .back-enti-btn,
 .input-group-lg > .add-enti-btn {
   padding: 0.5rem 1rem;
   font-size: 1.125rem;
@@ -2902,6 +2907,7 @@ textarea.form-control-lg {
 .input-group-sm > .input-group-text,
 .input-group-sm > .btn,
 .input-group-sm > .filter-enti-btn,
+.input-group-sm > .back-enti-btn,
 .input-group-sm > .add-enti-btn {
   padding: 0.25rem 0.5rem;
   font-size: 0.7875rem;
@@ -3153,6 +3159,7 @@ textarea.form-control.is-invalid {
 
 .btn,
 .filter-enti-btn,
+.back-enti-btn,
 .add-enti-btn {
   display: inline-block;
   font-weight: 400;
@@ -3177,6 +3184,7 @@ textarea.form-control.is-invalid {
 @media (prefers-reduced-motion: reduce) {
   .btn,
   .filter-enti-btn,
+  .back-enti-btn,
   .add-enti-btn {
     transition: none;
   }
@@ -3184,15 +3192,18 @@ textarea.form-control.is-invalid {
 
 .btn:hover,
 .filter-enti-btn:hover,
+.back-enti-btn:hover,
 .add-enti-btn:hover {
   color: #212529;
 }
 
 .btn-check:focus + .btn,
 .btn-check:focus + .filter-enti-btn,
+.btn-check:focus + .back-enti-btn,
 .btn-check:focus + .add-enti-btn,
 .btn:focus,
 .filter-enti-btn:focus,
+.back-enti-btn:focus,
 .add-enti-btn:focus {
   outline: 0;
   box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.25);
@@ -3200,12 +3211,15 @@ textarea.form-control.is-invalid {
 
 .btn:disabled,
 .filter-enti-btn:disabled,
+.back-enti-btn:disabled,
 .add-enti-btn:disabled,
 .btn.disabled,
 .disabled.filter-enti-btn,
+.disabled.back-enti-btn,
 .disabled.add-enti-btn,
 fieldset:disabled .btn,
 fieldset:disabled .filter-enti-btn,
+fieldset:disabled .back-enti-btn,
 fieldset:disabled .add-enti-btn {
   pointer-events: none;
   opacity: 0.65;
@@ -3273,14 +3287,16 @@ fieldset:disabled .add-enti-btn {
 }
 
 .btn-secondary,
-.filter-enti-btn {
+.filter-enti-btn,
+.back-enti-btn {
   color: #fff;
   background-color: #6c757d;
   border-color: #6c757d;
 }
 
 .btn-secondary:hover,
-.filter-enti-btn:hover {
+.filter-enti-btn:hover,
+.back-enti-btn:hover {
   color: #fff;
   background-color: #5c636a;
   border-color: #565e64;
@@ -3288,8 +3304,10 @@ fieldset:disabled .add-enti-btn {
 
 .btn-check:focus + .btn-secondary,
 .btn-check:focus + .filter-enti-btn,
+.btn-check:focus + .back-enti-btn,
 .btn-secondary:focus,
-.filter-enti-btn:focus {
+.filter-enti-btn:focus,
+.back-enti-btn:focus {
   color: #fff;
   background-color: #5c636a;
   border-color: #565e64;
@@ -3298,14 +3316,19 @@ fieldset:disabled .add-enti-btn {
 
 .btn-check:checked + .btn-secondary,
 .btn-check:checked + .filter-enti-btn,
+.btn-check:checked + .back-enti-btn,
 .btn-check:active + .btn-secondary,
 .btn-check:active + .filter-enti-btn,
+.btn-check:active + .back-enti-btn,
 .btn-secondary:active,
 .filter-enti-btn:active,
+.back-enti-btn:active,
 .btn-secondary.active,
 .active.filter-enti-btn,
+.active.back-enti-btn,
 .show > .btn-secondary.dropdown-toggle,
-.show > .dropdown-toggle.filter-enti-btn {
+.show > .dropdown-toggle.filter-enti-btn,
+.show > .dropdown-toggle.back-enti-btn {
   color: #fff;
   background-color: #565e64;
   border-color: #51585e;
@@ -3313,21 +3336,28 @@ fieldset:disabled .add-enti-btn {
 
 .btn-check:checked + .btn-secondary:focus,
 .btn-check:checked + .filter-enti-btn:focus,
+.btn-check:checked + .back-enti-btn:focus,
 .btn-check:active + .btn-secondary:focus,
 .btn-check:active + .filter-enti-btn:focus,
+.btn-check:active + .back-enti-btn:focus,
 .btn-secondary:active:focus,
 .filter-enti-btn:active:focus,
+.back-enti-btn:active:focus,
 .btn-secondary.active:focus,
 .active.filter-enti-btn:focus,
+.active.back-enti-btn:focus,
 .show > .btn-secondary.dropdown-toggle:focus,
-.show > .dropdown-toggle.filter-enti-btn:focus {
+.show > .dropdown-toggle.filter-enti-btn:focus,
+.show > .dropdown-toggle.back-enti-btn:focus {
   box-shadow: 0 0 0 0 rgba(130, 138, 145, 0.5);
 }
 
 .btn-secondary:disabled,
 .filter-enti-btn:disabled,
+.back-enti-btn:disabled,
 .btn-secondary.disabled,
-.disabled.filter-enti-btn {
+.disabled.filter-enti-btn,
+.disabled.back-enti-btn {
   color: #fff;
   background-color: #6c757d;
   border-color: #6c757d;
@@ -3941,6 +3971,7 @@ fieldset:disabled .add-enti-btn {
 .btn-lg,
 .btn-group-lg > .btn,
 .btn-group-lg > .filter-enti-btn,
+.btn-group-lg > .back-enti-btn,
 .btn-group-lg > .add-enti-btn {
   padding: 0.5rem 1rem;
   font-size: 1.125rem;
@@ -3950,6 +3981,7 @@ fieldset:disabled .add-enti-btn {
 .btn-sm,
 .btn-group-sm > .btn,
 .btn-group-sm > .filter-enti-btn,
+.btn-group-sm > .back-enti-btn,
 .btn-group-sm > .add-enti-btn {
   padding: 0.25rem 0.5rem;
   font-size: 0.7875rem;
@@ -4347,9 +4379,11 @@ fieldset:disabled .add-enti-btn {
 
 .btn-group > .btn,
 .btn-group > .filter-enti-btn,
+.btn-group > .back-enti-btn,
 .btn-group > .add-enti-btn,
 .btn-group-vertical > .btn,
 .btn-group-vertical > .filter-enti-btn,
+.btn-group-vertical > .back-enti-btn,
 .btn-group-vertical > .add-enti-btn {
   position: relative;
   flex: 1 1 auto;
@@ -4357,39 +4391,51 @@ fieldset:disabled .add-enti-btn {
 
 .btn-group > .btn-check:checked + .btn,
 .btn-group > .btn-check:checked + .filter-enti-btn,
+.btn-group > .btn-check:checked + .back-enti-btn,
 .btn-group > .btn-check:checked + .add-enti-btn,
 .btn-group > .btn-check:focus + .btn,
 .btn-group > .btn-check:focus + .filter-enti-btn,
+.btn-group > .btn-check:focus + .back-enti-btn,
 .btn-group > .btn-check:focus + .add-enti-btn,
 .btn-group > .btn:hover,
 .btn-group > .filter-enti-btn:hover,
+.btn-group > .back-enti-btn:hover,
 .btn-group > .add-enti-btn:hover,
 .btn-group > .btn:focus,
 .btn-group > .filter-enti-btn:focus,
+.btn-group > .back-enti-btn:focus,
 .btn-group > .add-enti-btn:focus,
 .btn-group > .btn:active,
 .btn-group > .filter-enti-btn:active,
+.btn-group > .back-enti-btn:active,
 .btn-group > .add-enti-btn:active,
 .btn-group > .btn.active,
 .btn-group > .active.filter-enti-btn,
+.btn-group > .active.back-enti-btn,
 .btn-group > .active.add-enti-btn,
 .btn-group-vertical > .btn-check:checked + .btn,
 .btn-group-vertical > .btn-check:checked + .filter-enti-btn,
+.btn-group-vertical > .btn-check:checked + .back-enti-btn,
 .btn-group-vertical > .btn-check:checked + .add-enti-btn,
 .btn-group-vertical > .btn-check:focus + .btn,
 .btn-group-vertical > .btn-check:focus + .filter-enti-btn,
+.btn-group-vertical > .btn-check:focus + .back-enti-btn,
 .btn-group-vertical > .btn-check:focus + .add-enti-btn,
 .btn-group-vertical > .btn:hover,
 .btn-group-vertical > .filter-enti-btn:hover,
+.btn-group-vertical > .back-enti-btn:hover,
 .btn-group-vertical > .add-enti-btn:hover,
 .btn-group-vertical > .btn:focus,
 .btn-group-vertical > .filter-enti-btn:focus,
+.btn-group-vertical > .back-enti-btn:focus,
 .btn-group-vertical > .add-enti-btn:focus,
 .btn-group-vertical > .btn:active,
 .btn-group-vertical > .filter-enti-btn:active,
+.btn-group-vertical > .back-enti-btn:active,
 .btn-group-vertical > .add-enti-btn:active,
 .btn-group-vertical > .btn.active,
 .btn-group-vertical > .active.filter-enti-btn,
+.btn-group-vertical > .active.back-enti-btn,
 .btn-group-vertical > .active.add-enti-btn {
   z-index: 1;
 }
@@ -4406,6 +4452,7 @@ fieldset:disabled .add-enti-btn {
 
 .btn-group > .btn:not(:first-child),
 .btn-group > .filter-enti-btn:not(:first-child),
+.btn-group > .back-enti-btn:not(:first-child),
 .btn-group > .add-enti-btn:not(:first-child),
 .btn-group > .btn-group:not(:first-child) {
   margin-left: -1px;
@@ -4413,9 +4460,11 @@ fieldset:disabled .add-enti-btn {
 
 .btn-group > .btn:not(:last-child):not(.dropdown-toggle),
 .btn-group > .filter-enti-btn:not(:last-child):not(.dropdown-toggle),
+.btn-group > .back-enti-btn:not(:last-child):not(.dropdown-toggle),
 .btn-group > .add-enti-btn:not(:last-child):not(.dropdown-toggle),
 .btn-group > .btn-group:not(:last-child) > .btn,
 .btn-group > .btn-group:not(:last-child) > .filter-enti-btn,
+.btn-group > .btn-group:not(:last-child) > .back-enti-btn,
 .btn-group > .btn-group:not(:last-child) > .add-enti-btn {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -4423,12 +4472,15 @@ fieldset:disabled .add-enti-btn {
 
 .btn-group > .btn:nth-child(n+3),
 .btn-group > .filter-enti-btn:nth-child(n+3),
+.btn-group > .back-enti-btn:nth-child(n+3),
 .btn-group > .add-enti-btn:nth-child(n+3),
 .btn-group > :not(.btn-check) + .btn,
 .btn-group > :not(.btn-check) + .filter-enti-btn,
+.btn-group > :not(.btn-check) + .back-enti-btn,
 .btn-group > :not(.btn-check) + .add-enti-btn,
 .btn-group > .btn-group:not(:first-child) > .btn,
 .btn-group > .btn-group:not(:first-child) > .filter-enti-btn,
+.btn-group > .btn-group:not(:first-child) > .back-enti-btn,
 .btn-group > .btn-group:not(:first-child) > .add-enti-btn {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -4452,6 +4504,7 @@ fieldset:disabled .add-enti-btn {
 .btn-sm + .dropdown-toggle-split,
 .btn-group-sm > .btn + .dropdown-toggle-split,
 .btn-group-sm > .filter-enti-btn + .dropdown-toggle-split,
+.btn-group-sm > .back-enti-btn + .dropdown-toggle-split,
 .btn-group-sm > .add-enti-btn + .dropdown-toggle-split {
   padding-right: 0.375rem;
   padding-left: 0.375rem;
@@ -4460,6 +4513,7 @@ fieldset:disabled .add-enti-btn {
 .btn-lg + .dropdown-toggle-split,
 .btn-group-lg > .btn + .dropdown-toggle-split,
 .btn-group-lg > .filter-enti-btn + .dropdown-toggle-split,
+.btn-group-lg > .back-enti-btn + .dropdown-toggle-split,
 .btn-group-lg > .add-enti-btn + .dropdown-toggle-split {
   padding-right: 0.75rem;
   padding-left: 0.75rem;
@@ -4473,6 +4527,7 @@ fieldset:disabled .add-enti-btn {
 
 .btn-group-vertical > .btn,
 .btn-group-vertical > .filter-enti-btn,
+.btn-group-vertical > .back-enti-btn,
 .btn-group-vertical > .add-enti-btn,
 .btn-group-vertical > .btn-group {
   width: 100%;
@@ -4480,6 +4535,7 @@ fieldset:disabled .add-enti-btn {
 
 .btn-group-vertical > .btn:not(:first-child),
 .btn-group-vertical > .filter-enti-btn:not(:first-child),
+.btn-group-vertical > .back-enti-btn:not(:first-child),
 .btn-group-vertical > .add-enti-btn:not(:first-child),
 .btn-group-vertical > .btn-group:not(:first-child) {
   margin-top: -1px;
@@ -4487,9 +4543,11 @@ fieldset:disabled .add-enti-btn {
 
 .btn-group-vertical > .btn:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .filter-enti-btn:not(:last-child):not(.dropdown-toggle),
+.btn-group-vertical > .back-enti-btn:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .add-enti-btn:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .btn-group:not(:last-child) > .btn,
 .btn-group-vertical > .btn-group:not(:last-child) > .filter-enti-btn,
+.btn-group-vertical > .btn-group:not(:last-child) > .back-enti-btn,
 .btn-group-vertical > .btn-group:not(:last-child) > .add-enti-btn {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
@@ -4499,13 +4557,21 @@ fieldset:disabled .add-enti-btn {
 .btn-group-vertical > .filter-enti-btn ~ .btn,
 .btn-group-vertical > .btn ~ .filter-enti-btn,
 .btn-group-vertical > .filter-enti-btn ~ .filter-enti-btn,
+.btn-group-vertical > .back-enti-btn ~ .btn,
+.btn-group-vertical > .back-enti-btn ~ .filter-enti-btn,
+.btn-group-vertical > .btn ~ .back-enti-btn,
+.btn-group-vertical > .filter-enti-btn ~ .back-enti-btn,
+.btn-group-vertical > .back-enti-btn ~ .back-enti-btn,
 .btn-group-vertical > .add-enti-btn ~ .btn,
 .btn-group-vertical > .add-enti-btn ~ .filter-enti-btn,
+.btn-group-vertical > .add-enti-btn ~ .back-enti-btn,
 .btn-group-vertical > .btn ~ .add-enti-btn,
 .btn-group-vertical > .filter-enti-btn ~ .add-enti-btn,
+.btn-group-vertical > .back-enti-btn ~ .add-enti-btn,
 .btn-group-vertical > .add-enti-btn ~ .add-enti-btn,
 .btn-group-vertical > .btn-group:not(:first-child) > .btn,
 .btn-group-vertical > .btn-group:not(:first-child) > .filter-enti-btn,
+.btn-group-vertical > .btn-group:not(:first-child) > .back-enti-btn,
 .btn-group-vertical > .btn-group:not(:first-child) > .add-enti-btn {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -5457,6 +5523,7 @@ fieldset:disabled .add-enti-btn {
 
 .btn .badge,
 .filter-enti-btn .badge,
+.back-enti-btn .badge,
 .add-enti-btn .badge {
   position: relative;
   top: -1px;

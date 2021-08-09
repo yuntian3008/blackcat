@@ -59,108 +59,7 @@
                     <div class="form-group row">
                         <button type="button" class="btn btn-warning col-sm-12" onclick="verify()">Verify</button>
                     </div>
-                    <!-- The core Firebase JS SDK is always required and must be listed first -->
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-                    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase.js"></script>
-
-                    <!-- TODO: Add SDKs for Firebase products that you want to use
-                         <setup id="available-libraries"></setup> -->
-
-                    <script>
-                      // Your web app's Firebase configuration
-                      var firebaseConfig = {
-                        apiKey: "AIzaSyC67ztfyyqe6bUsZQ6DuwAheZ7YzjsjV6o",
-                        authDomain: "blackcat-6457a.firebaseapp.com",
-                        projectId: "blackcat-6457a",
-                        storageBucket: "blackcat-6457a.appspot.com",
-                        messagingSenderId: "1008282368219",
-                        appId: "1:1008282368219:web:d93f28c3b67d55791d74fe"
-                      };
-                      // Initialize Firebase
-                      firebase.initializeApp(firebaseConfig);
-                    </script>
-                    <script type="text/javascript">
-                        function countdown(duration, display) {
-                            $('#send-link').fadeOut(100);
-                            var timer = duration,
-                                seconds;
-                            var interval = setInterval(function () {
-
-                                seconds = parseInt(timer % 60, 10);
-
-                                display.show();
-                                display.text("Try again in " + seconds);
-
-                                if (--timer < 0) {
-                                    display.hide();
-                                    $("#successAuth").fadeOut(100);
-                                    clearInterval(interval);
-                                    $('#send-link').show();
-                                    return;
-                                }
-                            }, 1000);
-                        };
-                        window.onload = function () {
-                            render();
-                            $("#successAuth").hide();
-                        };
-
-                        function render() {
-                            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
-                            recaptchaVerifier.render();
-                        }
-
-                        function sendOTP() {
-                            var number = "{{ Auth::user()->phone }}";
-                            number = "+84"+number.substring(1,number.length);
-                            firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function (confirmationResult) {
-                                window.confirmationResult = confirmationResult;
-                                coderesult = confirmationResult;
-                                //console.log(coderesult);
-                                $("#error").hide();
-                                $("#successAuth").text("Message sent. Check your phone");
-                                setTimeout(function() {
-                                    
-                                }, 2000);
-                                $('#recaptcha-container').parent().fadeOut(100);
-                                $("#successAuth").show();
-                                countdown(59,$("#countdownDisplay"));
-                            }).catch(function (error) {
-                                $("#error").text(error.message);
-                                $("#error").show();
-                            });
-                        }
-
-                        function verify() {
-                            var code = $("#verification").val();
-                            coderesult.confirm(code).then(function (result) {
-                                var user = result.user;
-                                $("#successOtpAuth").text("Auth is successful");
-                                $("#successOtpAuth").show();
-                                $("#error").hide();
-                                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                                $.ajax({
-                                    /* the route pointing to the post function */
-                                    url: '/verify-otp',
-                                    type: 'POST',
-                                    /* send the csrf-token and the input to the controller */
-                                    data: {
-                                        _token: CSRF_TOKEN, 
-                                        token: user.refreshToken,
-                                        uid: user.uid,
-                                    },
-                                    dataType: 'JSON',
-                                    /* remind that 'data' is the response of the AjaxController */
-                                    success: function (data) { 
-                                        console.log("successfully");
-                                    }
-                                }); 
-                            }).catch(function (error) {
-                                $("#error").text(error.message);
-                                $("#error").show();
-                            });
-                        }
-                    </script>
+                    
                     @endauth
                 </form>
             </div>
@@ -169,6 +68,114 @@
         <div class="col"></div>
     </div>
 </div>
+@endsection
+
+@section("script")
+@auth
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="application/javascript" src="https://www.gstatic.com/firebasejs/8.6.1/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     <setup id="available-libraries"></setup> -->
+
+<script type="application/javascript">
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyC67ztfyyqe6bUsZQ6DuwAheZ7YzjsjV6o",
+    authDomain: "blackcat-6457a.firebaseapp.com",
+    projectId: "blackcat-6457a",
+    storageBucket: "blackcat-6457a.appspot.com",
+    messagingSenderId: "1008282368219",
+    appId: "1:1008282368219:web:d93f28c3b67d55791d74fe"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+<script type="application/javascript">
+    function countdown(duration, display) {
+        $('#send-link').fadeOut(100);
+        var timer = duration,
+            seconds;
+        var interval = setInterval(function () {
+
+            seconds = parseInt(timer % 60, 10);
+
+            display.show();
+            display.text("Try again in " + seconds);
+
+            if (--timer < 0) {
+                display.hide();
+                $("#successAuth").fadeOut(100);
+                clearInterval(interval);
+                $('#send-link').show();
+                return;
+            }
+        }, 1000);
+    };
+    window.onload = function () {
+        render();
+        $("#successAuth").hide();
+    };
+
+    function render() {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+        recaptchaVerifier.render();
+    }
+
+    function sendOTP() {
+        var number = "{{ Auth::user()->phone }}";
+        number = "+84"+number.substring(1,number.length);
+        firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function (confirmationResult) {
+            window.confirmationResult = confirmationResult;
+            coderesult = confirmationResult;
+            //console.log(coderesult);
+            $("#error").hide();
+            $("#successAuth").text("Message sent. Check your phone");
+            setTimeout(function() {
+                
+            }, 2000);
+            $('#recaptcha-container').parent().fadeOut(100);
+            $("#successAuth").show();
+            countdown(59,$("#countdownDisplay"));
+        }).catch(function (error) {
+            $("#error").text(error.message);
+            $("#error").show();
+        });
+    }
+
+    function verify() {
+        var code = $("#verification").val();
+        coderesult.confirm(code).then(function (result) {
+            var user = result.user;
+            $("#successOtpAuth").text("Auth is successful");
+            $("#successOtpAuth").show();
+            $("#error").hide();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                /* the route pointing to the post function */
+                url: '/verify-otp',
+                type: 'POST',
+                /* send the csrf-token and the input to the controller */
+                data: {
+                    _token: CSRF_TOKEN, 
+                    token: user.refreshToken,
+                    uid: user.uid,
+                },
+                dataType: 'JSON',
+                /* remind that 'data' is the response of the AjaxController */
+                success: function (data) { 
+                    console.log("successfully");
+                }
+            }); 
+        }).catch(function (error) {
+            $("#error").text(error.message);
+            $("#error").show();
+        });
+    }
+</script>
+@endauth
+@endsection
 {{-- <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -240,4 +247,3 @@
         </div>
     </div>
 </div> --}}
-@endsection

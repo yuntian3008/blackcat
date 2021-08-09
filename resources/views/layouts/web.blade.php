@@ -124,7 +124,7 @@
                         </span>
                     </a>
                     @else
-                    <a class="nav-link hvr-underline-from-left py-2 mr-2 fsize-32 text-brown" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link hvr-underline-from-left py-2 mr-2 fsize-32 text-brown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="fa-1x fa-layers fa-fw">
                               <i class="fas fa-user-circle"></i>
                         </span>
@@ -161,6 +161,7 @@
         @yield('content')
     </main>
     </div>
+        @yield('script')
     {{-- <script type="text/javascript">
         // $.getJSON( "../data.json", function( data ) {
         //     alert(data.logged);

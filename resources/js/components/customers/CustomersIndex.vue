@@ -17,7 +17,7 @@
                     <th>Phone</th>
                     <th>Email</th>
                     <th>Birthday</th>
-                    <th>Verify phone</th>
+                    <!-- <th>Verify phone</th> -->
                     <th>Verify email</th>
                     <th>Create at</th>
                     <th class="text-danger">Status</th>
@@ -32,10 +32,10 @@
                     <td>{{ user.phone }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.dob }}</td>
-                    <td>
+                    <!-- <td>
                         <i v-if="user.firebase_uid.length" class="fas fa-check-circle text-success"></i>
                         <i v-if="!user.firebase_uid.length" class="fas fa-times-circle text-danger"></i>
-                    </td>
+                    </td> -->
                     <td>
                         <i v-if="user.email_verified_at" class="fas fa-check-circle text-success"></i>
                         <i v-if="!user.email_verified_at" class="fas fa-times-circle text-danger"></i>
@@ -44,8 +44,8 @@
                         {{ user.created_at }}
                     </td>
                     <td><div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="customSwitch1" v-model="user.block" v-on:click="deleteEntry(user.id, index)">
-                            <label class="custom-control-label custom-switch-danger" for="customSwitch1">{{ user.block ? "Blocked" : "Unblocked" }}</label>
+                            <input type="checkbox" class="custom-control-input" :id="'blockat_'+user.id" v-model="user.block" v-on:click="deleteEntry(user.id, index)">
+                            <label class="custom-control-label custom-switch-danger" :for="'blockat_'+user.id">{{ user.block ? "Blocked" : "Unblocked" }}</label>
                         </div>
                         <!-- <router-link :to="{name: 'editUser', params: {id: user.id}}" class="btn btn-sm btn-block btn-outline-dark m-1">
                             Edit
@@ -86,43 +86,48 @@
         methods: {
             deleteEntry(id, index) {
                 var app = this;
-                this.$confirm(
-                    {
-                        message: 'Are you sure you want to '+(app.users[index].block ? 'un' : '' )+'block '+app.users[index].firstname+' ?',
-                        button: {
-                            no: 'No',
-                            yes: 'Yes'
-                        },
-                        /**
-                        * Callback Function
-                        * @param {Boolean} confirm 
-                        */
-                        callback: confirm => {
-                            var status = app.users[index].block;
-                            if (confirm) {
-                                
-                                axios.patch('/api/v1/customers/' + id,{
-                                        block: status,
-                                        only_edit_block: true,
-                                    }
-                                        
-                                    ,{
-                                        headers: app.$bearerAPITOKEN
-                                    })
-                                    .then(function (resp) {
-                                        //app.products.splice(index, 1);
-                                    })
-                                    .catch(function (resp) {
-                                        console.log(resp);
-                                        alert("Could not block user");
-                                    });
+                app.$swal.fire({
+                    title: 'Are you sure?',
+                    html: 'Are you sure you want to '+(app.users[index].block ? 'un' : '' )+'block <strong>'+app.users[index].firstname+'</strong> ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    showClass: {
+                        popup: 'animate__animated animate__headShake',
+                        icon: 'animate__animated animate__shakeX',
+                    },
+                    confirmButtonColor: 'orange',
+                    confirmButtonText: 'Yes!'
+                }).then((result) => {
+                    var status = app.users[index].block;
+                    if (result.isConfirmed) {
+                        axios.patch('/api/v1/customers/' + id,{
+                                block: status,
+                                only_edit_block: true,
                             }
-                            else {
-                                app.users[index].block = !status;
-                            } 
-                        }
+                            ,{
+                                headers: app.$bearerAPITOKEN
+                            })
+                            .then(function (resp) {
+                                app.$swal.fire(
+                                    'Changed!',
+                                    'Customer status has been changed.',
+                                    'success'
+                                )
+                            })
+                            .catch(function (resp) {
+                                console.log(resp);
+                                app.$swal.fire(
+                                    'Error!',
+                                    'Could not change customer status!',
+                                    'error',
+                                )
+                            });
+                        
                     }
-                )
+                    else if (result.isDismissed) {
+                        app.users[index].block = !status;
+                    }
+                })
             }
         }
     }
