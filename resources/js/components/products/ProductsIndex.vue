@@ -3,9 +3,16 @@
         <div class="card-body">
             <div class="d-flex justify-content-between mb-2">
                 <div class="card-title h3 m-0">List of products</div>
-                <router-link :to="{name: 'createProduct'}" class="add-enti-btn"><i class="bi bi-plus-lg"></i>&ensp;Create</router-link>
+                <div>
+                    <div class="form-check form-switch form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" @click="filter">
+                        <label class="form-check-label" for="flexSwitchCheckDefault"><i class="bi bi-funnel" ></i>&ensp;Filter</label>
+                    </div>
+                    <router-link :to="{name: 'createProduct'}" class="add-enti-btn"><i class="bi bi-plus-lg"></i>&ensp;Create</router-link>
+                </div>
+                
             </div>
-            <div class="row gx-1 gy-2">
+            <div class="row gx-1 gy-2" v-show="isFilter">
             <!-- <button @click="filter()" class="filter-enti-btn"><i class="bi bi-search"></i>&ensp;Search</button> -->
                 <div class="col-lg-3 col-sm-12">
                     <input class="form-control" type="text" placeholder="Search by name" v-model="search.name" aria-label="default input example">
@@ -30,9 +37,9 @@
                         <option :value="0">Hiding</option>
                     </select>
                 </div>
-                
+                <hr/>
             </div>
-            <hr/>
+            
             <table class="table table-hover">
                 <thead class="thead-dark">
                 <tr>
@@ -41,6 +48,8 @@
                     <th>Price</th>
                     <th>Description</th>
                     <th>Category</th>
+                    <th>Created at</th>
+                    <th>Updated at</th>
                     <th>Visible</th>
 
                 </tr>
@@ -52,14 +61,29 @@
                     <td v-on:click="actionEntry(product.id,index)">{{ product.product_price }}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.product_desc }}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.category.category_name }}</td>
+                    <td v-on:click="actionEntry(product.id,index)">{{ product.created_at }}</td>
+                    <td v-on:click="actionEntry(product.id,index)">{{ product.updated_at }}</td>
                     <td><div class="form-check form-switch">
                             <input type="checkbox" class="form-check-input" :id="'blockat_'+product.id" v-model="product.product_visible" v-on:click="deleteEntry(product.id, index)">
                             <label class="form-check-label" :for="'blockat_'+product.id">{{ product.product_visible ? "Yes" : "No" }}</label>
                         </div></td>
                 </tr>
                 </tbody>
+                
                 <caption class="text-center fsize-24" v-if="resultQuery.length == 0">No thing.</caption>
+                
             </table>
+            <pagination
+                 v-show="!isFilter"
+                :totalPages="total_page"
+                :currentPage="current_page"
+                :maxVisibleButtons="4"
+                :firstButtonText="firstButtonText"
+                :lastButtonText="lastButtonText"
+                :prevButtonText="prevButtonText"
+                :nextButtonText="nextButtonText"
+                @pagechanged="onPageChange"
+                 class="text-center"/>
         </div>
     </div>
 </template>
@@ -68,14 +92,20 @@
 
 import VueNumeric from 'vue-numeric'
 import responseHelper from '../../mixins/responseHelper'
+import Pagination from '../utils/Pagination'
+
     export default {
         mixins: [responseHelper],
         components: {
             VueNumeric,
+            Pagination,
         },
         data: function () {
             return {
-                loader: this.$loading,
+                firstButtonText : '<i class="bi bi-chevron-double-left"></i>',
+                lastButtonText : '<i class="bi bi-chevron-double-right"></i>',
+                nextButtonText : '<i class="bi bi-chevron-right"></i>',
+                prevButtonText : '<i class="bi bi-chevron-left"></i>',
                 search: {
                     name: null,
                     price_from: 0,
@@ -83,6 +113,9 @@ import responseHelper from '../../mixins/responseHelper'
                     category_id: null,
                     visible: null,
                 },
+                isFilter: false,
+                current_page: 1,
+                total_page: 0,
                 products: [],
                 categories: [],
                 category_id: '',
@@ -90,18 +123,7 @@ import responseHelper from '../../mixins/responseHelper'
         },
         mounted() {
             var app = this;
-            app.loader = app.loader.show();
-            axios.get('/api/v1/products',{
-                headers: app.$bearerAPITOKEN
-            })
-                .then(function (resp) {
-                    app.products = resp.data;
-                })
-                .catch(function (resp) {
-                    console.log(resp);
-                    app.loader.hide();
-                    app.handingError(resp,'Could not load products','back');
-                });
+            this.onPageChange(this.current_page);
             axios.get('/api/v1/categories',{
                 headers: app.$bearerAPITOKEN
             })
@@ -115,6 +137,48 @@ import responseHelper from '../../mixins/responseHelper'
                 });
         },
         methods: {
+            filter() {
+                this.isFilter = !this.isFilter;
+                var app = this;
+                if(this.isFilter) {
+                    var loader = this.$loading.show();
+                        axios.get('/api/v1/products',{
+                        headers: app.$bearerAPITOKEN
+                    })
+                        .then(function (resp) {
+                            app.products = resp.data;
+                            loader.hide();
+                        })
+                        .catch(function (resp) {
+                            console.log(resp);
+                            loader.hide();
+                            app.handingError(resp,'Could not load products','back');
+                        });
+                }
+                else this.onPageChange(this.current_page);
+                
+            },
+            onPageChange(page) {
+                console.log(page)
+                var app = this;
+                var loader = this.$loading.show();
+                app.current_page = page;
+                axios.get('/api/v1/products?page=' + page,{
+                    headers: app.$bearerAPITOKEN
+                })
+                    .then(function (resp) {
+                        var pagination = resp.data;
+                        app.current_page = pagination.current_page;
+                        app.total_page = pagination.last_page;
+                        app.products = pagination.data;
+                        loader.hide();
+                    })
+                    .catch(function (resp) {
+                        console.log(resp);
+                        loader.hide();
+                        app.handingError(resp,'Could not load products','back');
+                    });
+            },
             showImg(index) {
                 var app = this;
                 app.$swal.fire({
@@ -188,19 +252,7 @@ import responseHelper from '../../mixins/responseHelper'
                 if(app.search.visible != null)
                     data = data.filter((product) => (app.search.visible == product.product_visible ));
 
-                if(data.length) app.loader.hide();
                 return data;
-                // if(this.search_keyword){
-                //     return this.products
-                //         // .filter((item)=>{
-                //         //     return this.search_keyword.toLowerCase().split(' ').every(v => item.product_name.toLowerCase().includes(v))
-                //         // })
-                //         .filter((item)=>{
-                //             return this.search_keyword.toLowerCase().split(' ').every(v => item.product_price.toString().includes(v))
-                //         })
-                // }else{
-                //     return this.products;
-                // }
             }
         }
     }

@@ -27,6 +27,7 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import '@sweetalert2/theme-bootstrap-4/bootstrap-4.css';
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
+import InfiniteLoading from 'vue-infinite-loading';
 
 
 
@@ -44,6 +45,7 @@ const swal_options = {
         popup: 'animate__animated animate__bounceOut animate__faster'
       },
   };
+Vue.use(InfiniteLoading, { /* options */ });
 Vue.use(Loading, loading_options);
 Vue.use(VueSweetalert2, swal_options);
 Vue.use(VueConfirmDialog)

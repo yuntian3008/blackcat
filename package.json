@@ -35,6 +35,7 @@
         "vue-chartjs": "^3.5.1",
         "vue-confirm-dialog": "^1.0.2",
         "vue-currency-input": "^1.22.6",
+        "vue-infinite-loading": "^2.4.5",
         "vue-loading-overlay": "^3.4.2",
         "vue-numeric": "^2.4.3",
         "vue-router": "^3.5.2",

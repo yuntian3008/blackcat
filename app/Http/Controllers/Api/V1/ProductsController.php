@@ -20,16 +20,20 @@ class ProductsController extends Controller
         $this->imgProcess = new ImageProcessing();
     }
 
-   /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category:id,category_name')->get();
+        if ($request->page) {
+            $products = Product::with('category:id,category_name')->paginate(5);
+        }
+        else $products = Product::with('category:id,category_name')->get();
+        
         foreach ($products as $product) {
-            $product['product_image'] = Storage::url('public/sm_'.$product['product_image'].'.png');
+            $product['product_image'] = Storage::url('public/sm_' . $product['product_image'] . '.png');
             // $id_images = collect(json_decode($product['product_image'],true))->collapse();
             // $product['product_image'] = self::DRIVE_CONFIG_URL.$id_images['sm'];
             //asset('storage/sm_'.$product['product_image']);
@@ -42,7 +46,7 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()    
+    public function create()
     {
         //USE VUEJS
     }
@@ -59,8 +63,8 @@ class ProductsController extends Controller
         //$request = mb_convert_encoding($request, 'UTF-8', 'UTF-8');
         $specs = $request->product_specs;
         //return $request;
-        $request->merge([ 
-            'product_image' => $this->imgProcess->run($request->product_image[0]['dataURL'],'products'),
+        $request->merge([
+            'product_image' => $this->imgProcess->run($request->product_image[0]['dataURL'], 'products'),
             'product_slug' => $this->sluger($request->product_name)
         ]);
         $product = Product::create($request->except(['product_specs']));
@@ -79,7 +83,7 @@ class ProductsController extends Controller
         $product = Product::findOrFail($id);
         // $id_images = collect(json_decode($product['product_image'],true))->collapse();
         // $product['product_image'] = self::DRIVE_CONFIG_URL.$id_images['sm'];
-        $product['product_image'] = Storage::url('public/sm_'.$product['product_image'].'.png');
+        $product['product_image'] = Storage::url('public/sm_' . $product['product_image'] . '.png');
         $product['product_specs'] = $product->specs;
         return $product;
     }
@@ -104,32 +108,32 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
-        
+
+
         $product = Product::findOrFail($id);
         if ($request->only_edit_visible) {
             $product->update(['product_visible' => $request->product_visible]);
             return $product;
         }
 
-        
+
 
         if ($request->product_image) {
-            $merge = [ 
-                'product_image' => $this->imgProcess->run($request->product_image[0]['dataURL'],'products'),
+            $merge = [
+                'product_image' => $this->imgProcess->run($request->product_image[0]['dataURL'], 'products'),
                 'product_slug' => $this->sluger($request->product_name)
             ];
             $except = ['product_specs'];
         } else {
-            $merge = [ 
+            $merge = [
                 'product_slug' => $this->sluger($request->product_name)
             ];
-            $except = ['product_image','product_specs'];
+            $except = ['product_image', 'product_specs'];
         }
 
         $request->merge($merge);
         $product->update($request->except($except));
-        
+
         $specs = $request->product_specs;
         $id = collect($specs)->pluck('id');
 
@@ -137,10 +141,11 @@ class ProductsController extends Controller
 
         foreach ($specs as $spec) {
             $product->specs()->updateOrCreate(
-                [ 'key' => $spec["key"] ],
-                [ 'value' => $spec["value"] ]);
+                ['key' => $spec["key"]],
+                ['value' => $spec["value"]]
+            );
         }
-        
+
         return $product;
     }
 
