@@ -29,7 +29,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(UrlGenerator $url)
     {
 
-       //View::share('navbar_data', Category::where('category_visible',1)->get());
+        if (Schema::hasTable('categories')) {
+            View::share('navbar_data', Category::where('category_visible',1)->get());
+        }
         Schema::defaultStringLength(191);
         if(env('REDIRECT_HTTPS')) {
             $url->formatScheme('https');
