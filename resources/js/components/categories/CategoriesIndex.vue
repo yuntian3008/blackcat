@@ -47,7 +47,6 @@ import responseHelper from '../../mixins/responseHelper'
         data: function () {
             return {
                 categories: [],
-                loader: this.$loading,
                 search: {
                     name: null,
                     visible: null,
@@ -56,12 +55,13 @@ import responseHelper from '../../mixins/responseHelper'
         },
         mounted() {
             var app = this;
-            app.loader = app.loader.show();
+            var loader = this.$loading.show();
             axios.get('/api/v1/categories',{
                 headers: app.$bearerAPITOKEN
             })
                 .then(function (resp) {
                     app.categories = resp.data;
+                    loader.hide();
                 })
                 .catch(function (resp) {
                     console.log(resp);
@@ -134,7 +134,7 @@ import responseHelper from '../../mixins/responseHelper'
                 if(app.search.visible != null)
                     data = data.filter((product) => (app.search.visible == product.category_visible ));
 
-                if(data.length) app.loader.hide();
+                //if(data.length) app.loader.hide();
                 return data;
                 // if(this.search_keyword){
                 //     return this.products
