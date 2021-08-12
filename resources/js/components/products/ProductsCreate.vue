@@ -173,7 +173,7 @@ import VueNumeric from 'vue-numeric'
                 app.validate();
                 if (app.errors.length == 0)
                 {
-                    let loader = app.$loading.show();
+                    var loader = app.$loading.show();
                     var newProduct = app.product;
                     newProduct.product_image = this.$refs.myVueDropzone.getAcceptedFiles();
                     axios.post('/api/v1/products', newProduct,{

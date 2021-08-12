@@ -21,8 +21,8 @@ class StaffTableSeeder extends Seeder
         $shipperRole = Role::firstWhere("code","shipper");
 
         $sa = new Staff();
-        $sa->first_name =  'admin';
-        $sa->last_name = 'super';
+        $sa->firstname =  'admin';
+        $sa->lastname = 'super';
         $sa->username ='superadmin';
         $sa->password = Hash::make('00000000');
         $sa->save();
@@ -30,8 +30,8 @@ class StaffTableSeeder extends Seeder
         $sa->roles()->attach($saRole);
 
         $admin = new Staff();
-        $admin->first_name =  'admin';
-        $admin->last_name = '';
+        $admin->firstname =  'admin';
+        $admin->lastname = '';
         $admin->username ='admin';
         $admin->password = Hash::make('00000000');
         $admin->save();
@@ -39,8 +39,8 @@ class StaffTableSeeder extends Seeder
         $admin->roles()->attach($adminRole);
 
         $product = new Staff();
-        $product->first_name =  'product';
-        $product->last_name = 'manager';
+        $product->firstname =  'product';
+        $product->lastname = 'manager';
         $product->username ='product';
         $product->password = Hash::make('00000000');
         $product->save();
@@ -48,8 +48,8 @@ class StaffTableSeeder extends Seeder
         $product->roles()->attach($productRole);
 
         $order = new Staff();
-        $order->first_name =  'order';
-        $order->last_name = 'manager';
+        $order->firstname =  'order';
+        $order->lastname = 'manager';
         $order->username ='order';
         $order->password = Hash::make('00000000');
         $order->save();
@@ -57,8 +57,8 @@ class StaffTableSeeder extends Seeder
         $order->roles()->attach($orderRole);
 
         $shipper = new Staff();
-        $shipper->first_name =  'shipper';
-        $shipper->last_name = 'staff';
+        $shipper->firstname =  'shipper';
+        $shipper->lastname = 'staff';
         $shipper->username ='shipper';
         $shipper->password = Hash::make('00000000');
         $shipper->save();

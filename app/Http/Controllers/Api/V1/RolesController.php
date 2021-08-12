@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use App\Permission;
+use App\Role;
 
-class PermissionsController extends Controller
+class RolesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,8 @@ class PermissionsController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::all();
-        return $permissions;
+        $roles = Role::all();
+        return $roles;
     }
 
     /**
@@ -38,12 +37,12 @@ class PermissionsController extends Controller
      */
     public function store(Request $request)
     {
-        // foreach (config('permission.api') as $list) {
-        //     Permission::create($list);
+        // foreach (config('role.api') as $list) {
+        //     Role::create($list);
         // }
-        $permission = Permission::create($request->all());
-        return $permission;
-        //return config('permission.api');
+        $role = Role::create($request->all());
+        return $role;
+        //return config('role.api');
     }
 
     /**
@@ -54,8 +53,8 @@ class PermissionsController extends Controller
      */
     public function show($id)
     {
-        $permission = Permission::findOrFail($id);
-        return $permission;
+        $role = Role::findOrFail($id);
+        return $role;
     }
 
     /**
@@ -78,10 +77,10 @@ class PermissionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $permission = Permission::findOrFail($id);
-        $permission->update($request->all());
+        $role = Role::findOrFail($id);
+        $role->update($request->all());
 
-        return $permission;
+        return $role;
     }
 
     /**
@@ -92,9 +91,9 @@ class PermissionsController extends Controller
      */
     public function destroy($id)
     {
-        $permission = Permission::findOrFail($id);
-        $permission->users()->detach();
-        $permission->delete();
+        $role = Role::findOrFail($id);
+        $role->users()->detach();
+        $role->delete();
         return '';
     }
 

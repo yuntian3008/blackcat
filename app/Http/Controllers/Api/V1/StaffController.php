@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use App\Staff;
 
 class StaffController extends Controller
@@ -42,19 +44,31 @@ class StaffController extends Controller
      */
     public function store(Request $request)
     {
-        // $user = User::create([
-        //     'fname' => $request->fname,
-        //     'lname' => $request->lname,
-        //     'gender' => $request->gender,
-        //     'email' => $request->email,
-        //     'isAdmin' => $request->isAdmin,
-        //     'password' => Hash::make(1),
-        // ]);
-        // if ($request->admin) $request->permissions->append(['id' => 1]);
-        // //if ($request->permissions != null) 
-        // $user->permissions()->sync($request->permissions);
+        Validator::make($request->all(), [
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'username' => ['required','unique:staff','regex:/^[a-z0-9_-]{3,16}$/'],
+            'roles' => ['present','array','min:1'],
+            // 'gender' => ['required', 'digits_between:-1,1'],
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:staff'],
+            // 'phone' => ['required', 'digits:10', 'unique:staff'],
+            // 'dob' => ['required', 'date_format:Y-m-d','before:today'],
+            // 'password' => ['required', 'string', 'min:8', 'confirmed'],
+            // 'address' => ['required', 'string', 'max:255'],   
+        ])->validate();
+        $default_password = Str::random(30);
+        $staff = Staff::create([
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
+            'username' => $request->username,
+            'password' => Hash::make($default_password),
+        ]);
+        $staff->generateToken();
         
-        // return $user;
+        $staff->roles()->sync($request->roles);
+
+        $staff["default_password"] = $default_password;
+        return $staff;
     }
 
     /**

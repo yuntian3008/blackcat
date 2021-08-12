@@ -21,10 +21,10 @@
                 </thead>
                 <tbody>
                 <tr v-for="stafff, index in staff">
-                    <td>{{ stafff.first_name }}</td>
-                    <td>{{ stafff.last_name }}</td>
+                    <td>{{ stafff.firstname }}</td>
+                    <td>{{ stafff.lastname }}</td>
                     <td>{{ stafff.username }}</td>
-                    <td><span class="badge badge-success" v-for="role, i in stafff.roles">{{ role.name}}</span></td>
+                    <td><span class="badge bg-success me-1" v-for="role, i in stafff.roles">{{ role.name}}</span></td>
                     <td>
                         <div class="custom-control custom-switch">
                             <input type="checkbox"  class="custom-control-input" :id="'blockat_'+stafff.id" v-model="stafff.block" v-on:click="deleteEntry(stafff.id, index)">
@@ -39,6 +39,7 @@
                     
                 </tr>
                 </tbody>
+                <caption class="text-center fsize-24" v-if="staff.length == 0">No thing.</caption>
             </table>
         </div>
     </div>
@@ -56,14 +57,17 @@ import responseHelper from '../../mixins/responseHelper'
         mounted() {
             
             var app = this;
+            var loader = app.$loading.show();
             axios.get('/api/v1/staff',{
                 headers: app.$bearerAPITOKEN
             })
                 .then(function (resp) {
                     app.staff = resp.data;
+                    loader.hide();
                 })
                 .catch(function (resp) {
                     console.log(resp);
+                    loader.hide();
                     app.handingError(resp,'Could not load staff!');
                 });
         },
@@ -72,7 +76,7 @@ import responseHelper from '../../mixins/responseHelper'
                 var app = this;
                 app.$swal.fire({
                     title: 'Are you sure?',
-                    html: 'Are you sure you want to '+(app.staff[index].block ? 'un' : '' )+'block <strong>'+app.staff[index].first_name+'</strong> ?',
+                    html: 'Are you sure you want to '+(app.staff[index].block ? 'un' : '' )+'block <strong>'+app.staff[index].firstname+'</strong> ?',
                     icon: 'warning',
                     showCancelButton: true,
                     showClass: {

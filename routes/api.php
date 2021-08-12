@@ -33,8 +33,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 			->middleware('api.role:productmanager');
 		Route::resource('orders', 'OrdersController', ['except' => ['create', 'edit']])
 			->middleware('api.role:ordermanager,api.role:shipper');
-		Route::resource('permissions', 'PermissionsController', ['except' => ['create', 'edit']])
-			->middleware('permission:'.config('permission.api.PermissionsController'));
+		Route::resource('roles', 'RolesController', ['except' => ['create', 'edit']])
+			->middleware('api.role:superadmin');
 	}
 	);
 });
