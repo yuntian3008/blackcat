@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
         if (Schema::hasTable('categories')) {
-            View::share('navbar_data', Category::where('category_visible',1)->get());
+            View::share('navbar_data', Category::all());
         }
         Schema::defaultStringLength(191);
         if(env('REDIRECT_HTTPS')) {

@@ -28,7 +28,9 @@ import '@sweetalert2/theme-bootstrap-4/bootstrap-4.css';
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import InfiniteLoading from 'vue-infinite-loading';
-
+global.jQuery = require('jquery');
+var $ = global.jQuery;
+window.$ = $;
 
 
 const loading_options = {
@@ -49,7 +51,6 @@ Vue.use(InfiniteLoading, { /* options */ });
 Vue.use(Loading, loading_options);
 Vue.use(VueSweetalert2, swal_options);
 Vue.use(VueConfirmDialog)
-
 
 //MIXINS
 //import responseHelper from './mixins/responseHelper'
@@ -88,7 +89,7 @@ import PermissionsIndex from './components/permissions/PermissionsIndex.vue';
 import PermissionsCreate from './components/permissions/PermissionsCreate.vue';
 
 import CategoriesIndex from './components/categories/CategoriesIndex.vue';
-import CategoriesCreate from './components/categories/CategoriesCreate.vue';
+//import CategoriesCreate from './components/categories/CategoriesCreate.vue';
 import CategoriesEdit from './components/categories/CategoriesEdit.vue';
 
 import StaffIndex from './components/staff/StaffIndex.vue';
@@ -128,7 +129,7 @@ const routes = [
     {path: '/create-permission', component: PermissionsCreate, name: 'createPermission'},
 
     {path: '/category', component: CategoriesIndex, name: 'indexCategory'},
-    {path: '/create-category', component: CategoriesCreate, name: 'createCategory'},
+    //{path: '/create-category', component: CategoriesCreate, name: 'createCategory'},
     {path: '/edit-category/:id', component: CategoriesEdit, name: 'editCategory'},
 
     {path: '/product', component: ProductsIndex, name: 'indexProduct'},
@@ -161,7 +162,7 @@ const app = new Vue({
 
 
 
-$("#search-filter-input").on('keypress',function (e) {
+jQuery("#search-filter-input").on('keypress',function (e) {
    if (e.keyCode == 13) {
        window.location.replace("/search/"+$("#search-filter-input").val())
    }

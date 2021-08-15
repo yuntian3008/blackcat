@@ -17,7 +17,9 @@ class CreateCategoriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('category_name', 100)->unique();
             $table->string('category_slug', 100)->unique();
-            $table->boolean('category_visible')->default(true);
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('categories');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

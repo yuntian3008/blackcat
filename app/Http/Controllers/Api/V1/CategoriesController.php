@@ -27,13 +27,11 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $this->middleware('permission:1');
-        $categories = Category::all();
+        //$categories = 
+        $categories['recursive'] = Category::with('childrenRecursive')->whereNull('parent_id')->get();
+        $categories['original'] = Category::all();
         
-        // foreach ($categories as $category) {
-        //     // $id_images = collect(json_decode($category['category_image'],true))->collapse();
-        //     $category['category_image'] = $this->imageProcessing->getURL($category['category_image'],'sm');
-        // }
+        
         return $categories;
     }
 
@@ -55,7 +53,6 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        
         $request->merge([
            'category_slug' => $this->sluger( $request->category_name),
         ]);
@@ -127,8 +124,9 @@ class CategoriesController extends Controller
         // foreach ($category->plants as $plant) {
         //     Storage::disk('local')->delete('public/plants/lg_'.$plant->plant_image);
         //     Storage::disk('local')->delete('public/plants/sm_'.$plant->plant_image);
-        // }
-        $category->products()->delete();
+        // // }
+        // $category->products()->delete();
+        $category->children()->delete();
         $category->delete();
         return '';
     }
