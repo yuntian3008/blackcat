@@ -1,13 +1,13 @@
 <template>
     <div class="d-inline">
-        <button data-bs-toggle="modal" :data-bs-target="'#createmodal_'+(parent_category ? parent_category.id : 'null')" class="btn btn-link btn-sm border text-decoration-none text-muted"><i class="bi bi-plus-lg"></i>&ensp;new {{ parent_category ? "sub-category" : "category"}} </button>
+        <!-- <a :href="'#createmodal_'+(parent_category ? parent_category.id : 'null')" data-bs-toggle="modal" :data-bs-target="'#createmodal_'+(parent_category ? parent_category.id : 'null')" class="d-flex align-items-center btn btn-link text-decoration-none text-muted new-item">new {{ parent_category ? "sub-category" : "category"}} </a> -->
         <!-- Modal -->
-        <div class="modal animate__animated animate__zoomIn animate__faster" :id="'createmodal_'+(parent_category ? parent_category.id : 'null')" tabindex="-1" :aria-labelledby="'#createmodalLabel_'+(parent_category ? parent_category.id : 'null')" aria-hidden="true">
+        <div v-if="parent_category != null" class="modal d-block animate__animated animate__zoomIn animate__faster" :id="'createmodal_'+parent_category.id" tabindex="-1" :aria-labelledby="'#createmodalLabel_'+parent_category.id" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"  :id="'#createmodalLabel_'+(parent_category ? parent_category.id : 'null')"><i class="bi bi-hash"></i>&ensp;{{ parent_category ? "Create a subcategory of "+parent_category.category_name : "Create new category"}}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title"  :id="'#createmodalLabel_'+parent_category.id"><i class="bi bi-hash"></i>&ensp;{{ parent_category.id != 0 ? "Create a subcategory of " : "Create new category"}}<strong>{{ parent_category.id != 0 ? parent_category.category_name : ""}}</strong></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="$emit('closeModal')"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -100,7 +100,7 @@
                 var app = this;
                 app.errors = [];
                 app.validate();
-                if (app.parent_category)
+                if (app.parent_category.id != 0)
                     app.category.parent_id = app.parent_category.id;
                 if (app.errors.length == 0) {
                     

@@ -18,8 +18,6 @@ class CategoriesController extends Controller
         $this->imageProcessing = new ImageProcessing();
     }
 
-
-
     /**
      * Display a listing of the resource.
      *
@@ -99,14 +97,23 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = Category::findOrFail($id);
+        if ($request->parent_id) {
+            if ($request->parent_id == $id) return response('The parent category is not itself',405);
+            $parent = Category::findOrFail($request->parent_id);
+            
+            while (!is_null($parent->parent_id)) {
+                if ($parent->parent_id == $id) return response('Sorry! You can\'t set subcategories of this category to parent of category',405);
+                $parent = Category::findOrFail($parent->parent_id);
+            }
+
+            
+        }
         
-        
-        
+        $category = Category::findOrFail($id);        
             $request->merge([
                 'category_slug' => $this->sluger($request->category_name)
             ]);
-            $category->update($request->toArray());
+        $category->update($request->toArray());
         return $category;
     }
 
@@ -116,7 +123,7 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, $isChild = null)
     {
         $category = Category::findOrFail($id);
         // Storage::disk('local')->delete('public/categories/lg_'.$category->category_image);
@@ -126,7 +133,14 @@ class CategoriesController extends Controller
         //     Storage::disk('local')->delete('public/plants/sm_'.$plant->plant_image);
         // // }
         // $category->products()->delete();
-        $category->children()->delete();
+        $children = $category->childrenRecursive()->get();
+        foreach ($children as $child) {
+            $this->destroy($child->id, true);
+        }
+        if (!$isChild)
+            $category->update([
+                'parent_id' => null,
+            ]);
         $category->delete();
         return '';
     }

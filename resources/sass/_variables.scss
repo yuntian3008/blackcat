@@ -29,4 +29,9 @@ $font-family-base: 'Quicksand', 'Open Sans';
 $offcanvas-horizontal-width: 300px;
 //sweetalert2 theme bootstrap 
 $bootstrap-input-focus-width: 0; 
+//
+.animate__very__fast {
+--animate-duration: 0.25s;
+}
+
 

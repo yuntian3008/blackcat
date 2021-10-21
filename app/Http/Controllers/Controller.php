@@ -32,8 +32,8 @@ class Controller extends BaseController
         //$this->imgProcess = "ok";//new ImageProcessing();
         //$this->client = $client->getClient();
 
-        $categories = new Category;
-        return view()->share('navbar_data', $categories->where('category_visible',1)->get());
+        //$categories = new Category;
+        //return view()->share('navbar_data', $categories->where('category_visible',1)->get());
     }
 
     public function sluger(String $str)

@@ -2,7 +2,7 @@
     <li>
         <div class="d-flex justify-content-between">
             <a class="d-flex align-items-center btn btn-link text-decoration-none text-muted" 
-                v-bind:class="{ 'can-open' : (node.children_recursive && node.children_recursive.length) }" 
+                v-bind:class="{ 'folder' : true /*(node.children_recursive && node.children_recursive.length)*/ }" 
                 aria-current="page" 
                 data-bs-toggle="collapse" 
                 :href="'#collapse_'+node.id" 
@@ -14,10 +14,9 @@
                 
             </a>
             <div class="ms-auto dropstart">
-                <categories-create :parent_category="node"></categories-create>
                 <categories-edit :category="node"></categories-edit>
                 <button class="btn btn-link text-decoration-none text-muted" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,10"><i class="bi bi-three-dots-vertical"></i></button>
-                <ul class="dropdown-menu animate__animated animate__zoomIn animate__faster">
+                <ul class="dropdown-menu animate__animated animate__zoomIn animate__very__fast">
                     <li><button class="dropdown-item" @click="openTab()"><i class="bi bi-box-arrow-up-right">&ensp;</i>Open category in new tab</button></li>
                     <li><button class="dropdown-item" @click="getLink()"><i class="bi bi-link-45deg">&ensp;</i>Copy link</button></li>
                     <li><hr class="dropdown-divider"></li>
@@ -27,8 +26,9 @@
                 <!-- <router-link :to="{name: 'createCategory', params: {id: node.id}}" class="btn btn-link btn-sm border text-decoration-none text-muted"><i class="bi bi-plus-lg"></i>&ensp;new sub-category</router-link> -->
             </div>
         </div>
-        <ul v-if="node.children_recursive && node.children_recursive.length" class="list-unstyled collapse ms-3"  :id="'collapse_'+node.id">
+        <ul  class="list-unstyled collapse ms-3"  :id="'collapse_'+node.id">
             <node v-for="category in node.children_recursive" :node="category" :key="category.id"></node>
+            <li><categories-create :parent_category="node"></categories-create></li>
         </ul>
     </li>
 

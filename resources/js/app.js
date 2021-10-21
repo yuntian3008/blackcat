@@ -28,6 +28,7 @@ import '@sweetalert2/theme-bootstrap-4/bootstrap-4.css';
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import InfiniteLoading from 'vue-infinite-loading';
+
 global.jQuery = require('jquery');
 var $ = global.jQuery;
 window.$ = $;
@@ -55,16 +56,6 @@ Vue.use(VueConfirmDialog)
 //MIXINS
 //import responseHelper from './mixins/responseHelper'
 
-
-
-Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('add-to-cart', require('./components/AddToCart.vue').default);
-Vue.component('change-qty', require('./components/ChangeQuantity.vue').default);
-Vue.component('cart-count', require('./components/CartCount.vue').default);
-Vue.component('cart-view', require('./components/CartView.vue').default);
-Vue.component('checkout-view', require('./components/CheckoutView.vue').default);
-Vue.component('cart-view-total-amount', require('./components/CartViewTotalAmount.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -72,9 +63,6 @@ Vue.component('cart-view-total-amount', require('./components/CartViewTotalAmoun
  */
 
 // PERSONAL
-
-
-
 
 import Security from './components/Security.vue';
 

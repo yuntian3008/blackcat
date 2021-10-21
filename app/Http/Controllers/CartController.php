@@ -21,6 +21,7 @@ class CartController extends Controller
             'temporaryAmount' => $request->temporaryAmount,
             'totalAmount' => $request->totalAmount,
             'addresses' => $request->user()->addresses,
+            'cartItem' => $request->user()->cartItems,
             'user' => $request->user(),
         ]);
     }

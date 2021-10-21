@@ -1,5 +1,6 @@
 <template>
     <div>
+        
         <div class="card-body row">
             <a href="#" class="col-sm mx-3 btn text-white badge-color-red-5 card zoom">
                 <div class="card-body row align-items-center">

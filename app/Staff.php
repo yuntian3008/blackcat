@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
+use Laravel\Passport\HasApiTokens;
 
 class Staff extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
 
 
     /**

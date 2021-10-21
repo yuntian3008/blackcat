@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
 use App\Product;
 use App\Components\Helper\ImageProcessing;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
@@ -33,7 +34,7 @@ class ProductsController extends Controller
         else $products = Product::with('category:id,category_name')->get();
         
         foreach ($products as $product) {
-            $product['product_image'] = Storage::url('public/sm_' . $product['product_image'] . '.png');
+            $product['product_image'] = Storage::url('public/sm_' . $product['product_image'] . '.' . config('image-processing')['format']);
             // $id_images = collect(json_decode($product['product_image'],true))->collapse();
             // $product['product_image'] = self::DRIVE_CONFIG_URL.$id_images['sm'];
             //asset('storage/sm_'.$product['product_image']);
@@ -59,17 +60,17 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //dd(mb_convert_encoding($request, 'UTF-8', 'UTF-8'));
-        //$request = mb_convert_encoding($request, 'UTF-8', 'UTF-8');
-        $specs = $request->product_specs;
-        //return $request;
-        $request->merge([
-            'product_image' => $this->imgProcess->run($request->product_image[0]['dataURL'], 'products'),
-            'product_slug' => $this->sluger($request->product_name)
+        $collection = collect(json_decode($request->data,true));
+
+        
+        $collection = $collection->merge([
+            'product_image' => $this->imgProcess->run($request->product_image, 'products'),
+            'product_slug' => $this->sluger($collection->get('product_name')),
         ]);
-        $product = Product::create($request->except(['product_specs']));
+        $specs = $collection->get('product_specs');
+        $product = Product::create($collection->except(['product_specs'])->toArray());
         $product->specs()->createMany($specs);
-        return $product;
+        return $collection;
     }
 
     /**
@@ -83,7 +84,7 @@ class ProductsController extends Controller
         $product = Product::findOrFail($id);
         // $id_images = collect(json_decode($product['product_image'],true))->collapse();
         // $product['product_image'] = self::DRIVE_CONFIG_URL.$id_images['sm'];
-        $product['product_image'] = Storage::url('public/sm_' . $product['product_image'] . '.png');
+        $product['product_image'] = Storage::url('public/sm_' . $product['product_image'] . '.' .config('image-processing')['format']);
         $product['product_specs'] = $product->specs;
         return $product;
     }
@@ -108,42 +109,42 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-
         $product = Product::findOrFail($id);
-        if ($request->only_edit_visible) {
-            $product->update(['product_visible' => $request->product_visible]);
+        if ($request->has('data')) {
+            $collection = collect(json_decode($request->data,true));
+            $collection = $collection->merge([
+                'product_slug' => $this->sluger($collection->get('product_name')),
+            ]);
+
+            $product->update($collection->toArray());
+
+            $specs = $collection->get('product_specs');
+            $id = collect($specs)->pluck('id');
+
+            $product->specs()->whereNotIn('id', $id)->delete();
+
+            foreach ($specs as $spec) {
+                $product->specs()->updateOrCreate(
+                    ['key' => $spec["key"]],
+                    ['value' => $spec["value"]]
+                );
+            }
+
             return $product;
         }
 
+        if ($request->has('product_image')) {
+            $product->update([
+                'product_image' => $this->imgProcess->run($request->product_image, 'products')
+            ]);
 
-
-        if ($request->product_image) {
-            $merge = [
-                'product_image' => $this->imgProcess->run($request->product_image[0]['dataURL'], 'products'),
-                'product_slug' => $this->sluger($request->product_name)
-            ];
-            $except = ['product_specs'];
-        } else {
-            $merge = [
-                'product_slug' => $this->sluger($request->product_name)
-            ];
-            $except = ['product_image', 'product_specs'];
+            return $product;
         }
 
-        $request->merge($merge);
-        $product->update($request->except($except));
-
-        $specs = $request->product_specs;
-        $id = collect($specs)->pluck('id');
-
-        $product->specs()->whereNotIn('id', $id)->delete();
-
-        foreach ($specs as $spec) {
-            $product->specs()->updateOrCreate(
-                ['key' => $spec["key"]],
-                ['value' => $spec["value"]]
-            );
+        if ($request->has('visible')) {
+            $visible = json_decode($request->visible);
+            $product->update(['product_visible' => $visible]);
+            return $product;
         }
 
         return $product;
@@ -158,12 +159,12 @@ class ProductsController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
-        $product->product_visible = false;
-        $product->save();
+        // $product->product_visible = false;
+        // $product->save();
         // Storage::disk('local')->delete('public/products/lg_'.$product->product_image);
         // Storage::disk('local')->delete('public/products/sm_'.$product->product_image);
         // $product->specs()->delete();
-        // $product->delete();
+        $product->delete();
         return '';
     }
 }

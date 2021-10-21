@@ -1,99 +1,46 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.web')
 
-        <title>Laravel</title>
+@section('title')
+Home
+@endsection
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+@section('style')
+<style type="text/css">
+.search-filter-input {
+    border: 1px solid #bb6b24;
+    width: 40%;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 80px;
+    padding-left: 90px;
+    font-weight: 300;
+    color: #000;
+    background: url(assets/images/default/search.svg) no-repeat scroll 35px 25px;
+    background-size: 30px 30px;
+}
+</style>
+@endsection
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
+@section('main-class')
+mt-0  
+@endsection
 
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/dashboard') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+@section('content')
+<div class="container px-6 py-16 mx-auto">
+    <div class="items-center lg:flex">
+        <div class="w-full lg:w-1/2">
+            <div class="lg:max-w-lg">
+                <h1 class="text-2xl font-semibold text-gray-800 uppercase dark:text-white lg:text-3xl">Prepare for the perfect coffee shop</h1>
+                <p class="mt-2 text-gray-600 dark:text-gray-400">Coffee machines and tools will gladly cater to the coffee enthusiast</p>
+                <a href="{{ route('products') }}" type="button" class="mt-4 px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:ring-gray-700 focus:ring-opacity-80" id="send-link" onclick="sendOTP();">
+                    Shop Now
+                </a>
             </div>
         </div>
-    </body>
-</html>
+
+        <div class="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
+            <img class="w-full h-full lg:max-w-2xl" src="{{ asset('svg/coffee-shop-animate.svg') }}" alt="Catalogue-pana.svg">
+        </div>
+    </div>
+</div>
+@endsection

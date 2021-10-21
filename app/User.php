@@ -25,6 +25,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Permission');
     }
+
+
     
     /**
     * Check multiple roles

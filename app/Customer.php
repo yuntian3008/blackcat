@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
 
 class Customer extends Authenticatable
 {
@@ -36,6 +37,15 @@ class Customer extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getFullName()
+    {
+        return ($this->firstname && $this->lastname ? "{$this->firstname} {$this->lastname}" : null);
+    }
+
+    public function getAvatar($size = "sm") {
+        return !$this->avatar ? null : Storage::url('public/'.$size.'_' . $this->avatar . '.' . config('image-processing')['format']);
+    }
 
     public function cartItems()
     {

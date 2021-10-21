@@ -1,142 +1,161 @@
 <template>
-    <div>
-        <!-- Card -->
-        <div class="card mb-3">
-          <div class="card-body pt-4">
-            <div class="d-flex justify-content-between">
-                <a href="/cart" class="text-brown text-decoration-none"><i class="mr-1 fas fa-chevron-left"></i>Back to cart</a>
-            </div>
-            <div class="d-flex justify-content-between">
-              <h2 class="mb-4">Order</h2>
-            </div>
-            
-
-            <form>
-                <h5>Delivery information</h5>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">First name: <strong>{{ user.firstname }}</strong></li>
-                    <li class="list-group-item">Last name: <strong>{{ user.lastname }}</strong></li>
-                    <li class="list-group-item">Phone number: <strong>{{ user.phone }}</strong></li>
-                    <li class="list-group-item">Email: <strong>{{ user.email }}</strong></li>
-                </ul>
-                <hr>
-                <div class="d-flex justify-content-between">
-                    <h5>Delivery address</h5>
-                    <select class="form-control form-control-sm" style="width: 30%" @change="choose" v-model="address_index">
-                        <option v-for="item, index in addresses" :value="index">{{item.address}}</option>
-                        <option :value="-1">Other address</option>
-                    </select>
+    <div class="flex flex-col md:w-full">
+        <h2 class="mb-4 font-bold md:text-xl text-heading ">Delivery information
+        </h2>
+        <div class="justify-center w-full mx-auto">
+                <div class="space-x-0 lg:flex lg:space-x-4">
+                    <div class="w-full lg:w-1/2">
+                        <label for="firstName" class="block mb-3 text-sm font-semibold text-gray-500">First
+                            Name</label>
+                        <input type="text" v-model="user.firstname" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" disabled />
+                    </div>
+                    <div class="w-full lg:w-1/2 ">
+                        <label for="firstName" class="block mb-3 text-sm font-semibold text-gray-500">Last
+                            Name</label>
+                        <input type="text" v-model="user.lastname" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" disabled />
+                    </div>
+                </div>
+                <div class="mt-4 space-x-0 lg:flex lg:space-x-4">
+                    <div class="w-full lg:w-1/2">
+                        <label for="Email"
+                            class="block mb-3 text-sm font-semibold text-gray-500">Email</label>
+                        <input type="text" v-model="user.email" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" disabled />
+                    </div>
+                    <div class="w-full lg:w-1/2">
+                        <label for="Phone"
+                            class="block mb-3 text-sm font-semibold text-gray-500">Phone</label>
+                        <input type="text" v-model="user.phone" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" disabled />
+                    </div>
+                </div>
+        </div>
+        <h2 class="my-4 font-bold md:text-xl text-heading ">Delivery address
+        </h2>
+        <div class="justify-center w-full mx-auto">
+                <div class="mt-4">
+                    <div class="w-full">
+                        <label for="caddress"
+                            class="block mb-3 text-sm font-semibold text-gray-500">Choose address</label>
+                        <select id="caddress" class="rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" @change="choose" v-model="address_index">
+                            <option v-for="item, index in addresses" :value="index">{{item.address}}, {{item.ward}}, {{item.district}}, {{item.province}}, {{item.country}}</option>
+                            <option :value="-1">Other address</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="other-address" v-show="address_index == -1">
+                    <div class="mt-4 space-x-0 lg:flex lg:space-x-4">
+                        <div class="w-full lg:w-1/2">
+                            <label for="country"
+                                class="block mb-3 text-sm font-semibold text-gray-500">Country</label>
+                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.country" id="country" :disabled="address_index >= 0">
+                        </div>
+                        <div class="w-full lg:w-1/2">
+                            <label for="province"
+                                class="block mb-3 text-sm font-semibold text-gray-500">Province</label>
+                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.province" id="province" :disabled="address_index >= 0">
+                        </div>
+                    </div>
+                    <div class="mt-4 space-x-0 lg:flex lg:space-x-4">
+                        <div class="w-full lg:w-1/2">
+                            <label for="district"
+                                class="block mb-3 text-sm font-semibold text-gray-500">District</label>
+                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.district" id="district" :disabled="address_index >= 0">
+                        </div>
+                        <div class="w-full lg:w-1/2">
+                            <label for="ward"
+                                class="block mb-3 text-sm font-semibold text-gray-500">Ward</label>
+                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.ward" id="ward" :disabled="address_index >= 0">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="w-full">
+                            <label for="address"
+                                class="block mb-3 text-sm font-semibold text-gray-500">Address</label>
+                            <textarea
+                                class="disabled:opacity-50 w-full px-4 py-3 text-xs rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base"
+                                id="address" cols="20" rows="4" v-model="address.address":disabled="address_index >= 0"></textarea>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                      <label for="inputFname">Country</label>
-                      <input type="text" class="form-control form-control-sm" v-model="address.country" id="inputFname" :disabled="address_index >= 0">
-                    </div>
-                    <div class="form-group col-md-4">
-                      <label for="inputLname">Province</label>
-                      <input type="text" class="form-control form-control-sm" v-model="address.province" id="inputLname" :disabled="address_index >= 0">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="inputPhone">District</label>
-                        <input type="text" class="form-control form-control-sm" v-model="address.district" id="inputPhone" :disabled="address_index >= 0">
+                <div class="mt-4">
+                    <div class="w-full">
+                        <label for="Phone"
+                            class="block mb-3 text-sm font-semibold text-gray-500">Other Number Phone (Optional)</label>
+                        <input type="text" 
+                            class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="phone">
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="inputAddress">Ward</label>
-                        <input type="text" class="form-control form-control-sm" v-model="address.ward" id="inputAddress" :disabled="address_index >= 0">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="inputAddress">Address</label>
-                        <input type="text" class="form-control form-control-sm" v-model="address.address" id="inputAddress" :disabled="address_index >= 0">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="inputAddress">Other Phone</label>
-                        <input type="text" placeholder="(Optional)" class="form-control form-control-sm" v-model="phone" id="inputAddress">
-                    </div>
+
+                <!-- <div class="flex items-center mt-4">
+                    <label class="flex items-center text-sm group text-heading">
+                        <input type="checkbox"
+                            class="w-5 h-5 border border-gray-300 rounded focus:outline-none focus:ring-1">
+                        <span class="ml-2">Save this information for next time</span></label>
                 </div>
-              <!-- <div class="form-group">
-                <label class="d-block">Address type</label>
-                <div class="form-check form-check-inline fsize-16">
-                  <input class="form-check-input" type="radio" name="addressType" id="inlineRadio1" value="option1">
-                  <label class="form-check-label" for="inlineRadio1">Private Houses / Condominiums</label>
-                </div>
-                <div class="form-check form-check-inline fsize-16">
-                  <input class="form-check-input" type="radio" name="addressType" id="inlineRadio2" value="option2">
-                  <label class="form-check-label" for="inlineRadio2">Agency/Company</label>
-                </div>
-              </div> -->
+                <div class="relative pt-3 xl:pt-6"><label for="note"
+                        class="block mb-3 text-sm font-semibold text-gray-500"> Notes
+                        (Optional)</label><textarea name="note"
+                        class="flex items-center w-full px-4 py-3 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-600"
+                        rows="4" placeholder="Notes for delivery"></textarea>
+                </div> -->
+        </div>
+        <h2 class="my-4 font-bold md:text-xl text-heading ">Payment
+        </h2>
+        <div class="flex flex-col gap-8">
+            <label class="inline-flex items-center">
+                <input type="radio" name="vehicle" class="h-5 w-5 text-gray-700" v-model="payment" value="cash"/>
+                <span class="ml-2 gap-x-2 inline-flex items-center" >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Cash payment upon delivery
+                </span>
+            </label>
+            <label class="inline-flex items-center">
+                <input type="radio" name="vehicle" class="h-5 w-5 text-gray-700" v-model="payment" value="card"/>
+                <span class="ml-2 gap-x-2 inline-flex items-center">
+                    <div class="inline-flex gap-x-2">
+                      <img class="h-5 w-5" src="assets/images/payment/visa.svg" alt="visa">
+                      <img class="h-5 w-5" src="assets/images/payment/mastercard.svg" alt="mastercard">
+                      <img class="h-5 w-5" src="assets/images/payment/jcb.svg" alt="jcb">
+                    </div>
+                    International card payment Visa, Master, JCB
+                </span>
+            </label>
+            <label class="inline-flex items-center">
+                <input type="radio" name="vehicle" class="h-5 w-5 text-gray-700" v-model="payment" value="momo"/>
+                <span class="ml-2 gap-x-2 inline-flex items-center">
+                    <img class="h-5 w-5" src="assets/images/payment/momo.svg" alt="momo">
+                    MoMo wallet payment
+                </span>
+            </label>
+            <label class="inline-flex items-center">
+                <input type="radio" name="vehicle" class="h-5 w-5 text-gray-700" v-model="payment" value="zalo"/>
+                <span class="ml-2 gap-x-2 inline-flex items-center">
+                    <img class="h-5 w-5" src="assets/images/payment/zalopay.svg" alt="momo">
+                    Zalopay wallet payment
+                </span>
+            </label>
+        </div>
+        <div class="flex items-center gap-8">
+            <form class="mt-4" method="POST" action="/order/create">
+                <input type="hidden" name="_token" :value="$csrfToken">
+                <input type="hidden" name="country" :value="address.country">
+                <input type="hidden" name="province" :value="address.province">
+                <input type="hidden" name="district" :value="address.district">
+                <input type="hidden" name="ward" :value="address.ward">
+                <input type="hidden" name="address" :value="address.address">
+                <input type="hidden" name="phone" :value="phone">
+                <input type="hidden" name="payment" :value="payment">
+                <input type="hidden" name="newAddress" :value="address_index < 0 ? true : false">
+                <button type="submit" class="flex items-center justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-700 rounded-full shadow hover:bg-gray-700 focus:shadow-outline focus:outline-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                  <span class="ml-2 mt-5px">Order</span>
+                </button>
             </form>
-            <hr class="mb-4">
-
-            <p class="text-primary mb-0 text-brown" id="endCart"><i class="fas fa-info-circle mr-1"></i> Do not delay the purchase, adding
-              items to your cart does not mean booking them.</p>
-
-          </div>
         </div>
-        <!-- Card -->
-
-        <!-- Card -->
-        <div class="card">
-          <div class="card-body pt-4">
-
-            <h5 class="mb-4">Expected shipping delivery</h5>
-
-            <p class="mb-0" id="timeShip"></p>
-          </div>
-        </div>
-        <!-- Card -->
-
-        <!-- Card -->
-        <div class="card">
-          <div class="card-body pt-4">
-
-            <h5 class="mb-4">Payment</h5>
-
-            <div class="form-group">
-                <div class="form-check fsize-20">
-                  <input class="form-check-input" type="radio" v-model="payment" id="cashPayment" value="cash">
-                  <label class="form-check-label" for="cashPayment"><i class="far fa-money-bill-alt mr-2"></i>Cash payment upon delivery</label>
-                </div>
-                <div class="form-check fsize-20">
-                  <input class="form-check-input" type="radio" v-model="payment" id="cardPayment" value="card">
-                  <label class="form-check-label" for="cardPayment"><i class="far fa-credit-card mr-2"></i>International card payment Visa, Master, JC / Paypal
-                    <div class="d-block">
-                      <img width="24" src="assets/images/payment/visa.svg" alt="visa">
-                      <img width="24" src="assets/images/payment/mastercard.svg" alt="mastercard">
-                      <img width="24" src="assets/images/payment/jcb.svg" alt="jcb">
-                      /
-                      <i class="fab fa-cc-paypal"></i>
-                    </div>
-                  </label>
-                  
-                </div>
-                <div class="form-check fsize-20">
-                  <input class="form-check-input" type="radio" v-model="payment" id="momoPayment" value="momo">
-                  <label class="form-check-label" for="momoPayment"><img class="mr-2" width="24" src="assets/images/payment/momo.svg" alt="momo">MoMo wallet payment</label>
-                </div>
-                <div class="form-check fsize-20">
-                  <input class="form-check-input" type="radio" v-model="payment" id="zaloPayment" value="zalo">
-                  <label class="form-check-label" for="zaloPayment"><img class="mr-2" width="24" src="assets/images/payment/zalopay.svg" alt="zalo">Zalopay wallet payment</label>
-                </div>
-              </div>
-                <form method="POST" action="/order/create">
-                    <input type="hidden" name="_token" :value="$csrfToken">
-                    <input type="hidden" name="country" :value="address.country">
-                    <input type="hidden" name="province" :value="address.province">
-                    <input type="hidden" name="district" :value="address.district">
-                    <input type="hidden" name="ward" :value="address.ward">
-                    <input type="hidden" name="address" :value="address.address">
-                    <input type="hidden" name="phone" :value="phone">
-                    <input type="hidden" name="payment" :value="payment">
-                    <input type="hidden" name="newAddress" :value="address_index < 0 ? true : false">
-                    <input type="hidden" name="phone" :value="user.phone">
-                    <button type="submit" class="btn btn-danger btn-block">ORDER</button>
-                </form>
-          </div>
-        </div>
-        <!-- Card -->
     </div>
 </template>
 

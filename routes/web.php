@@ -20,16 +20,23 @@
 // {
 	
 // });
+
 Route::get('home','Customer\HomeController@index')->middleware('verified.phone');
 Route::get('login', 'Customer\Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Customer\Auth\LoginController@login');
 Route::post('logout', 'Customer\Auth\LoginController@logout')->name('logout');
-Route::middleware('auth')->group(function (){
-	Route::get('cart', 'CartController@showCart')->name('show.cart');
-	Route::post('checkout', 'CartController@showCheckout')->name('show.checkout');
-	Route::post('order/create', 'OrderController@create')->name('order.create');
-	Route::get('manage', 'OrderController@history')->name('customer.manage');
-	Route::get('order-details/{id}', 'OrderController@show')->name('order.details');
+Route::middleware(['auth'])->group(function (){
+	Route::middleware(['profile.updated'])->group(function () {
+		Route::get('cart', 'CartController@showCart')->name('cart');
+		Route::post('checkout', 'CartController@showCheckout')->name('show.checkout');
+		Route::post('order/create', 'OrderController@create')->name('order.create');
+		Route::get('customer/order', 'OrderController@history')->name('customer.order.all');
+		Route::get('customer/order/{id}', 'OrderController@show')->name('customer.order.details');
+	});
+	Route::get('customer/profile', 'Customer\ProfileController@show')->name('customer.profile');
+	Route::post('customer/profile', 'Customer\ProfileController@update')->name('customer.profile.update');
+	Route::post('customer/profile/avatar', 'Customer\ProfileController@changeAvatar')->name('customer.profile.update.avatar');
+	
     //Route::get('/', 'Customer\HomeController@index')->name('home');
 });
 // Registration Routes...
@@ -101,7 +108,7 @@ Route::post('password/reset', 'Customer\Auth\ResetPasswordController@reset')->na
 	/{category_slug}/{plant_slug}
  */
 
-Route::get('search/{keyword?}','CoreController@search')->name('search');
+Route::get('search','CoreController@search')->name('search');
 
 Route::get('advanced-search-form','CoreController@showFormSearch')->name('search.form');
 
@@ -115,6 +122,6 @@ Route::post('carts/remove-item','CartController@removeItem');
 
 //Route::get('/controllers', 'HomeController@controllers')->name('home');
 //Route::get('/categories', 'CoreController@categories')->name('categories');
-Route::get('/{category_slug}', 'CoreController@products')->name('products');
-Route::get('/{category_slug}/{plant_slug}', 'CoreController@product_details')->name('product.details');
+Route::get('/shop/{category_slug?}', 'CoreController@products')->name('products');
+Route::get('/shop/{category_slug}/{product_slug}', 'CoreController@product_details')->name('product.details');
 

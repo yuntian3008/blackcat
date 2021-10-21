@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Category;
 use Illuminate\Support\Collection;
 use App\Product;
+use Illuminate\Support\Facades\Validator;
 use App\Components\Helper\ImageProcessing;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Input;
@@ -16,27 +17,31 @@ class CoreController extends Controller
 
     function __construct()
     {
-        return view()->share('navbar_data', Category::where('category_visible',1)->get());
+        //return view()->share('navbar_data', Category::all());
     }
 
     public function home()
     {
-        $categories = Category::where('category_visible',1)->get();
-        foreach ($categories as $category) {
-            $category['products'] = $category->products()->where('product_visible', 1)->get();
-            foreach ($category['products'] as $product) {
-                $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
-                if ($product->specs()->where("key","Brand")->count())
-                $product['product_brand'] = $product->specs()->where("key","Brand")->first()->value;
-            }
-        }
+        return view('welcome');
+    }
+    public function shop()
+    {
+        $categories = Category::whereNull('parent_id')->get();
+        // foreach ($categories as $category) {
+        //     $category['products'] = $category->products()->where('product_visible', 1)->get();
+        //     foreach ($category['products'] as $product) {
+        //         $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
+        //         if ($product->specs()->where("key","Brand")->count())
+        //         $product['product_brand'] = $product->specs()->where("key","Brand")->first()->value;
+        //     }
+        // }
         // $products = Product::where('product_visible', 1)->get();
         // foreach ($products as $product) {
         //     $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
         //     $product['product_brand'] = $product->specs()->where("key","Brand")->first()->value;
         // }
-        return view('home', [
-            'data' => $categories,
+        return view('shop', [
+            'categories' => $categories,
         ]);
     }
 
@@ -49,20 +54,85 @@ class CoreController extends Controller
         return view('categories', ['data' => $categories]);
     }
 
-    public function products($category_slug)
+    public function flatten($array)
     {
-        $category = Category::where('category_slug', $category_slug)
-        ->where('category_visible',1)
-        ->firstOrFail();
-        $products = Product::where('category_id', $category->id)->where('product_visible', 1)->paginate(8);
-        foreach ($products as $product) {
-            $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
-            if ($product->specs()->where("key","Brand")->count())
-            $product['product_brand'] = $product->specs()->where("key","Brand")->first()->value;
+            $flatArray = [];
+
+            if (!is_array($array)) {
+                $array = (array)$array;
+            }
+
+            foreach($array as $key => $value) {
+                if (is_array($value) || is_object($value)) {
+                    $flatArray = array_merge($flatArray, $this->flatten($value));
+                } else {
+                    $flatArray[0][$key] = $value;
+                }
+            }
+
+            return $flatArray;
+    }
+
+    public function search(Request $request)
+    {
+        Validator::make($request->all(), [
+            'search' => 'nullable|string'
+        ])->validate();
+        if( !empty($request->search) ) {
+            $products = Product::whereHas('category', function (Builder $query) use($request) {
+                $query->where('category_name', 'like', "%{$request->search}%");
+                })
+                ->orWhere('product_name', 'like', "%{$request->search}%")
+                ->orWhere('product_desc', 'like', "%{$request->search}%")
+                ->orWhere('product_price', 'like', "%{$request->search}%")->where('product_visible', 1)->get();
+            foreach ($products as $product) {
+                $product->product_image = ImageProcessing::getURL($product->product_image,'sm');
+                $product["href"] = route('product.details', [
+                    'category_slug' => $product->category->category_slug,
+                    'product_slug' => $product->product_slug,
+                ]);
+            }
+            return $products;
+        } 
+        return [];
+    }
+
+    public function products(Request $request,$category_slug = null)
+    {
+        if (is_null($category_slug)) {
+            $data = Category::all('id','category_name','category_slug');
+            foreach ($data as $key => $value) {
+                if ($value->randomProducts()->count() == 0) {
+                    unset($data[$key]);
+                    continue;
+                }
+                $data[$key] = [
+                    'category' => $value,
+                    'products' => $value->randomProducts(4),
+                ];
+            }
+            return view('shop', [
+                'data' => $data,
+                'category' => null
+                //'current_category' => $category->category_name
+            ]);
         }
-        return view('products', [
-            'data' => $products,
-            'current_category' => $category->category_name
+        $category = Category::where('category_slug',$category_slug)->firstOrFail();
+        $data = $category->products()->where('product_visible', 1);
+
+        if ($request->sort && $request->sortBy) {
+            Validator::make($request->all(), [
+                'sort' => 'string|in:product_name,product_price',
+                'sortBy' => 'numeric|between:0,1',
+            ])->validate();
+            $data = $data->orderBy($request->sort, $request->sortBy ? "asc" : "desc");
+        }
+
+        $data = $data->paginate(8);
+        return view('shop', [
+            'data' => $data,
+            'category' => $category,
+            //'current_category' => $category->category_name
         ]);
     }
 
@@ -82,23 +152,23 @@ class CoreController extends Controller
         );
     }
 
-    public function search($keyword = null) 
-    {
-        $products = Product::whereHas('specs', function (Builder $query) use($keyword) {
-            $query->where('key', 'LIKE', "%{$keyword}%")->orWhere('value', 'LIKE', "%{$keyword}%");
-        })->orWhere('product_name', 'LIKE', "%{$keyword}%")
-        ->orWhere('product_desc', 'LIKE', "%{$keyword}%")
-        ->where('product_visible', 1)->paginate(8);
-        foreach ($products as $product) {
-            $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
-            if ($product->specs()->where("key","Brand")->count())
-            $product['product_brand'] = $product->specs()->where("key","Brand")->first()->value;
-        }
-        return view('search', [
-            'data' => $products,
-            'keyword' => $keyword,
-        ]);
-    }
+    // public function search($keyword = null) 
+    // {
+    //     $products = Product::whereHas('specs', function (Builder $query) use($keyword) {
+    //         $query->where('key', 'LIKE', "%{$keyword}%")->orWhere('value', 'LIKE', "%{$keyword}%");
+    //     })->orWhere('product_name', 'LIKE', "%{$keyword}%")
+    //     ->orWhere('product_desc', 'LIKE', "%{$keyword}%")
+    //     ->where('product_visible', 1)->paginate(8);
+    //     foreach ($products as $product) {
+    //         $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
+    //         if ($product->specs()->where("key","Brand")->count())
+    //         $product['product_brand'] = $product->specs()->where("key","Brand")->first()->value;
+    //     }
+    //     return view('search', [
+    //         'data' => $products,
+    //         'keyword' => $keyword,
+    //     ]);
+    // }
 
     public function showFormSearch() {
         $categories = Category::where('category_visible',1)->get();

@@ -49,19 +49,19 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
+            // 'firstname' => ['required', 'string', 'max:255'],
+            // 'lastname' => ['required', 'string', 'max:255'],
             'username' => ['required','unique:customers','regex:/^[a-z0-9_-]{3,16}$/'],
-            'gender' => ['required', 'digits_between:-1,1'],
+            // 'gender' => ['required', 'digits_between:-1,1'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:customers'],
             'phone' => ['required', 'digits:10', 'unique:customers'],
-            'dob' => ['required', 'date_format:Y-m-d','before:today'],
+            // 'dob' => ['required', 'date_format:Y-m-d','before:today'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'country' => ['required', 'string', 'max:255'],
-            'province' => ['required', 'string', 'max:255'],
-            'district' => ['required', 'string', 'max:255'],
-            'ward' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],       
+            // 'country' => ['required', 'string', 'max:255'],
+            // 'province' => ['required', 'string', 'max:255'],
+            // 'district' => ['required', 'string', 'max:255'],
+            // 'ward' => ['required', 'string', 'max:255'],
+            // 'address' => ['required', 'string', 'max:255'],       
         ]);
     }
 
@@ -74,22 +74,22 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = Customer::create([
-            'firstname' => $data['firstname'],
-            'lastname' => $data['lastname'],
-            'gender' => $data['gender'],
+            // 'firstname' => $data['firstname'],
+            // 'lastname' => $data['lastname'],
+            // 'gender' => $data['gender'],
             'email' => $data['email'],
             'phone' => $data['phone'],
-            'dob' => $data['dob'],
+            // 'dob' => $data['dob'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
         ]);
-        $user->addresses()->create([
-            'country' => $data['country'],
-            'province' => $data['province'],
-            'district' => $data['district'],
-            'ward' => $data['ward'],
-            'address' => $data['address'],
-        ]);
+        // $user->addresses()->create([
+        //     'country' => $data['country'],
+        //     'province' => $data['province'],
+        //     'district' => $data['district'],
+        //     'ward' => $data['ward'],
+        //     'address' => $data['address'],
+        // ]);
         //default users have a basic role
         //$user->roles()->attach(Role::where('name', 'basic')->first());
 

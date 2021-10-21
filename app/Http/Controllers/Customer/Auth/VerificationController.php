@@ -28,7 +28,7 @@ class VerificationController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/user/dashboard';
+    protected $redirectTo = '/profile';
 
     /**
      * Create a new controller instance.
@@ -58,7 +58,7 @@ class VerificationController extends Controller
         $user = Auth::guard('web')->user();
         $user->firebase_uid = $uid;
         $user->save();
-        return $uid;
+        return response('OK', 200);
     }
     /**
      * Show the email verification notice.

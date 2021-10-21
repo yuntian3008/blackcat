@@ -28,11 +28,11 @@ class ImageProcessing
 	 * @param  String $key [keyword of image]
 	 * @return String      [name of image]
 	 */
-	public function run(String $img, String $key)
+	public function run(Object $img, String $key)
 	{
 		$name = $this->createName($key);
 		$format = $this->config['format'];
-		$resolution = $this->config['resolution'];
+		$resolution = $this->config['resolution'];	
 		$location = $this->config['storage_location'];
 		foreach ($resolution as $value) {
 			$image = $this->createImage($img,$format,$value['x'], $value['y']);

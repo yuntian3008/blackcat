@@ -38,9 +38,9 @@
     <div id="app">
         @auth
         <div class="offcanvas offcanvas-start bg-dark text-light" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Menu</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div class="offcanvas-header bg-white">
+                <h5 class="offcanvas-title " id="offcanvasWithBothOptionsLabel"><a class="text-dark text-decoration-none" href="#"><strong>Black</strong>Cat - Admin Page</a></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body navbar-dark">
                 <ul class="navbar-nav flex-column fsize-24 text-light">
@@ -81,7 +81,9 @@
         @endauth
         <nav class="navbar navbar-expand navbar-light bg-light fsize-20">
             <div class="container">
+                @guest
                 <a class="navbar-brand py-0" href="#"><strong>Black</strong>Cat - Admin Page</a>
+                @endguest
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>

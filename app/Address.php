@@ -13,4 +13,9 @@ class Address extends Model
     {
         return $this->belongsTo('App\Customer');
     }
+
+    public function getFull()
+    {
+        return "{$this->address}, {$this->ward}, {$this->district}, {$this->province}, {$this->country}";
+    }
 }

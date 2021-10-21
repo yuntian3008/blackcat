@@ -19,8 +19,13 @@ class OrderController extends Controller
     public function history() {
         $user = Auth::user();
         $orders = $user->orders;
-
-        return view('customer.profile',[
+        foreach ($orders as $index => $order) {
+            $order['represent'] = $order->orderDetails->first();
+            $order['represent']->product = $order['represent']->product;
+            $order['represent']->product->product_image = ImageProcessing::getURL($order['represent']->product->product_image,'sm');
+            $order['count'] = $order->orderDetails->count();
+        }
+        return view('customer.orders',[
             'orders' => $orders,
         ]);
     }
@@ -41,7 +46,6 @@ class OrderController extends Controller
     }
 
     public function create(Request $request) {
-    	
     	if ($request->newAddress == "true") {
 	        Validator::make($request->all(), [
 	            'address' => 'required|string|max:255',
@@ -78,7 +82,7 @@ class OrderController extends Controller
 
         $request->user()->cartItems()->delete();
 
-        return redirect()->route('order.details', $order->id);
+        return redirect()->route('customer.order.details', $order->id);
         
     }
 }

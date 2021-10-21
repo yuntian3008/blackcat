@@ -1,7 +1,45 @@
 <template>
-        <button class="btn btn-outline-brown col-sm-12 btnAdd" @click="addToCart">Add to cart</button>
+        <button @click.prevent="addToCart">Add to cart</button>
 </template>
+<style>
+.colored-toast.swal2-icon-success {
+    background-color: rgba(55, 65, 81, 1) !important;
+}
+.text-white {
+    color: white !important;
+  /*background-color: #a5dc86 !important;*/
+}
+/*
 
+ 
+.colored-toast.swal2-icon-error {
+  background-color: #f27474 !important;
+}
+ 
+.colored-toast.swal2-icon-warning {
+  background-color: #f8bb86 !important;
+}
+ 
+.colored-toast.swal2-icon-info {
+  background-color: #3fc3ee !important;
+}
+ 
+.colored-toast.swal2-icon-question {
+  background-color: #87adbd !important;
+}
+ 
+.colored-toast .swal2-title {
+  color: white;
+}
+ 
+.colored-toast .swal2-close {
+  color: white;
+}
+ 
+.colored-toast .swal2-html-container {
+  color: white;
+}*/
+</style>
 <script>
     export default {
         props: ['product_id','quantity'],
@@ -22,6 +60,23 @@
         methods: {
             addToCart() {
                 var app = this;
+                const Toast = app.$swal.mixin({
+                  toast: true,
+                  position: 'center',
+                  iconColor: 'white',
+                  customClass: {
+                    popup: 'colored-toast',
+                    title: 'text-white',
+                  },
+                  showClass: {
+                    popup: 'animate__animated animate__jackInTheBox animate__fast'
+                  },
+                  hideClass: {
+                    popup: 'animate__animated animate__fadeOut animate__fast'
+                  },
+                  showConfirmButton: false,
+                  timer: 1500
+                })
                 var data = app.data;
                 if (app.data.secret === '') 
                     window.location.href = '/login'
@@ -30,6 +85,10 @@
                 })
                     .then(function (resp) {
                         app.$root.$emit("updateCount")
+                        Toast.fire({
+                          icon: 'success',
+                          title: 'Item has been added to your cart'
+                        })
                         //console.log(resp);
                     })
                     .catch(function () {

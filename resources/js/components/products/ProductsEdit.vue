@@ -1,155 +1,119 @@
 <template>
-    <div class="vld-parent">
-        <loading :active.sync="isLoading" 
-        :can-cancel="false"
-        :is-full-page="fullPage"></loading>
-        <h4 class="card-title">Edit product</h4>
+    <div>
         <div class="card-body">
-            <form v-on:submit="saveForm()">
+            <div class="d-flex justify-content-between mb-2">
+                <div class="card-title h3 m-0">Edit product</div>
+                <router-link :to="{ name: 'indexProduct' }" class="back-enti-btn"><i class="bi bi-arrow-return-left"></i>&ensp;Back</router-link>
+            </div>
+            <form>
                 <div v-show="errors.length > 0" id="error" class="alert alert-warning alert-dismissible fade show" role="alert">
                     <div v-for="item in errors">
-                        <strong>Error: </strong>{{item}}.
+                        <strong>Warning: </strong>{{item}}.
                     </div>
-                    <button type="button" class="close" v-on:click="errors = []" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" v-on:click="errors = []"></button>
                 </div>
-                <div class="row">
-                    <div class="col-sm-3 form-group">
+                <div class="row g-2">
+                    <div class="col-md-5">
                         <label class="control-label">Category</label>
-                        <select v-model="product.category_id" class="form-control">
-                          <option v-for="category, index in categories" :value="category.id">{{category.category_name}}</option>
+                        <select v-model="product.category_id" class="form-select">
+                            <option :value="null" selected>Choose product's category</option>
+                            <option v-for="category, index in categories" :value="category.id">{{category.category_name}}</option>
                         </select>
                     </div>
-                    <div class="col-sm-4 form-group">
+                    <div class="col-md-7">
                         <label class="control-label">Product name</label>
-                        <input type="text" v-model="product.product_name" class="form-control">
+                        <input type="text" v-model.trim="product.product_name" class="form-control">
                     </div>
-                    <div class="col-md-3 form-group">
+                    <div class="col-md-4">
                         <label class="control-label">Price</label>
                         <vue-numeric currency="$" separator="." v-model="product.product_price" class="form-control"></vue-numeric>
                         <!-- <input type="text" v-model.trim="" > -->
-                    </div>  
-                    <div class="col-md-2 form-group">
-                        <label class="control-label">Visible</label>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="customSwitch1" v-model="product.product_visible">
-                            <label class="custom-control-label" for="customSwitch1">{{ product.product_visible ? "Yes" : "No" }}</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2 form-group card border-0 bg-transparent">
-                        <label class="control-label">Product image</label>
-                        <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" class="rounded"></vue-dropzone>
-                    </div>
-                    <div class="col-sm-2 form-group card border-0 bg-transparent">
-                        <label class="control-label font-weight-bold text-center">Current product photos</label>
-                        <img :src="product.product_image" class="mx-auto" :alt="product.product_name">
-                    </div>
-                    <div class="col-md-5 form-group">
-                        <label for="desc">Description</label>
-                        <textarea class="form-control" v-model.trim="product.product_desc" id="desc" rows="8"></textarea required>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <label for="desc">Additional information<button type="button" class="ml-3 btn btn-sm btn-outline-dark" @click="addSpec"><i class="fas fa-plus"></i></button></label>
-                        <div class="input-group input-group-sm mb-2" v-for="(spec, index) in product.product_specs">
+                        <label for="desc" class="mt-2">Additional information</label>
+                        <div class="input-group input-group-sm mb-2" v-for="(spec, index) in product.product_specs" :key="index">
                             <!-- <div class="input-group-prepend">
                             <span class="input-group-text" id="">First and last name</span>
                             </div> -->
                             <input type="text" v-model="spec.key" class="form-control" placeholder="Attribute" required>
                             <input type="text" v-model="spec.value" class="form-control"
                             placeholder="Value" required>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-danger" type="button" @click="deleteSpec(index)"><i class="fas fa-trash"></i></button>
-                            </div>
+                            <button class="btn btn-outline-danger" type="button" @click="deleteSpec(index)"><i class="fas fa-trash"></i></button>
                         </div>
+                        <div class="d-grid gap-2">
+                            <button type="button" class="ml-3 btn btn-sm btn-outline-dark" @click="addSpec"><i class="bi bi-plus-lg"></i>&ensp;Add</button>
+                        </div>
+                    </div>  
+                    
+                    <div class="col-md-8">
+                        <label for="desc">Description</label>
+                        <textarea class="form-control" v-model.trim="product.product_desc" id="desc" rows="5"></textarea required>
                     </div>
+                    
                 </div>
-                <div class="row">
+                
+                <div class="row g-1 mt-2">
                     <div class="col-sm-12 form-group">
-                        <router-link :to="{ name: 'indexProduct' }" class="m-1 btn btn-outline-secondary">Back</router-link>
-                        <button class="m-1 btn btn-outline-primary">Edit</button>
+                        
+                        <button class="m-1 btn btn-outline-primary" @click="saveForm()">Edit</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </template>
-
 <script>
 
-import vue2Dropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/vue-loading.css'
 import VueNumeric from 'vue-numeric'
 
     export default {
         components: {
-            vueDropzone: vue2Dropzone,
-            Loading,
             VueNumeric,
+        },
+        data: function () {
+            return {
+                loader: this.$loading,
+                productId: '',
+                product: {
+                    product_name: '',
+                    product_price: 0,
+                    category_id: null,
+                    product_desc: '',
+                    product_specs: [],
+                },
+                categories: [],
+                errors: [],
+            }
         },
         mounted() {
             let app = this;
             let id = app.$route.params.id;
             app.productId = id;
-            axios.get('/api/v1/products/' + id,{
+            app.loader = app.loader.show();
+            axios.get('/api/v1/products/' + app.productId,{
                 headers: app.$bearerAPITOKEN
             })
                 .then(function (resp) {
-                    app.product = resp.data;
+                    for (const [key, value] of Object.entries(app.product)) {
+                        app.product[key] = resp.data[key];
+                    }
+                    app.loader.hide();
                 })
                 .catch(function () {
-                    alert("Could not load your product")
+                    console.log(resp);
+                    app.loader.hide();
+                    app.handingError(resp,'Could not load list of categories','back');
                 });
             axios.get('/api/v1/categories',{
                 headers: app.$bearerAPITOKEN
             })
                 .then(function (resp) {
-                    app.categories = resp.data;
+                    app.categories = resp.data.original;
+                    app.loader.hide();
                 })
                 .catch(function (resp) {
                     console.log(resp);
-                    alert("Could not load list categories");
+                    app.loader.hide();
+                    app.handingError(resp,'Could not load list of categories','back');
                 });
-        },
-        data: function () {
-            return {
-                dropzoneOptions: {
-                    url: 'post',
-                    autoProcessQueue: false,
-                    parallelUploads: 1,
-                    maxFiles:1,
-                    addRemoveLinks: true,
-                    dictDefaultMessage: "",
-                    dictRemoveFile: "Xóa ?",
-                    acceptedFiles: ".jpeg,.jpg,.png,",
-                    init: function() {
-                        this.on("maxfilesexceeded", function(file) {
-                            this.removeAllFiles();
-                            this.addFile(file);
-                        });
-                    }   
-
-                },
-                productId: '',
-                product: {
-                    product_name: '',
-                    product_price: 0,
-                    category_id: '',
-                    product_image: '',
-                    product_visible: true,
-                    product_desc: '',
-                    product_specs: [],
-                },
-                categories: [],
-                //Vue Loading Overlay
-                isLoading: false,
-                fullPage: true,
-                errors: [],
-            }
         },
         methods: {
             addSpec: function () {
@@ -163,7 +127,7 @@ import VueNumeric from 'vue-numeric'
                 {
                     this.errors.push("Product name is empty");
                 }
-                if (this.product.category_id === '')
+                if (!this.product.category_id)
                 {
                     this.errors.push("Category is empty");
                 }
@@ -174,33 +138,44 @@ import VueNumeric from 'vue-numeric'
                 if (this.product.product_desc === '')
                 {
                     this.errors.push("Description is empty");
-                }   
+                }
+                if (this.categories.length == 0)
+                {
+                    this.errors.push("Please create category before");
+                }
+
             },
             saveForm() {
-                event.preventDefault();
                 var app = this;
                 app.errors = [];
                 app.validate();
                 if (app.errors.length == 0)
                 {
-                    app.isLoading = true;
-                    var newProduct = app.product;
-                    if (this.$refs.myVueDropzone.getAcceptedFiles().length) {
-                        newProduct.product_image = this.$refs.myVueDropzone.getAcceptedFiles();
-                    }
-                    else newProduct.product_image = 0;
-                    axios.patch('/api/v1/products/' + app.productId, newProduct,{
-                headers: app.$bearerAPITOKEN
-            })
-                        .then(function (resp) {
-                            app.isLoading = false;
-                            app.$router.replace('/');
-                        })
-                        .catch(function (resp) {
-                            console.log(resp);
-                            app.isLoading = false;
-                            alert("Could not update your product");
+                    var loader = app.$loading.show();
+                    const form = new FormData();
+
+                    form.append('data',JSON.stringify(app.product));
+                    form.append('_method', 'PATCH');
+
+                    axios.post('/api/v1/products/' + app.productId, form,{
+                        headers: app.$bearerAPITOKEN
+                    })
+                    .then(function (resp) {
+                        loader.hide();
+                        app.$swal.fire({
+                            title: 'Edited!',
+                            showConfirmButton: false,
+                            icon: 'success',
+                            timer: 1500,
+                        }).then((result) => {
+                            app.$router.push({name: 'indexProduct'});
                         });
+                    })
+                    .catch(function (resp) {
+                        console.log(resp);
+                        loader.hide();
+                        app.handingError(resp,'Could not edit product');
+                    });
                 }
             }
         }

@@ -1,243 +1,198 @@
 @extends('layouts.web')
 
 @section('style')
-<style type="text/css">
-    .or-seperator {
-    margin: 20px 0 10px;
-    text-align: center;
-    border-top: 1px solid #ccc;
-}
-.or-seperator i {
-    padding: 0 10px;
-    background: #ffffff;
-    position: relative;
-    top: -11px;
-    z-index: 1;
-}
-.login-form {
-    background-color: #fff;
-}
-</style>
 
 @endsection
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col"></div>
-        <div class="col-lg-3 col-md-6 col-sm-10">
-            <div class="login-form border p-4">
-                <form id="user-login-form" method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <h3 class="text-center pb-2">{{ __('Verify Your Phone Number') }}</h3>
-                    {{-- <a class="btn btn-outline-primary btn-block" href="#"><i class="fab fa-facebook-f mx-2"></i>Sign in with <b>Facebook</b></a>
-                    <a class="btn btn-outline-danger btn-block" href="#"><i class="fab fa-google mx-2"></i>Sign in with <b>Google</b></a> --}}
-                    {{-- <div class="or-seperator"><i>or</i></div> --}}
-                    @guest
-                    <div class="form-group row">
-                        <div class="alert alert-warning col-sm-12 mb-0" id="message">Please verify OTP to change password</div>
-                        <div class="alert alert-danger col-sm-12 mt-2 mb-0" id="error" style="display: none;"></div>
-                        <div class="alert alert-success col-sm-12 mt-2 mb-0" id="successAuth" style="display: none;"></div>
-                        <div class="alert alert-success col-sm-12 mt-2 mb-0" id="successOtpAuth" style="display: none;"></div>
-                    </div>
-                
-                    <div class="form-group row">
-                        <div id="recaptcha-container" class="col-sm-12 text-center"></div>
-                    </div>
-                    
-                    <div class="form-group row">
-                        <div class="input-group col-sm-12 p-0">
-                            <input type="text" class="form-control" placeholder="Phone number" id="phone" pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" required autocomplete="phone">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button"id="send-link" onclick="sendOTP();">Send OTP</button>
-                                {{-- <strong id="countdownDisplay" style="display: none;"></strong> --}}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group row">
-                        <input type="text" id="verification" class="form-control col-sm-12" placeholder="Verification code">
-                    </div>
-                    <div class="form-group row">
-                        <button type="button" class="btn btn-warning col-sm-12" onclick="verify()">Verify</button>
-                    </div>
-                    <!-- The core Firebase JS SDK is always required and must be listed first -->
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-                    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase.js"></script>
+<div class="lg:mt-20 flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-1xl">
+    
+        <div class="w-full px-6 py-8 md:px-8">
+            <h2 class="text-2xl text-center text-gray-700 dark:text-white"><strong>Black</strong>Cat</h2>
 
-                    <!-- TODO: Add SDKs for Firebase products that you want to use
-                         <setup id="available-libraries"></setup> -->
+            <p class="text-xl text-center text-gray-600 dark:text-gray-200 mt-2">{{ __('Reset password') }}</p>
 
-                    <script>
-                      // Your web app's Firebase configuration
-                      var firebaseConfig = {
-                        apiKey: "AIzaSyC67ztfyyqe6bUsZQ6DuwAheZ7YzjsjV6o",
-                        authDomain: "blackcat-6457a.firebaseapp.com",
-                        projectId: "blackcat-6457a",
-                        storageBucket: "blackcat-6457a.appspot.com",
-                        messagingSenderId: "1008282368219",
-                        appId: "1:1008282368219:web:d93f28c3b67d55791d74fe"
-                      };
-                      // Initialize Firebase
-                      firebase.initializeApp(firebaseConfig);
-                    </script>
-                    <script type="text/javascript">
-                        function countdown(duration) {
-                            $('#send-link').attr("disabled", true);
-                            var timer = duration,
-                                seconds;
-                            var interval = setInterval(function () {
-
-                                seconds = parseInt(timer % 60, 10);
-
-                                $('#send-link').text("Try again in " + seconds);
-
-                                if (--timer < 0) {
-                                    $('#send-link').text("Send OTP");
-                                    $('#send-link').attr("disabled", false);
-                                    $("#successAuth").fadeOut(100);
-                                    clearInterval(interval);
-                                    return;
-                                }
-                            }, 1000);
-                        };
-                        window.onload = function () {
-                            render();
-                            $("#successAuth").hide();
-                        };
-
-                        function render() {
-                            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
-                            recaptchaVerifier.render();
-                        }
-
-                        function sendOTP() {
-                            if ($('#phone')[0].checkValidity() == true) {
-                                var number = $("#phone").val();
-                                number = "+84"+number.substring(1,number.length);
-                                firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function (confirmationResult) {
-                                    window.confirmationResult = confirmationResult;
-                                    coderesult = confirmationResult;
-                                    //console.log(coderesult);
-                                    $("#error").hide();
-                                    $("#successAuth").text("Verification code sent. Check your phone");
-                                    setTimeout(function() {
-                                        
-                                    }, 2000);
-                                    $('#recaptcha-container').parent().fadeOut(100);
-                                    $("#successAuth").show();
-                                    countdown(59);
-                                }).catch(function (error) {
-                                    $("#error").text(error.message);
-                                    $("#error").show();
-                                });
-                            }
-                            else {
-                                $("#error").text("Phone number is not valid");
-                                $("#error").show();
-                            }
-                        }
-
-                        function verify() {
-                            var code = $("#verification").val();
-                            coderesult.confirm(code).then(function (result) {
-                                var user = result.user;
-                                $("#successOtpAuth").text("Auth is successful");
-                                $("#successOtpAuth").show();
-                                $("#error").hide();
-                                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                                $.post(
-                                    '/password/otp',
-                                    {
-                                        _token: CSRF_TOKEN, 
-                                        token: user.refreshToken,
-                                        uid: user.uid,
-                                    }, function (data, status) { 
-                                        document.location.href = '/password/reset/'+data; 
-                                    }); 
-                            }).catch(function (error) {
-                                $("#error").text(error.message);
-                                $("#error").show();
-                            });
-                        }
-                    </script>
-                    @endguest
-                </form>
-            </div>
-            
-        </div>
-        <div class="col"></div>
-    </div>
-</div>
-{{-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header"></div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-                                <a class="btn btn-link" href="{{ route('register') }}">
-                                    {{ __('Register') }}
-                                </a>
-                                @if (Route::has('password.request'))
-                                    |<a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
+                <div class="mt-4 flex justify-center">
+                     <div id="recaptcha-container"></div>
                 </div>
-            </div>
+                <div class="mt-4 flex">
+                    <div class="block w-full">
+                        <div class="flex justify-between">
+                        <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="phone">{{  __('Phone number') }}</label>
+                        </div>
+
+                        <input id="phone" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" type="text" required>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button type="button" class="px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:ring-gray-700 focus:ring-opacity-80" id="send-link" onclick="sendOTP();">
+                        Send code
+                    </button>
+                    <strong id="countdownDisplay" class="hidden"></strong>
+                </div>
+                <div class="mt-4 hidden verification">
+                    @error('password')
+                    <div x-data="{ errorOpen : true }">
+                        <div class="w-full text-white bg-red-500 mb-2" x-show="errorOpen">
+                            <div class="container flex items-center justify-between px-6 py-4 mx-auto">
+                                <div class="flex">
+                                    <svg viewBox="0 0 40 40" class="w-6 h-6 fill-current">
+                                        <path d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z"></path>
+                                    </svg>
+
+                                    <p class="mx-3">{{ $message }}</p>
+                                </div>
+
+                                <button type="button" class="p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none" x-on:click="errorOpen = false">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    @enderror
+                    <div class="flex justify-between">
+                        <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="verification">{{  __('Verification Code') }}</label>
+                    </div>
+
+                    <input id="verification" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" type="text" required>
+                </div>
+
+                <div class="mt-4 hidden verification">
+                    <button type="button" class="flex justify-center items-center px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:ring-gray-700 focus:ring-opacity-80" onclick="verify()">
+                        {{ __('Verify') }}
+                        <svg width="20" height="20" fill="currentColor" class="hidden loading ml-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
         </div>
-    </div>
-</div> --}}
+    
+</div>
+@endsection
+
+@section("script")
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="application/javascript" src="https://www.gstatic.com/firebasejs/8.6.1/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     <setup id="available-libraries"></setup> -->
+
+<script type="application/javascript">
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyC67ztfyyqe6bUsZQ6DuwAheZ7YzjsjV6o",
+    authDomain: "blackcat-6457a.firebaseapp.com",
+    projectId: "blackcat-6457a",
+    storageBucket: "blackcat-6457a.appspot.com",
+    messagingSenderId: "1008282368219",
+    appId: "1:1008282368219:web:d93f28c3b67d55791d74fe"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+<script type="application/javascript">
+    function countdown(duration, display) {
+        $('#send-link').fadeOut(100);
+        var timer = duration,
+            seconds;
+        var interval = setInterval(function () {
+
+            seconds = parseInt(timer % 60, 10);
+
+            display.show();
+            display.text("Try again in " + seconds+'s');
+
+            if (--timer < 0) {
+                display.hide();
+                clearInterval(interval);
+                $('#send-link').show();
+                return;
+            }
+        }, 1000);
+    };
+    window.onload = function () {
+        render();
+    };
+
+    function render() {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+        recaptchaVerifier.render();
+    }
+
+    function sendOTP() {
+        if ($('#phone')[0].checkValidity() == true) {
+            var number = $("#phone").val();
+            number = "+84"+number.substring(1,number.length);
+            firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function (confirmationResult) {
+                window.confirmationResult = confirmationResult;
+                coderesult = confirmationResult;
+                //console.log(coderesult);
+                Swal.fire(
+                  'Successfully!',
+                  'Message sent. Check your phone',
+                  'success'
+                ).then((result) => {
+                    $('#recaptcha-container').parent().fadeOut(100);
+                    countdown(59,$("#countdownDisplay"));
+                    $('.verification').fadeIn();
+                });
+                
+            }).catch(function (error) {
+                Swal.fire(
+                  'Error?',
+                  error.message,
+                  'error'
+                );
+            });
+        }
+        else Swal.fire(
+                  'Error?',
+                  'Phone number is invalid',
+                  'error'
+                );
+    }
+
+    function verify() {
+        $('.verification').show();
+        var code = $("#verification").val();
+        coderesult.confirm(code).then(function (result) {
+            var user = result.user;
+            Swal.fire(
+              'Successfully!',
+              '',
+              'success'
+            ).then((result) => {
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                    $.post(
+                        '/password/otp',
+                        {
+                            _token: CSRF_TOKEN, 
+                            token: user.refreshToken,
+                            uid: user.uid,
+                        }, function (data, status) { 
+                            document.location.href = '/password/reset/'+data; 
+                    }).catch(function (error) {
+                        Swal.fire(
+                          'Error?',
+                          error.message,
+                          'error'
+                        );
+                });
+            });
+            
+        }).catch(function (error) {
+            Swal.fire(
+              'Error?',
+              error.message,
+              'error'
+            );
+        });
+    }
+</script>
 @endsection

@@ -1,5 +1,6 @@
 <?php
 
+use App\Role;
 use Illuminate\Http\Request;
 
 /*
@@ -13,9 +14,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::group(['middleware' => 'auth:api'], function() {
     Route::group([
@@ -24,6 +25,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 		'as' => 'api.',
 	], function () {
 		Route::resource('categories', 'CategoriesController', ['except' => ['create', 'edit']])
+			->middleware('api.role:productmanager');
+		Route::resource('categories-trash', 'CategoriesTrashController', ['expect' => ['create','edit']])
 			->middleware('api.role:productmanager');
 		Route::resource('customers', 'CustomersController', ['except' => ['create', 'edit']])
 			->middleware('api.role:admin');

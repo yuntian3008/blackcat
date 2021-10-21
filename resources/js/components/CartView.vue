@@ -1,58 +1,78 @@
+<style>
+.colored-toast.swal2-icon-success {
+    background-color: rgba(55, 65, 81, 1) !important;
+}
+.text-white {
+    color: white !important;
+  /*background-color: #a5dc86 !important;*/
+}
+</style>
 <template>
     <div>
         <loading :active.sync="isLoading" 
         :can-cancel="false"
         :is-full-page="fullPage"></loading>
         <vue-confirm-dialog></vue-confirm-dialog>
-        <div class="d-flex justify-content-between">
-            <h3 class="mb-4" v-if="cartItems.length">Cart ({{ cartItems.length }} items)</h3>
-        </div>
-        <div class="row mb-4" v-for="item, index in cartItems">
-            <div class="col-md-5 col-lg-3 col-xl-3 d-flex align-items-center">
-                <div class="rounded mb-3 mb-md-0">
-                    <img class="img-fluid d-block" :src="item.product.product_image" alt="Sample"/>
-                </div>
+        <div class="w-full">
+            <div class="p-4 rounded-full flex justify-between">
+                <h1 class="ml-2 font-bold uppercase">Cart</h1>
+                <h1 class="ml-2 font-bold uppercase">{{ cartItems.length }} items</h1>
             </div>
-            <div class="col-md-7 col-lg-9 col-xl-9">
-                <div>
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h5>{{ item.product.product_name }}</h5>
-                            <p class="mb-3 text-muted small">
-                                <strong>Unit price:</strong> $ {{ item.product.product_price }}
-                            </p>
-                            <p class="mb-2 text-muted text-uppercase small">
-                            </p>
-                        </div>
-                        <div>
-                                <div class="input-group input-group-sm mb-3">
-                                    <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Qty.</span>
-                                    </div>
-                                    <input class="form-control form-control-sm"  type="number" v-model="item.quantity" @change="changeQty(item.product_id, item.quantity)" min="1" max="100" step="1"/>
-                                </div>
-                                
-                            <small id="passwordHelpBlock" class="form-text text-muted text-center"></small>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <a href="#" data-confirm="Do you really want to remove this product?" type="button" class="text-danger small mr-3 remove" @click="deleteItem(index,item.product_id,item.product.product_name)">
-                                <i class="fas fa-trash-alt mr-1"></i> Remove item 
-                            </a> <!-- <a href="#!" type="button" class="card-link-secondary small text-uppercase"><i class="fas fa-heart mr-1"></i> Move to wish list </a> -->
-                        </div>
-                        <p class="mb-0">
-                            <span class="fsize-28">
-                                <strong id="summary" class="text-brown">$ {{item.quantity * item.product.product_price}}</strong>
-                            </span>
-                        </p class="mb-0"> 
-                    </div> 
-                </div> 
-            </div> 
         </div>
+        <table class="w-full text-sm lg:text-base" cellspacing="0">
+            <thead class="bg-gray-700 text-white ">
+                <tr class="h-12 uppercase">
+                    <th class="hidden md:table-cell"></th>
+                    <th class="text-left">Product</th>
+                    <th class="lg:text-left text-left pl-5 lg:pl-0">
+                        <span class="lg:hidden" title="Quantity">Qtd</span>
+                        <span class="hidden lg:inline">Quantity</span>
+                    </th>
+                    <th class="hidden text-left md:table-cell">Unit price</th>
+                    <th class="text-left">Total price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-if="!(cartItems.length > 0)">
+                    <td colspan="5"><div class="py-4 flex justify-center text-3xl font-extrabold text-gray-700">Nothing</div></td>
+                </tr>
+                <tr v-else v-for="item, index in cartItems">
+                    <td class="hidden pb-4 md:table-cell">
+                  <a href="#">
+                    <img :src="item.product.product_image" class="w-20 rounded" alt="Thumbnail">
+                  </a>
+                    </td>
+                    <td>
+                        <a href="#">
+                            <p class="mb-2 md:ml-4">{{ item.product.product_name }}</p>
+                            <form action="" method="POST">
+                                <button type="button" class="text-gray-700 md:ml-4" @click="deleteItem(index,item.product_id,item.product.product_name)">
+                                    <small>(Remove item)</small>
+                                </button>
+                            </form>
+                        </a>
+                    </td>
+                    <td class="justify-start items-center md:flex mt-6">
+                        <div class="w-20 h-10">
+                            <div class="relative flex flex-row w-full h-8">
+                                <input type="number" class="text-center rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-0 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"  v-model="item.quantity" @change="changeQty(item.product_id, item.quantity)" min="1" max="100" step="1"/>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="hidden text-left md:table-cell">
+                        <span class="text-sm lg:text-base font-medium">
+                            {{ item.product.product_price | toCurrency }}
+                        </span>
+                    </td>
+                    <td class="text-left">
+                        <span class="text-sm lg:text-base font-medium">
+                            {{item.quantity * item.product.product_price | toCurrency}}
+                        </span>
+                    </td>
+                </tr> 
+            </tbody>
+        </table>
     </div>
-    
-    
 </template>
 
 <script>
@@ -89,6 +109,8 @@ import 'vue-loading-overlay/dist/vue-loading.css'
         },
         methods: {
             changeQty: function (product_id,quantity) {
+                var app = this;
+                app.isLoading = true;
                 axios.post('/carts/change-quantity', {
                     product_id: product_id,
                     quantity: quantity,
@@ -97,16 +119,38 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                     _token: app.$csrfToken,
                 })
                 .then(function (resp) {
-                    app.cartItems = resp.data;
                     app.isLoading = false;
+                    app.$root.$emit("updateTotal",app.cartItems);
                     //console.log(resp);
                 })
                 .catch(function () {
-                    alert("Could not load your product")
+                    app.isLoading = false;
+                    app.$swal.fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'Something went wrong!',
+                    });
                 });
             },
             deleteItem: function (index,product_id, product_name) {
                 var app = this;
+                const Toast = app.$swal.mixin({
+                  toast: true,
+                  position: 'center',
+                  iconColor: 'white',
+                  customClass: {
+                    popup: 'colored-toast',
+                    title: 'text-white',
+                  },
+                  showClass: {
+                    popup: 'animate__animated animate__jackInTheBox animate__fast'
+                  },
+                  hideClass: {
+                    popup: 'animate__animated animate__fadeOut animate__fast'
+                  },
+                  showConfirmButton: false,
+                  timer: 1500
+                })
                 this.$confirm({
                     title: 'Are you sure?',
                     message: 'Are you sure you want to remove '+ product_name + ' from the cart ?',
@@ -120,6 +164,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                     */
                     callback: a => {
                         if (a) {
+                            app.isLoading = true;
                             axios.post('/carts/remove-item', {
                                 product_id: product_id,
                                 secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
@@ -127,10 +172,17 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                                 _token: app.$csrfToken,
                             })
                             .then(function (resp) {
+                                app.isLoading = false;
                                 app.cartItems.splice(index, 1);
+                                app.$root.$emit("updateTotal",app.cartItems);
+                                Toast.fire({
+                                  icon: 'success',
+                                  title: 'Item has been deleted to your cart'
+                                })
                                 //console.log(resp);
                             })
                             .catch(function () {
+                                app.isLoading = false;
                                 alert("Could not load your product")
                             });
                         }

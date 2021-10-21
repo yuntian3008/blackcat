@@ -12,7 +12,7 @@
 
     {{-- <link rel="icon" href="../_public/images/logo/favicon.ico" type="image/x-icon"> --}}
 
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -20,75 +20,308 @@
     <link rel="stylesheet" href="{{asset('css/fontawesome/css/all.css')}}">
 
     <!-- Styles -->
-    <link href="{{ asset('css/utilities.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/web.css') }}" rel="stylesheet">
     
     @yield('style')
-    
+    {{-- <style> 
+        /* for navbar */
+        /* ============ desktop view ============ */
+        @media all and (min-width: 992px) {
+            .dropdown-menu li{ 
+                position: relative; 	
+            }
+            .nav-item .submenu{ 
+                display: none;
+                position: absolute;
+                left:100%; top:-7px;
+            }
+            .nav-item .submenu-left{ 
+                right:100%; left:auto;
+            }
+            .dropdown-menu > li:hover{ background-color: #f1f1f1; }
+            .dropdown-menu > li:hover > .submenu{ display: block; }
+            .dropdown-menu > li:hover > a{
+                font-weight: 900;
+            }
+            .dropdown-menu > li > a > i {
+                -webkit-transition: 0.2s ease-out;
+                -moz-transition:  0.2s ease-out;
+                transition:  0.2s ease-out;
+            }
+            .dropdown-menu > li:hover > a > i {
+                -webkit-transform: rotateZ(90deg);
+                -moz-transform: rotateZ(90deg);
+                transform: rotateZ(90deg);
+            }
+        }	
+        /* ============ desktop view .end// ============ */
+
+        /* ============ small devices ============ */
+        @media (max-width: 991px) {
+        .dropdown-menu .dropdown-menu{
+            margin-left:0.7rem; margin-right:0.7rem; margin-bottom: .5rem;
+        }
+        }	
+        /* ============ small devices .end// ============ */
+    </style> --}}
+    <style>
+        /* since nested groupes are not supported we have to use 
+         regular css for the nested dropdowns 
+        */
+        li>ul                 { transform: translatex(100%) scale(0) }
+        li:hover>ul           { transform: translatex(101%) scale(1) }
+        li > a svg       { transform: rotate(-90deg) }
+        li:hover > a svg { transform: rotate(-270deg) }
+
+        /* Below styles fake what can be achieved with the tailwind config
+         you need to add the group-hover variant to scale and define your custom
+         min width style.
+         See https://codesandbox.io/s/tailwindcss-multilevel-dropdown-y91j7?file=/index.html
+         for implementation with config file
+        */
+        .group:hover .group-hover\:scale-100 { transform: scale(1) }
+        .group:hover .group-hover\:-rotate-180 { transform: rotate(180deg) }
+        .scale-0 { transform: scale(0) }
+        .min-w-32 { min-width: 8rem }
+    </style>
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 
 <body>
-    <div id="app">
+    <div @yield('vue-id')>
     <!-- ============= MENU ============== -->
-    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+        <nav class="bg-white shadow dark:bg-gray-800">
+        <div class="container px-6 py-4 mx-auto lg:flex lg:justify-between lg:items-center">
+            <div class="lg:flex lg:items-center">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <a class="text-2xl text-gray-700 dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300" href="{{ route("home") }}"><strong>Black</strong>Cat</a>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="flex lg:hidden">
+                        <button type="button" class="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400" aria-label="toggle menu">
+                            <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current">
+                                <path fill-rule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col text-gray-600 capitalize dark:text-gray-300 lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
+                    <a href="{{ route('products') }}" class="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-800 dark:hover:text-gray-200">Shop</a>
+                    {{-- <a href="#" class="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-800 dark:hover:text-gray-200">downloads</a>
+                    <a href="#" class="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-800 dark:hover:text-gray-200">docs</a>
+                    <a href="#" class="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-800 dark:hover:text-gray-200">support</a>
+                    <a href="#" class="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-800 dark:hover:text-gray-200">blog</a> --}}
+                    <div class="group inline-block">
+                      <a
+                        href="#"
+                        class="mt-2 lg:mt-0 flex items-center lg:mx-4 hover:text-gray-800 dark:hover:text-gray-200"
+                      >
+                         <span class="pr-1 flex-1">Category</span>
+                        <span class="mr-auto">
+                          <svg
+                            class="fill-current h-4 w-4
+                            transition duration-150 ease-in-out"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                            />
+                          </svg>
+                        </span>
+                      </a>
+                      <ul
+                        class="bg-white border rounded-lg transform scale-0 group-hover:scale-100 absolute 
+                      transition duration-150 ease-in-out origin-top min-w-32 mt-1 z-10"
+                      >
+                        @if (count($recursive_categories) > 0)
+                        @foreach ($recursive_categories as $category)
+                            @include('layouts.web.subcategories', $category)
+                        @endforeach
+                        @else
+                        <li><a class="dropdown-item" href="#">Nothing </a></li>
+                        @endif
+                      </ul>
+                    </div>
+
+                    @yield('search-input')
+                </div>
+            </div>
+
+            <div class="flex items-center mt-4 md:mt-0">
+                <div class="flex justify-center md:block mx-4">
+                    <a class="relative text-gray-700 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300" href="{{ route('cart') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+
+                        @if(Auth::user()->cartItems->count() > 0)<span class="absolute top-0 left-0 p-1 text-xs text-white bg-yellow-500 rounded-full"></span>@endif
+                    </a>
+                </div>
+
+                @guest
+                <div class="flex justify-center md:block mx-4">
+                    <a class="relative text-gray-700 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300" href="{{ route('login') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </a>
+                </div>
+                @else
+                <div class="relative inline-block" x-data="{ dropdownOpen: false}">
+                    <!-- Dropdown toggle button -->
+                    <button class="relative z-10 flex items-center p-2 text-sm text-gray-600 bg-white border border-transparent rounded-md  dark:text-white dark:bg-gray-800 focus:outline-none" x-on:click="dropdownOpen = ! dropdownOpen">
+                        <span class="mx-1">{{ Auth::user()->getFullName() ? Auth::user()->getFullName() : "Customer"  }}</span>
+                        <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 15.713L18.01 9.70299L16.597 8.28799L12 12.888L7.40399 8.28799L5.98999 9.70199L12 15.713Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown menu -->
+                    <div class="absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800" x-show="dropdownOpen" x-transition>
+                        <a href="{{ route('customer.profile') }}" class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            @if ( Auth::user()->avatar)
+                                <img class="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src="{{ Auth::user()->getAvatar() }}" alt="avatar">
+                            @elseif(Auth::user()->getFullName())
+                                <img class="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src="{{ \Avatar::create(Auth::user()->getFullName())->toBase64() }}" alt="avatar">
+                            @else
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            @endif
+                            
+                            
+                            <div class="mx-1">
+                                <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-200">{{ Auth::user()->getFullName() ? Auth::user()->getFullName() : "Customer"  }}</h1>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->phone }}</p>
+                            </div>
+                        </a>
+
+                        <hr class="border-gray-200 dark:border-gray-700 ">
+                        
+                        <a href="{{ route('customer.order.all') }}" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                            
+                            <span class="mx-1">
+                                Orders
+                            </span>
+                        </a>
+                        
+                        <hr class="border-gray-200 dark:border-gray-700 ">
+
+                        {{-- <a href="#" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.8199 22H10.1799C9.71003 22 9.30347 21.673 9.20292 21.214L8.79592 19.33C8.25297 19.0921 7.73814 18.7946 7.26092 18.443L5.42392 19.028C4.97592 19.1709 4.48891 18.9823 4.25392 18.575L2.42992 15.424C2.19751 15.0165 2.27758 14.5025 2.62292 14.185L4.04792 12.885C3.98312 12.2961 3.98312 11.7019 4.04792 11.113L2.62292 9.816C2.27707 9.49837 2.19697 8.98372 2.42992 8.576L4.24992 5.423C4.48491 5.0157 4.97192 4.82714 5.41992 4.97L7.25692 5.555C7.50098 5.37416 7.75505 5.20722 8.01792 5.055C8.27026 4.91269 8.52995 4.78385 8.79592 4.669L9.20392 2.787C9.30399 2.32797 9.71011 2.00049 10.1799 2H13.8199C14.2897 2.00049 14.6958 2.32797 14.7959 2.787L15.2079 4.67C15.4887 4.79352 15.7622 4.93308 16.0269 5.088C16.2739 5.23081 16.5126 5.38739 16.7419 5.557L18.5799 4.972C19.0276 4.82967 19.514 5.01816 19.7489 5.425L21.5689 8.578C21.8013 8.98548 21.7213 9.49951 21.3759 9.817L19.9509 11.117C20.0157 11.7059 20.0157 12.3001 19.9509 12.889L21.3759 14.189C21.7213 14.5065 21.8013 15.0205 21.5689 15.428L19.7489 18.581C19.514 18.9878 19.0276 19.1763 18.5799 19.034L16.7419 18.449C16.5093 18.6203 16.2677 18.7789 16.0179 18.924C15.7557 19.0759 15.4853 19.2131 15.2079 19.335L14.7959 21.214C14.6954 21.6726 14.2894 21.9996 13.8199 22ZM7.61992 16.229L8.43992 16.829C8.62477 16.9652 8.81743 17.0904 9.01692 17.204C9.20462 17.3127 9.39788 17.4115 9.59592 17.5L10.5289 17.909L10.9859 20H13.0159L13.4729 17.908L14.4059 17.499C14.8132 17.3194 15.1998 17.0961 15.5589 16.833L16.3799 16.233L18.4209 16.883L19.4359 15.125L17.8529 13.682L17.9649 12.67C18.0141 12.2274 18.0141 11.7806 17.9649 11.338L17.8529 10.326L19.4369 8.88L18.4209 7.121L16.3799 7.771L15.5589 7.171C15.1997 6.90671 14.8132 6.68175 14.4059 6.5L13.4729 6.091L13.0159 4H10.9859L10.5269 6.092L9.59592 6.5C9.39772 6.58704 9.20444 6.68486 9.01692 6.793C8.81866 6.90633 8.62701 7.03086 8.44292 7.166L7.62192 7.766L5.58192 7.116L4.56492 8.88L6.14792 10.321L6.03592 11.334C5.98672 11.7766 5.98672 12.2234 6.03592 12.666L6.14792 13.678L4.56492 15.121L5.57992 16.879L7.61992 16.229ZM11.9959 16C9.78678 16 7.99592 14.2091 7.99592 12C7.99592 9.79086 9.78678 8 11.9959 8C14.2051 8 15.9959 9.79086 15.9959 12C15.9932 14.208 14.2039 15.9972 11.9959 16ZM11.9959 10C10.9033 10.0011 10.0138 10.8788 9.99815 11.9713C9.98249 13.0638 10.8465 13.9667 11.9386 13.9991C13.0307 14.0315 13.9468 13.1815 13.9959 12.09V12.49V12C13.9959 10.8954 13.1005 10 11.9959 10Z" fill="currentColor"></path>
+                            </svg>
+
+                            <span class="mx-1">
+                                Settings
+                            </span>
+                        </a> --}}
+
+                        {{-- <a href="#" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 19H3C1.89543 19 1 18.1046 1 17V16H3V7C3 5.89543 3.89543 5 5 5H19C20.1046 5 21 5.89543 21 7V16H23V17C23 18.1046 22.1046 19 21 19ZM5 7V16H19V7H5Z" fill="currentColor"></path>
+                            </svg>
+
+                            <span class="mx-1">
+                                Keyboard shortcuts 
+                            </span>
+                        </a> --}}
+
+                        {{-- <hr class="border-gray-200 dark:border-gray-700 "> --}}
+                        
+                        {{-- <a href="#" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 22C15.8082 21.9947 14.0267 20.2306 14 18.039V16H9.99996V18.02C9.98892 20.2265 8.19321 22.0073 5.98669 22C3.78017 21.9926 1.99635 20.1999 2.00001 17.9934C2.00367 15.7868 3.79343 14 5.99996 14H7.99996V9.99999H5.99996C3.79343 9.99997 2.00367 8.21315 2.00001 6.00663C1.99635 3.8001 3.78017 2.00736 5.98669 1.99999C8.19321 1.99267 9.98892 3.77349 9.99996 5.97999V7.99999H14V5.99999C14 3.79085 15.7908 1.99999 18 1.99999C20.2091 1.99999 22 3.79085 22 5.99999C22 8.20913 20.2091 9.99999 18 9.99999H16V14H18C20.2091 14 22 15.7909 22 18C22 20.2091 20.2091 22 18 22ZM16 16V18C16 19.1046 16.8954 20 18 20C19.1045 20 20 19.1046 20 18C20 16.8954 19.1045 16 18 16H16ZM5.99996 16C4.89539 16 3.99996 16.8954 3.99996 18C3.99996 19.1046 4.89539 20 5.99996 20C6.53211 20.0057 7.04412 19.7968 7.42043 19.4205C7.79674 19.0442 8.00563 18.5321 7.99996 18V16H5.99996ZM9.99996 9.99999V14H14V9.99999H9.99996ZM18 3.99999C17.4678 3.99431 16.9558 4.2032 16.5795 4.57952C16.2032 4.95583 15.9943 5.46784 16 5.99999V7.99999H18C18.5321 8.00567 19.0441 7.79678 19.4204 7.42047C19.7967 7.04416 20.0056 6.53215 20 5.99999C20.0056 5.46784 19.7967 4.95583 19.4204 4.57952C19.0441 4.2032 18.5321 3.99431 18 3.99999ZM5.99996 3.99999C5.4678 3.99431 4.95579 4.2032 4.57948 4.57952C4.20317 4.95583 3.99428 5.46784 3.99996 5.99999C3.99428 6.53215 4.20317 7.04416 4.57948 7.42047C4.95579 7.79678 5.4678 8.00567 5.99996 7.99999H7.99996V5.99999C8.00563 5.46784 7.79674 4.95583 7.42043 4.57952C7.04412 4.2032 6.53211 3.99431 5.99996 3.99999Z" fill="currentColor"></path>
+                            </svg>
+                            
+                            <span class="mx-1">
+                                Company profile
+                            </span>
+                        </a> --}}
+
+                        {{-- <a href="#" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 3C6.23858 3 4 5.23858 4 8C4 10.7614 6.23858 13 9 13C11.7614 13 14 10.7614 14 8C14 5.23858 11.7614 3 9 3ZM6 8C6 6.34315 7.34315 5 9 5C10.6569 5 12 6.34315 12 8C12 9.65685 10.6569 11 9 11C7.34315 11 6 9.65685 6 8Z" fill="currentColor"></path>
+                                <path d="M16.9084 8.21828C16.6271 8.07484 16.3158 8.00006 16 8.00006V6.00006C16.6316 6.00006 17.2542 6.14956 17.8169 6.43645C17.8789 6.46805 17.9399 6.50121 18 6.5359C18.4854 6.81614 18.9072 7.19569 19.2373 7.65055C19.6083 8.16172 19.8529 8.75347 19.9512 9.37737C20.0496 10.0013 19.9987 10.6396 19.8029 11.2401C19.6071 11.8405 19.2719 12.3861 18.8247 12.8321C18.3775 13.2782 17.8311 13.6119 17.2301 13.8062C16.6953 13.979 16.1308 14.037 15.5735 13.9772C15.5046 13.9698 15.4357 13.9606 15.367 13.9496C14.7438 13.8497 14.1531 13.6038 13.6431 13.2319L13.6421 13.2311L14.821 11.6156C15.0761 11.8017 15.3717 11.9248 15.6835 11.9747C15.9953 12.0247 16.3145 12.0001 16.615 11.903C16.9155 11.8059 17.1887 11.639 17.4123 11.416C17.6359 11.193 17.8035 10.9202 17.9014 10.62C17.9993 10.3198 18.0247 10.0006 17.9756 9.68869C17.9264 9.37675 17.8041 9.08089 17.6186 8.82531C17.4331 8.56974 17.1898 8.36172 16.9084 8.21828Z" fill="currentColor"></path>
+                                <path d="M19.9981 21C19.9981 20.475 19.8947 19.9551 19.6938 19.47C19.4928 18.9849 19.1983 18.5442 18.8271 18.1729C18.4558 17.8017 18.0151 17.5072 17.53 17.3062C17.0449 17.1053 16.525 17.0019 16 17.0019V15C16.6821 15 17.3584 15.1163 18 15.3431C18.0996 15.3783 18.1983 15.4162 18.2961 15.4567C19.0241 15.7583 19.6855 16.2002 20.2426 16.7574C20.7998 17.3145 21.2417 17.9759 21.5433 18.7039C21.5838 18.8017 21.6217 18.9004 21.6569 19C21.8837 19.6416 22 20.3179 22 21H19.9981Z" fill="currentColor"></path>
+                                <path d="M16 21H14C14 18.2386 11.7614 16 9 16C6.23858 16 4 18.2386 4 21H2C2 17.134 5.13401 14 9 14C12.866 14 16 17.134 16 21Z" fill="currentColor"></path>
+                            </svg>
+
+                            <span class="mx-1">Team</span>
+                        </a> --}}
+
+                        {{-- <a href="#" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 19H2C2 15.6863 4.68629 13 8 13C11.3137 13 14 15.6863 14 19H12C12 16.7909 10.2091 15 8 15C5.79086 15 4 16.7909 4 19ZM19 16H17V13H14V11H17V8H19V11H22V13H19V16ZM8 12C5.79086 12 4 10.2091 4 8C4 5.79086 5.79086 4 8 4C10.2091 4 12 5.79086 12 8C11.9972 10.208 10.208 11.9972 8 12ZM8 6C6.9074 6.00111 6.01789 6.87885 6.00223 7.97134C5.98658 9.06383 6.85057 9.9667 7.94269 9.99912C9.03481 10.0315 9.95083 9.1815 10 8.09V8.49V8C10 6.89543 9.10457 6 8 6Z" fill="currentColor"></path>
+                            </svg>
+
+                            <span class="mx-1">
+                                Invite colleagues
+                            </span>
+                        </a>
+
+                        <hr class="border-gray-200 dark:border-gray-700 "> --}}
+                        
+                        <a href="#" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C6.47967 21.9939 2.00606 17.5203 2 12V11.8C2.10993 6.30452 6.63459 1.92794 12.1307 2.00087C17.6268 2.07379 22.0337 6.56887 21.9978 12.0653C21.9619 17.5618 17.4966 21.9989 12 22ZM11.984 20H12C16.4167 19.9956 19.9942 16.4127 19.992 11.996C19.9898 7.57928 16.4087 3.99999 11.992 3.99999C7.57528 3.99999 3.99421 7.57928 3.992 11.996C3.98979 16.4127 7.56729 19.9956 11.984 20ZM13 18H11V16H13V18ZM13 15H11C10.9684 13.6977 11.6461 12.4808 12.77 11.822C13.43 11.316 14 10.88 14 9.99999C14 8.89542 13.1046 7.99999 12 7.99999C10.8954 7.99999 10 8.89542 10 9.99999H8V9.90999C8.01608 8.48093 8.79333 7.16899 10.039 6.46839C11.2846 5.76778 12.8094 5.78493 14.039 6.51339C15.2685 7.24184 16.0161 8.57093 16 9.99999C15.9284 11.079 15.3497 12.0602 14.44 12.645C13.6177 13.1612 13.0847 14.0328 13 15Z" fill="currentColor"></path>
+                            </svg>
+
+                            <span class="mx-1">
+                                Help
+                            </span>
+                        </a>
+                        <a href="{{ route('logout') }}" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white" onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();">
+                                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                            <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 21H10C8.89543 21 8 20.1046 8 19V15H10V19H19V5H10V9H8V5C8 3.89543 8.89543 3 10 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21ZM12 16V13H3V11H12V8L17 12L12 16Z" fill="currentColor"></path>
+                            </svg>
+
+                            <span class="mx-1">
+                                {{ __('Log out') }}
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                @endguest
+            </div>
+        </div>
+    </nav>
+   {{--  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand py-0" href="{{ route("home") }}"><strong>Black</strong>Cat</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item subnav">
-                        <a class="nav-link dropdown-toggle" href="#">CATEGORY</a>
-                        <div class="subnav-content p-3">
-                            <div class="single category">
-                                <h3 class="side-title">Category</h3>
-                                <ul class="list-unstyled">
-                                    @foreach ($navbar_data as $category)
-                                        <li><a href="{{ route('products', $category->category_slug) }}" title="">{{ $category->category_name }} <span class="float-right">{{ $category->products()->where('product_visible', 1)->count() }}</span></a></li>
-                                    @endforeach
-                                    
-                                </ul>
-                        </div>
-                            {{-- <div class="row no-gutters">
-                                <div class="col-md-3 p-1">
-                                    <h5 class="m-0 text-brown mb-3">BARISTA</h5>
-                                    <ul class="list-unstyled text-small">
-                                        <li><a class="text-warning subimg" href="#">BARISTA TOOLS</a></li>
-                                        <li><a class="text-warning subimg" href="#">BOOKS</a></li>
-                                        <li><a class="text-warning subimg" href="#">CUPS AND MUGS</a></li>
-                                        <li><a class="text-warning subimg" href="#">MILK JUGS & LATTE ART</a></li>
-                                        <li><a class="text-warning subimg" href="#">TEMPERS</a></li>
-                                    </ul>
-                                </div>
-
-                                <div class="col-md-3 p-1">
-                                    <h5 class="m-0 text-brown mb-3">BREWING</h5>
-                                    <ul class="list-unstyled text-small">
-                                        <li><a class="text-warning subimg" href="#">BREWERS</a></li>
-                                        <li><a class="text-warning subimg" href="#">FILTERS</a></li>
-                                        <li><a class="text-warning subimg" href="#">GRINDERS & ACCESSORIES</a></li>
-                                        <li><a class="text-warning subimg" href="#">KATTLES AND SCALES</a></li>
-                                    </ul>
-                                </div>
-
-                                <div class="col-md-3 p-1">
-                                    <h5 class="m-0 text-brown mb-3">MACHINES</h5>
-                                    <ul class="list-unstyled text-small">
-                                        <li><a class="text-warning subimg" href="#">MACHINES</a></li>
-                                    </ul>
-                                </div>
-                                
-                                <div class="col-md-3 p-1">
-                                    <h5 class="m-0 text-brown mb-3">ROASTING</h5>
-                                    <ul class="list-unstyled text-small">
-                                        <li><a class="text-warning subimg" href="#">ROASTING</a></li>
-                                    </ul>
-                                </div>
-                            </div> --}}
-                        </div>
+                    <li class="nav-item dropdown" id="myDropdown">
+                        <a class="nav-link" href="#" data-bs-toggle="dropdown">  Category </a>
+                        
+                        <ul class="dropdown-menu fsize-16">
+                            @if (count($recursive_categories) > 0)
+                            
+                            @foreach ($recursive_categories as $category)
+                                @include('layouts.web.subcategories', $category)
+                            @endforeach
+                            @else
+                            <li><a class="dropdown-item" href="#">Nothing </a></li>
+                            @endif
+                        </ul>
+                       
+                        
                     </li>
-                    {{-- <li class="nav-item">
+                    <li class="nav-item">
                         <div id="searchzone">
                             <a id="ad-search" class="text-white" href="#">Advanced search</a>
                             <div class="search-container">
@@ -101,8 +334,8 @@
                         </div>
                         
                         
-                        <!-- <a class="nav-link hvr-underline-from-left py-3 mr-2 text-brown" href="#"><i class="fas fa-search mx-2"></i></a> -->
-                    </li> --}}
+                        <a class="nav-link hvr-underline-from-left py-3 mr-2 text-brown" href="#"><i class="fas fa-search mx-2"></i></a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item" @yield('nav-search-class')>
@@ -150,22 +383,49 @@
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav> --}}
     <!-- =========================== -->
     <main class="@yield('main-class')">
         @yield('content')
     </main>
     </div>
-        @yield('script')
-    {{-- <script type="text/javascript">
-        // $.getJSON( "../data.json", function( data ) {
-        //     alert(data.logged);
-        // });
-    </script>
-    <div insert-html="../_template/footer_category_coffee.html"></div>
-    <script src="../_public/js/lib/jquery-3.5.1.min.js"></script>
-    <script data-main="../_public/js/main" src="../_public/js/require.js"></script> --}}
     @yield('script')
+    {{-- <script> // FOR NAVBAR
+        document.addEventListener("DOMContentLoaded", function(){
+        // make it as accordion for smaller screens
+        if (window.innerWidth < 992) {
+
+        // close all inner dropdowns when parent is closed
+        document.querySelectorAll('.navbar .dropdown').forEach(function(everydropdown){
+            everydropdown.addEventListener('hidden.bs.dropdown', function () {
+            // after dropdown is hidden, then find all submenus
+                this.querySelectorAll('.submenu').forEach(function(everysubmenu){
+                // hide every submenu as well
+                everysubmenu.style.display = 'none';
+                });
+            })
+        });
+
+        document.querySelectorAll('.dropdown-menu a').forEach(function(element){
+            element.addEventListener('click', function (e) {
+                let nextEl = this.nextElementSibling;
+                if(nextEl && nextEl.classList.contains('submenu')) {	
+                // prevent opening link if link needs to open dropdown
+                e.preventDefault();
+                if(nextEl.style.display == 'block'){
+                    nextEl.style.display = 'none';
+                } else {
+                    nextEl.style.display = 'block';
+                }
+
+                }
+            });
+        })
+        }
+        // end if innerWidth
+        }); 
+        // DOMContentLoaded  end
+    </script> --}}
 </body>
 
 </html>

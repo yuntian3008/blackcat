@@ -61,7 +61,8 @@ Categories
 @endsection
 
 @section('content')
-<div class="container-fluid pt-4">
+
+{{-- <div class="container-fluid pt-4">
         <div class="row justify-content-center">
             <div class="card col-md-11 p-0 border-0">
                 <div class="card-header p-0">
@@ -89,5 +90,5 @@ Categories
                 </div>
             </div>
         </div>
-</div>
+</div> --}}
 @endsection

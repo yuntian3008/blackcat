@@ -1,5 +1,6 @@
 @extends('layouts.web')
-
+@inject('imageProcessing', 'App\Components\Helper\ImageProcessing')
+@inject('product','App\Product')
 @section('title')
 @endsection
 
@@ -139,7 +140,149 @@ style="display: none;"
 @endsection
 
 @section('content')
-<div class="container px-1 px-md-4 mx-auto">
+<div class="container mx-auto">
+    <div class="flex flex-col gap-y-10">
+        <div class="flex px-10 mt-5">
+            <h1 class="text-2xl font-extrabold uppercase">
+                Order #{{ $order->id }}
+            </h1>
+        </div>
+        <div class="shadow-xl rounded-lg py-10">
+            <div class="flex px-10">
+                <h1 class="text-xl font-bold">
+                    #Order Status
+                </h1>
+            </div>
+            <div class="flex px-5">
+                <div class="py-10 px-10 w-full">
+                    <div class="mx-4 p-4">
+                        <div class="flex items-center">
+                            <div class="flex items-center {{ !empty($order->request_date) ? "text-white" : "text-gray-500" }} relative">
+                                <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2{{ !empty($order->request_date) ? " bg-gray-700 border-gray-700" : " border-gray-300" }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                    </svg>
+                                </div>
+                                <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-gray-700">
+                                    Order has been initiated
+                                </div>
+                                <div class="absolute bottom-0 -ml-10 text-center mb-16 w-32 text-xs font-medium uppercase text-gray-700">
+                                    {{ !empty($order->request_date) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $order->request_date)->format('H:i - d/m/Y') : "" }}
+                                </div>
+                            </div>
+                            <div class="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-{{ empty($order->get_date) ? "300" : "700" }}"></div>
+                            <div class="flex items-center {{ !empty($order->get_date) ? "text-white" : "text-gray-500" }} relative">
+                                <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2{{ !empty($order->get_date) ? " bg-gray-700 border-gray-700" : " border-gray-300" }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                    </svg>
+                                </div>
+                                <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-gray-700">
+                                We are preparing your order
+                                </div>
+                                <div class="absolute bottom-0 -ml-10 text-center mb-16 w-32 text-xs font-medium uppercase text-gray-700">
+                                    {{ !empty($order->get_date) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $order->get_date)->format('H:i - d/m/Y') : "" }}
+                                </div>
+                            </div>
+                            <div class="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-{{ empty($order->ship_date) ? "300" : "700" }}"></div>
+                            <div class="flex items-center {{ !empty($order->ship_date) ? "text-white" : "text-gray-500" }} relative">
+                                <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2{{ !empty($order->ship_date) ? " bg-gray-700 border-gray-700" : " border-gray-300" }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                                <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-gray-500">
+                                Order is being shipped
+                                </div>
+                                <div class="absolute bottom-0 -ml-10 text-center mb-16 w-32 text-xs font-medium uppercase text-gray-700">
+                                    {{ !empty($order->ship_date) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $order->ship_date)->format('H:i - d/m/Y') : "" }}
+                                </div>
+                            </div>
+                            <div class="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-{{ empty($order->completion_date) ? "300" : "700" }}"></div>
+                            <div class="flex items-center {{ !empty($order->completion_date) ? "text-white" : "text-gray-500" }} relative">
+                                <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2{{ !empty($order->completion_date) ? " bg-gray-700 border-gray-700" : " border-gray-300" }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                                    </svg>
+                                </div>
+                                <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-gray-500">
+                                Order is completed
+                                </div>
+                                <div class="absolute bottom-0 -ml-10 text-center mb-16 w-32 text-xs font-medium uppercase text-gray-700">
+                                    {{ !empty($order->completion_date) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $order->completion_date)->format('H:i - d/m/Y') : "" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="shadow-xl rounded-lg py-10">
+            <div class="flex px-10">
+                <h1 class="text-xl font-bold">
+                    #Order Information
+
+                </h1>
+            </div>
+            <div class="flex items-center justify-center h-auto p-5">
+                <div class="container">
+                    <div class="w-full flex justify-between px-5">
+                        <div class="">
+                            <p class="mt-1 text-gray-700 mb-0">Phone: {{$order->phone}}</p>
+                            <p class="text-gray-700">Address: {{$order->address}}</p>
+                        </div>
+                        <div class="">
+                            <p class="mb-0">Expected Arrival: <span>{{ $expected_arrival }}</span></p>
+                            <p>Total: <span class="font-bold text-lg">$ {{ number_format($order_details->reduce(function($total,$item) { return $total + $item->product->product_price * $item->quantity;
+                                }),2) }}</span>
+                            </p>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <div class="shadow-xl rounded-lg py-10">
+            <div class="flex px-10 mt-5">
+                <h1 class="text-xl font-bold">
+                    #Order Summary
+                </h1>
+            </div>
+            <div class="flex items-center justify-center h-auto p-5">
+                <div class="container">
+                    <div class="flex justify-center">
+                        <div class="bg-white w-full">
+                            <ul class="divide-y divide-gray-300">
+                                @foreach ($order_details as $item)
+                                <li class="p-4 hover:bg-gray-50 cursor-pointer">
+                                    <a href="{{ route('product.details',[$item->product->category->category_slug,$item->product->product_slug]) }}" class="flex space-x-4">
+                                        <div>
+                                            <img src="{{ $item->product->product_image }}" alt="image"
+                                                class="w-40">
+                                        </div>
+                                        <div>
+                                            <h2 class="text-xl font-bold">{{ strlen($item->product->product_name) > 50 ? substr($item->product->product_name,0,30)."..." : $item->product->product_name }}</h2>
+                                            {{-- <p class="text-sm">{{ $product->find($item->product_id)->product_desc }}</p> --}}
+                                            <strong class="text-gray-700 mr-3">Price:</strong>$ {{ number_format($item->product->product_price,2) }} x <strong>{{ $item->quantity }}</strong>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                  
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+               
+    </div>
+</div>
+{{-- <div class="container px-1 px-md-4 mx-auto">
     <div class="card">
         <div class="row d-flex justify-content-between px-3 top">
             <div class="">
@@ -247,7 +390,7 @@ style="display: none;"
         </div>
         @endforeach
     </div>
-</div>
+</div> --}}
 {{-- <div class="container bg-white py-3 mt-4">
 	<!--Section: Block Content-->
 	<section>

@@ -1,15 +1,14 @@
 <template>
-    <div class="d-inline">
         <!-- 
             Vietnamese: So với CategoriesCreate.vue button được đưa ra khỏi component này. Button có thể mở Modal này thông qua id "editmodal_[id]"
          -->
         <!-- Modal -->
-        <div class="modal animate__animated animate__zoomIn animate__faster" :id="'editmodal_'+category.id" tabindex="-1" :aria-labelledby="'#editmodalLabel_'+category.id" aria-hidden="true">
+        <div v-if="category != null" class="modal d-block animate__animated animate__zoomIn animate__faster" :id="'editmodal_'+category.id" tabindex="-1" :aria-labelledby="'#editmodalLabel_'+category.id">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" :id="'#editmodalLabel_'+category.id"><i class="bi bi-hash"></i>&ensp;Edit <strong>{{category.category_name }}</strong> category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="$emit('closeModal')"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -19,7 +18,7 @@
                                     <div v-for="item in errors">
                                         <strong>Error: </strong>{{item}}.
                                     </div>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" v-on:click="errors = []" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" v-on:click="errors = [];" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="row g-2">
@@ -69,7 +68,6 @@
             </form>
             <div class="col"></div>
         </div> -->
-    </div>
 </template>
 
 <script>
@@ -78,7 +76,8 @@
         props: {
             category: {
                 type: Object,
-                required: true,
+                required: false,
+                default: null,
             },
         },
         data: function () {

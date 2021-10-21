@@ -46,27 +46,27 @@
 //   }
 
 // Dropzone Override
-.dropzone {
+.cute-upload {
 	background-image: url('/assets/images/default/dropzone.gif') !important;
   background-size: auto 100% !important;
   text-align: center !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
 }
-.dropzone .dz-message {
-	color: $dark !important;
-}
-.dropzone .dz-details {
-	background: $light !important;
-	color: $dark !important;
-}
-.dropzone .dz-progress{
-	display: none !important;
-}
-.dropzone .dz-remove{
-  background: $danger !important;
-  color: $light !important;
-}
+// .dropzone .dz-message {
+// 	color: $dark !important;
+// }
+// .dropzone .dz-details {
+// 	background: $light !important;
+// 	color: $dark !important;
+// }
+// .dropzone .dz-progress{
+// 	display: none !important;
+// }
+// .dropzone .dz-remove{
+//   background: $danger !important;
+//   color: $light !important;
+// }
 
 //
 // Footer
