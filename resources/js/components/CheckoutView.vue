@@ -31,7 +31,7 @@
         <h2 class="my-4 font-bold md:text-xl text-heading ">Delivery address
         </h2>
         <div class="justify-center w-full mx-auto">
-                <div class="mt-4">
+                <div class="mt-4" v-show="addresses.length > 0">
                     <div class="w-full">
                         <label for="caddress"
                             class="block mb-3 text-sm font-semibold text-gray-500">Choose address</label>
@@ -41,29 +41,29 @@
                         </select>
                     </div>
                 </div>
-                <div id="other-address" v-show="address_index == -1">
+                <div id="other-address" v-show="address_index == -1 || addresses.length == 0">
                     <div class="mt-4 space-x-0 lg:flex lg:space-x-4">
                         <div class="w-full lg:w-1/2">
                             <label for="country"
                                 class="block mb-3 text-sm font-semibold text-gray-500">Country</label>
-                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.country" id="country" :disabled="address_index >= 0">
+                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.country" id="country" :disabled="address_index >= 0 && addresses.length > 0">
                         </div>
                         <div class="w-full lg:w-1/2">
                             <label for="province"
                                 class="block mb-3 text-sm font-semibold text-gray-500">Province</label>
-                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.province" id="province" :disabled="address_index >= 0">
+                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.province" id="province" :disabled="address_index >= 0 && addresses.length > 0">
                         </div>
                     </div>
                     <div class="mt-4 space-x-0 lg:flex lg:space-x-4">
                         <div class="w-full lg:w-1/2">
                             <label for="district"
                                 class="block mb-3 text-sm font-semibold text-gray-500">District</label>
-                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.district" id="district" :disabled="address_index >= 0">
+                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.district" id="district" :disabled="address_index >= 0 && addresses.length > 0">
                         </div>
                         <div class="w-full lg:w-1/2">
                             <label for="ward"
                                 class="block mb-3 text-sm font-semibold text-gray-500">Ward</label>
-                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.ward" id="ward" :disabled="address_index >= 0">
+                            <input type="text" class="disabled:opacity-50 rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="address.ward" id="ward" :disabled="address_index >= 0 && addresses.length > 0">
                         </div>
                     </div>
                     <div class="mt-4">
@@ -72,7 +72,7 @@
                                 class="block mb-3 text-sm font-semibold text-gray-500">Address</label>
                             <textarea
                                 class="disabled:opacity-50 w-full px-4 py-3 text-xs rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base"
-                                id="address" cols="20" rows="4" v-model="address.address":disabled="address_index >= 0"></textarea>
+                                id="address" cols="20" rows="4" v-model="address.address":disabled="address_index >= 0 && addresses.length > 0"></textarea>
                         </div>
                     </div>
                 </div>
@@ -138,23 +138,12 @@
             </label>
         </div>
         <div class="flex items-center gap-8">
-            <form class="mt-4" method="POST" action="/order/create">
-                <input type="hidden" name="_token" :value="$csrfToken">
-                <input type="hidden" name="country" :value="address.country">
-                <input type="hidden" name="province" :value="address.province">
-                <input type="hidden" name="district" :value="address.district">
-                <input type="hidden" name="ward" :value="address.ward">
-                <input type="hidden" name="address" :value="address.address">
-                <input type="hidden" name="phone" :value="phone">
-                <input type="hidden" name="payment" :value="payment">
-                <input type="hidden" name="newAddress" :value="address_index < 0 ? true : false">
-                <button type="submit" class="flex items-center justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-700 rounded-full shadow hover:bg-gray-700 focus:shadow-outline focus:outline-none">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                  <span class="ml-2 mt-5px">Order</span>
-                </button>
-            </form>
+            <button type="button" @click="order()" class="flex items-center justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-700 rounded-full shadow hover:bg-gray-700 focus:shadow-outline focus:outline-none">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+              <span class="ml-2 mt-5px">Order</span>
+            </button>
         </div>
     </div>
 </template>
@@ -186,23 +175,11 @@ import 'vue-loading-overlay/dist/vue-loading.css'
         },
         mounted() {
             var app = this;
-            app.address = app.addresses[0];
-            // var app = this;
-            // app.isLoading = true;
-            // axios.post('/carts', {
-            //         secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
-            //     },{
-            //         _token: app.$csrfToken,
-            //     })
-            //     .then(function (resp) {
-            //         app.cartItems = resp.data;
-            //         app.$root.$emit("updateTotal",app.cartItems);
-            //         app.isLoading = false;
-            //         //console.log(resp);
-            //     })
-            //     .catch(function () {
-            //         alert("Could not load your product")
-            //     });
+            if (app.addresses.length > 0) {
+                app.address = app.addresses[0];
+            }
+            
+            
         },
         methods: {
             choose: function () {
@@ -218,6 +195,44 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                     ward: '',
                 }
             },
+            order: function () {
+                var app = this;
+                axios.post('/customer/order/create', {
+                    secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
+                    country : app.address.country,
+                    province : app.address.province,
+                    district : app.address.district,
+                    ward : app.address.ward,
+                    address : app.address.address,
+                    phone : app.phone,
+                    payment : app.payment,
+                    newAddress : (app.address_index < 0 || app.addresses.length == 0) ? true : false,
+                },{
+                    _token: app.$csrfToken,
+                })
+                .then(function (resp) {
+                    app.$swal.fire({
+                        title: resp.data.message,
+                        showConfirmButton: false,
+                        icon: 'success',
+                        timer: 1500,
+                    }).then((result) => {
+                        location.href = resp.data.next;
+                    });
+                    
+                })
+                .catch(function (resp) {
+                    var errors = resp.response.data.errors;
+                    for(var k in errors) {
+                        app.$swal.fire({
+                          icon: 'error',
+                          title: k,
+                          text: errors[k],
+                        });
+                    }
+                    
+                });
+            }
         },
         computed: {
             total: function(){

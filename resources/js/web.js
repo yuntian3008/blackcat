@@ -87,6 +87,8 @@ Vue.prototype.$bearerAPITOKEN = {
 
 
 
+//MIXINS
+//import responseHelper from './mixins/responseHelper'
 
 
 

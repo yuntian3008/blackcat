@@ -10231,17 +10231,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -10268,22 +10257,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var app = this;
-    app.address = app.addresses[0]; // var app = this;
-    // app.isLoading = true;
-    // axios.post('/carts', {
-    //         secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
-    //     },{
-    //         _token: app.$csrfToken,
-    //     })
-    //     .then(function (resp) {
-    //         app.cartItems = resp.data;
-    //         app.$root.$emit("updateTotal",app.cartItems);
-    //         app.isLoading = false;
-    //         //console.log(resp);
-    //     })
-    //     .catch(function () {
-    //         alert("Could not load your product")
-    //     });
+
+    if (app.addresses.length > 0) {
+      app.address = app.addresses[0];
+    }
   },
   methods: {
     choose: function choose() {
@@ -10296,6 +10273,41 @@ __webpack_require__.r(__webpack_exports__);
         province: '',
         ward: ''
       };
+    },
+    order: function order() {
+      var app = this;
+      axios.post('/customer/order/create', {
+        secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
+        country: app.address.country,
+        province: app.address.province,
+        district: app.address.district,
+        ward: app.address.ward,
+        address: app.address.address,
+        phone: app.phone,
+        payment: app.payment,
+        newAddress: app.address_index < 0 || app.addresses.length == 0 ? true : false
+      }, {
+        _token: app.$csrfToken
+      }).then(function (resp) {
+        app.$swal.fire({
+          title: resp.data.message,
+          showConfirmButton: false,
+          icon: 'success',
+          timer: 1500
+        }).then(function (result) {
+          location.href = resp.data.next;
+        });
+      })["catch"](function (resp) {
+        var errors = resp.response.data.errors;
+
+        for (var k in errors) {
+          app.$swal.fire({
+            icon: 'error',
+            title: k,
+            text: errors[k]
+          });
+        }
+      });
     }
   },
   computed: {
@@ -46244,75 +46256,89 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "justify-center w-full mx-auto" }, [
-      _c("div", { staticClass: "mt-4" }, [
-        _c("div", { staticClass: "w-full" }, [
-          _c(
-            "label",
+      _c(
+        "div",
+        {
+          directives: [
             {
-              staticClass: "block mb-3 text-sm font-semibold text-gray-500",
-              attrs: { for: "caddress" }
-            },
-            [_vm._v("Choose address")]
-          ),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.address_index,
-                  expression: "address_index"
+              name: "show",
+              rawName: "v-show",
+              value: _vm.addresses.length > 0,
+              expression: "addresses.length > 0"
+            }
+          ],
+          staticClass: "mt-4"
+        },
+        [
+          _c("div", { staticClass: "w-full" }, [
+            _c(
+              "label",
+              {
+                staticClass: "block mb-3 text-sm font-semibold text-gray-500",
+                attrs: { for: "caddress" }
+              },
+              [_vm._v("Choose address")]
+            ),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.address_index,
+                    expression: "address_index"
+                  }
+                ],
+                staticClass:
+                  "rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base",
+                attrs: { id: "caddress" },
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.address_index = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    },
+                    _vm.choose
+                  ]
                 }
-              ],
-              staticClass:
-                "rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base",
-              attrs: { id: "caddress" },
-              on: {
-                change: [
-                  function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.address_index = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  },
-                  _vm.choose
-                ]
-              }
-            },
-            [
-              _vm._l(_vm.addresses, function(item, index) {
-                return _c("option", { domProps: { value: index } }, [
-                  _vm._v(
-                    _vm._s(item.address) +
-                      ", " +
-                      _vm._s(item.ward) +
-                      ", " +
-                      _vm._s(item.district) +
-                      ", " +
-                      _vm._s(item.province) +
-                      ", " +
-                      _vm._s(item.country)
-                  )
+              },
+              [
+                _vm._l(_vm.addresses, function(item, index) {
+                  return _c("option", { domProps: { value: index } }, [
+                    _vm._v(
+                      _vm._s(item.address) +
+                        ", " +
+                        _vm._s(item.ward) +
+                        ", " +
+                        _vm._s(item.district) +
+                        ", " +
+                        _vm._s(item.province) +
+                        ", " +
+                        _vm._s(item.country)
+                    )
+                  ])
+                }),
+                _vm._v(" "),
+                _c("option", { domProps: { value: -1 } }, [
+                  _vm._v("Other address")
                 ])
-              }),
-              _vm._v(" "),
-              _c("option", { domProps: { value: -1 } }, [
-                _vm._v("Other address")
-              ])
-            ],
-            2
-          )
-        ])
-      ]),
+              ],
+              2
+            )
+          ])
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -46321,8 +46347,8 @@ var render = function() {
             {
               name: "show",
               rawName: "v-show",
-              value: _vm.address_index == -1,
-              expression: "address_index == -1"
+              value: _vm.address_index == -1 || _vm.addresses.length == 0,
+              expression: "address_index == -1 || addresses.length == 0"
             }
           ],
           attrs: { id: "other-address" }
@@ -46353,7 +46379,7 @@ var render = function() {
                 attrs: {
                   type: "text",
                   id: "country",
-                  disabled: _vm.address_index >= 0
+                  disabled: _vm.address_index >= 0 && _vm.addresses.length > 0
                 },
                 domProps: { value: _vm.address.country },
                 on: {
@@ -46391,7 +46417,7 @@ var render = function() {
                 attrs: {
                   type: "text",
                   id: "province",
-                  disabled: _vm.address_index >= 0
+                  disabled: _vm.address_index >= 0 && _vm.addresses.length > 0
                 },
                 domProps: { value: _vm.address.province },
                 on: {
@@ -46431,7 +46457,7 @@ var render = function() {
                 attrs: {
                   type: "text",
                   id: "district",
-                  disabled: _vm.address_index >= 0
+                  disabled: _vm.address_index >= 0 && _vm.addresses.length > 0
                 },
                 domProps: { value: _vm.address.district },
                 on: {
@@ -46469,7 +46495,7 @@ var render = function() {
                 attrs: {
                   type: "text",
                   id: "ward",
-                  disabled: _vm.address_index >= 0
+                  disabled: _vm.address_index >= 0 && _vm.addresses.length > 0
                 },
                 domProps: { value: _vm.address.ward },
                 on: {
@@ -46510,7 +46536,7 @@ var render = function() {
                   id: "address",
                   cols: "20",
                   rows: "4",
-                  disabled: _vm.address_index >= 0
+                  disabled: _vm.address_index >= 0 && _vm.addresses.length > 0
                 },
                 domProps: { value: _vm.address.address },
                 on: {
@@ -46689,91 +46715,42 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "flex items-center gap-8" }, [
       _c(
-        "form",
+        "button",
         {
-          staticClass: "mt-4",
-          attrs: { method: "POST", action: "/order/create" }
+          staticClass:
+            "flex items-center justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-700 rounded-full shadow hover:bg-gray-700 focus:shadow-outline focus:outline-none",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              return _vm.order()
+            }
+          }
         },
         [
-          _c("input", {
-            attrs: { type: "hidden", name: "_token" },
-            domProps: { value: _vm.$csrfToken }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            attrs: { type: "hidden", name: "country" },
-            domProps: { value: _vm.address.country }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            attrs: { type: "hidden", name: "province" },
-            domProps: { value: _vm.address.province }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            attrs: { type: "hidden", name: "district" },
-            domProps: { value: _vm.address.district }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            attrs: { type: "hidden", name: "ward" },
-            domProps: { value: _vm.address.ward }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            attrs: { type: "hidden", name: "address" },
-            domProps: { value: _vm.address.address }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            attrs: { type: "hidden", name: "phone" },
-            domProps: { value: _vm.phone }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            attrs: { type: "hidden", name: "payment" },
-            domProps: { value: _vm.payment }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            attrs: { type: "hidden", name: "newAddress" },
-            domProps: { value: _vm.address_index < 0 ? true : false }
-          }),
-          _vm._v(" "),
           _c(
-            "button",
+            "svg",
             {
-              staticClass:
-                "flex items-center justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-700 rounded-full shadow hover:bg-gray-700 focus:shadow-outline focus:outline-none",
-              attrs: { type: "submit" }
+              staticClass: "h-8 w-8",
+              attrs: {
+                xmlns: "http://www.w3.org/2000/svg",
+                fill: "none",
+                viewBox: "0 0 24 24",
+                stroke: "currentColor"
+              }
             },
             [
-              _c(
-                "svg",
-                {
-                  staticClass: "h-8 w-8",
-                  attrs: {
-                    xmlns: "http://www.w3.org/2000/svg",
-                    fill: "none",
-                    viewBox: "0 0 24 24",
-                    stroke: "currentColor"
-                  }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      "stroke-linecap": "round",
-                      "stroke-linejoin": "round",
-                      "stroke-width": "2",
-                      d: "M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                    }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c("span", { staticClass: "ml-2 mt-5px" }, [_vm._v("Order")])
+              _c("path", {
+                attrs: {
+                  "stroke-linecap": "round",
+                  "stroke-linejoin": "round",
+                  "stroke-width": "2",
+                  d: "M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                }
+              })
             ]
-          )
+          ),
+          _vm._v(" "),
+          _c("span", { staticClass: "ml-2 mt-5px" }, [_vm._v("Order")])
         ]
       )
     ])
@@ -60048,7 +60025,9 @@ Vue.prototype.$csrfToken = document.querySelector("meta[name='csrf-token']").get
 Vue.prototype.$bearerAPITOKEN = {
   'Accept': 'application/json',
   'Authorization': 'Bearer ' + document.querySelector("meta[name='api-token']").getAttribute('content')
-};
+}; //MIXINS
+//import responseHelper from './mixins/responseHelper'
+
 var app = new Vue({
   mode: 'history'
 }).$mount('#shop');

@@ -9,7 +9,7 @@ use App\Customer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Components\Helper\ImageProcessing;
-
+use App\Rules\OrderNotProcessedYet;
 class OrderController extends Controller
 {
     public function __construct() {
@@ -41,11 +41,18 @@ class OrderController extends Controller
         return view('customer.order_details', [
             'order' => $order,
             'order_details' => $order_details,
-            'expected_arrival' => Carbon::createFromFormat('Y-m-d H:i:s', $order->request_date)->addDays(7)->format('d/m/Y'),
+            'expected_arrival' => empty($order->request_date) ? "" : Carbon::createFromFormat('Y-m-d H:i:s', $order->request_date)->addDays(7)->format('d/m/Y'),
         ]);
     }
 
     public function create(Request $request) {
+
+        Validator::make($request->all(), [
+                'secret' => 'required',
+                'phone' => 'digits:10|nullable',
+            ])->validate();
+        $customer = Customer::where('firebase_uid', $request->secret)->firstOrFail();
+
     	if ($request->newAddress == "true") {
 	        Validator::make($request->all(), [
 	            'address' => 'required|string|max:255',
@@ -53,10 +60,9 @@ class OrderController extends Controller
 	            'district' => 'required|string|max:255',
 	            'province' => 'required|string|max:255',
 	            'country' => 'required|string|max:255',
-                'phone' => 'digits:10',
 	        ])->validate();
 
-	        $address = $request->user()->addresses()->create([
+	        $address = $customer->addresses()->create([
 	    		'address' => $request->address,
 	    		'ward' => $request->ward,
 	    		'district' => $request->district,
@@ -66,13 +72,15 @@ class OrderController extends Controller
         }
     	
     	$address = $request->address.', '.$request->ward.', '.$request->district.', '.$request->province.', '.$request->country;
-        $order = $request->user()->orders()->create([
+
+
+        $order = $customer->orders()->create([
         	'address' => $address,
         	'phone' => empty($request->phone) ? $request->user()->phone : $request->phone,
         	'payment' => $request->payment,
             'request_date' => Carbon::now(),
         ]);
-        $cartItems = $request->user()->cartItems;
+        $cartItems = $customer->cartItems;
         foreach ($cartItems as $item) {
         	$order->orderDetails()->create([
         		'product_id' => $item->product_id,
@@ -80,9 +88,26 @@ class OrderController extends Controller
         	]);
         }
 
-        $request->user()->cartItems()->delete();
+        $customer->cartItems()->delete();
 
-        return redirect()->route('customer.order.details', $order->id);
+        return response()
+            ->json(['message' => 'Order has been created successfully.',
+                    'next' => route('customer.order.details',['id'=> $order->id]) ]);
+        
+    }
+
+    public function cancel(Request $request) {
+        Validator::make($request->all(), [
+            'id' => ['required', 'exists:orders', new OrderNotProcessedYet ],
+        ])->validate();
+        
+        $order = Order::findOrFail($request->id);
+
+        $order->update([
+            'request_date' => null,
+        ]);
+
+        return redirect()->back();
         
     }
 }

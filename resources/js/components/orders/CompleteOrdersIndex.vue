@@ -12,8 +12,8 @@
                 <tr>
                     <th>Order ID</th>
                     <th>Request Date</th>
-                    <th>Get Date</th>
-                    <th>Ship Date</th>
+                    <th>Processed Date</th>
+                    <th>Start Shipping Date</th>
                     <th>Phone</th>
                     <th>Address</th>
                     <th width="150">&nbsp;</th>
@@ -31,7 +31,7 @@
                         <a href="#"
                            class="btn btn-sm btn-block btn-success m-1"
                            v-on:click="actionOrder(order.id, index)">
-                            Complete order
+                            Done
                         </a>
                     </td>
                 </tr>
@@ -50,7 +50,7 @@
         },
         mounted() {
             var app = this;
-            axios.get('/api/v1/orders/'+ 3,{
+            axios.get('/api/v1/shipping/1',{
                 headers: app.$bearerAPITOKEN
             })
                 .then(function (resp) {
@@ -64,38 +64,39 @@
         methods: {
             actionOrder(id, index) {
                 var app = this;
-                this.$confirm(
-                    {
-                        message: 'Are you sure you want to ship Order has id '+app.orders[index].id+' ?',
-                        button: {
-                            no: 'No',
-                            yes: 'Yes'
-                        },
-                        /**
-                        * Callback Function
-                        * @param {Boolean} confirm 
-                        */
-                        callback: confirm => {
-                            if (confirm) {
-                                
-                                axios.patch('/api/v1/orders/' + id,{
-                                        action: 3,
-                                    }
-                                        
-                                    ,{
-                                        headers: app.$bearerAPITOKEN
-                                    })
-                                    .then(function (resp) {
-                                        app.orders.splice(index, 1);
-                                    })
-                                    .catch(function (resp) {
-                                        console.log(resp);
-                                        alert("Could not get order");
-                                    });
-                            }
-                        }
+                app.$swal.fire({
+                    title: 'Are you sure?',
+                    html: "Delivered ? (ORDER ID: <strong>"+ id +"</strong>)",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    showClass: {
+                        popup: 'animate__animated animate__headShake',
+                        icon: 'animate__animated animate__shakeX',
+                    },
+                    confirmButtonText: 'OK!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.patch('/api/v1/shipping/' + id,{
+                            type: 1,
+                        }     
+                        ,{
+                            headers: app.$bearerAPITOKEN
+                        })
+                        .then(function (resp) {
+                            app.orders.splice(index, 1);
+                            app.$swal.fire({
+                                title: 'Successfully!',
+                                showConfirmButton: false,
+                                icon: 'success',
+                                timer: 1500,
+                            });
+                        })
+                        .catch(function (resp) {
+                            console.log(resp);
+                            app.handingError(resp,'Could not Mark the order as processed');
+                        });
                     }
-                )
+                })
             }
         }
     }

@@ -54,6 +54,9 @@
                     <li class="nav-item">
                         <router-link :to="{name: 'indexStaff'}" class="nav-link" data-bs-dismiss="offcanvas">Staff</router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link :to="{name: 'indexSetting'}" class="nav-link" data-bs-dismiss="offcanvas">Setting</router-link>
+                    </li>
                     @endif
                     @if (Auth::guard('admin')->user()->hasAnyRole(['productmanager','superadmin']))
                     <li class="nav-item">
@@ -64,10 +67,17 @@
                     </li>
                     @endif
                     @if (Auth::guard('admin')->user()->hasAnyRole(['ordermanager','superadmin']))
-                    
+                    <li class="nav-item">
+                        <router-link :to="{name: 'indexHandleOrder'}" class="nav-link" data-bs-dismiss="offcanvas">Handle Orders</router-link>
+                    </li>
                     @endif
                     @if (Auth::guard('admin')->user()->hasAnyRole(['shipper','superadmin']))
-                    
+                    <li class="nav-item">
+                        <router-link :to="{name: 'indexShipOrder'}" class="nav-link" data-bs-dismiss="offcanvas">Ready Orders</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{name: 'indexCompleteOrder'}" class="nav-link" data-bs-dismiss="offcanvas">Orders are being delivered</router-link>
+                    </li>
                     @endif
                     
                     {{-- <li class="nav-item">

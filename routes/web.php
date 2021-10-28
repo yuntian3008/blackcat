@@ -10,35 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-// use App\Http\Controllers\Customer\Auth\LoginController;
-// use App\Http\Controllers\Customer\HomeController;
-// use Illuminate\Support\Facades\Route;
 
-
-// Authentication Routes...
-// Route::get('ahihi', function ()
-// {
-	
-// });
-
-Route::get('home','Customer\HomeController@index')->middleware('verified.phone');
 Route::get('login', 'Customer\Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Customer\Auth\LoginController@login');
 Route::post('logout', 'Customer\Auth\LoginController@logout')->name('logout');
-Route::middleware(['auth'])->group(function (){
-	Route::middleware(['profile.updated'])->group(function () {
-		Route::get('cart', 'CartController@showCart')->name('cart');
-		Route::post('checkout', 'CartController@showCheckout')->name('show.checkout');
-		Route::post('order/create', 'OrderController@create')->name('order.create');
-		Route::get('customer/order', 'OrderController@history')->name('customer.order.all');
-		Route::get('customer/order/{id}', 'OrderController@show')->name('customer.order.details');
-	});
-	Route::get('customer/profile', 'Customer\ProfileController@show')->name('customer.profile');
-	Route::post('customer/profile', 'Customer\ProfileController@update')->name('customer.profile.update');
-	Route::post('customer/profile/avatar', 'Customer\ProfileController@changeAvatar')->name('customer.profile.update.avatar');
-	
-    //Route::get('/', 'Customer\HomeController@index')->name('home');
-});
+
 // Registration Routes...
 Route::get('register', 'Customer\Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Customer\Auth\RegisterController@register');
@@ -56,7 +32,20 @@ Route::post('password/otp', 'Customer\Auth\ForgotPasswordController@verifyOtp')-
 Route::get('password/reset/{token}', 'Customer\Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Customer\Auth\ResetPasswordController@reset')->name('password.update');
 
-
+Route::middleware(['auth'])->group(function (){
+	Route::middleware(['profile.updated'])->group(function () {
+		Route::get('cart', 'CartController@showCart')->name('cart');
+		Route::post('checkout', 'CartController@showCheckout')->name('show.checkout');
+		Route::post('customer/order/create', 'OrderController@create')->name('order.create');
+		Route::post('order/cancel', 'OrderController@cancel')->name('customer.order.cancel');
+		Route::get('customer/order', 'OrderController@history')->name('customer.order.all');
+		Route::get('customer/order/{id}', 'OrderController@show')->name('customer.order.details');
+	});
+	Route::get('customer/profile', 'Customer\ProfileController@show')->name('customer.profile');
+	Route::post('customer/profile', 'Customer\ProfileController@update')->name('customer.profile.update');
+	Route::post('customer/profile/avatar', 'Customer\ProfileController@changeAvatar')->name('customer.profile.update.avatar');
+	
+});
 //Group : Login page
 //Auth::routes(); 
 

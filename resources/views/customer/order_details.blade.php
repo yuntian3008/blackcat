@@ -142,10 +142,24 @@ style="display: none;"
 @section('content')
 <div class="container mx-auto">
     <div class="flex flex-col gap-y-10">
-        <div class="flex px-10 mt-5">
+        <div class="flex justify-between px-10 mt-5">
             <h1 class="text-2xl font-extrabold uppercase">
                 Order #{{ $order->id }}
             </h1>
+            @if($order->getStatus()['status'] == 1)
+            <form id="cancelForm" action="{{ route('customer.order.cancel')}}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $order->id }}">
+                <button
+                class="flex items-center gap-x-3 text-red-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg><span> Cancel Order</span>
+                </button>
+            </form>
+            @endif
+            
         </div>
         <div class="shadow-xl rounded-lg py-10">
             <div class="flex px-10">
@@ -153,6 +167,7 @@ style="display: none;"
                     #Order Status
                 </h1>
             </div>
+            @if ($order->getStatus()['status'] > 0)
             <div class="flex px-5">
                 <div class="py-10 px-10 w-full">
                     <div class="mx-4 p-4">
@@ -217,6 +232,28 @@ style="display: none;"
                     </div>
                 </div>
             </div>
+            @else
+            <div
+                class="block text-sm text-left text-white bg-gray-500 h-12 flex items-center p-4 rounded-md my-5 mx-10"
+                role="alert"
+                >
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="w-6 h-6 mx-2 stroke-current"
+                >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+                ></path>
+                </svg>
+                {{ $order->getStatus()['message'] }}
+            </div>
+            @endif
+            
         </div>
         <div class="shadow-xl rounded-lg py-10">
             <div class="flex px-10">
@@ -404,4 +441,30 @@ style="display: none;"
 	</div>
 	</section>
 </div> --}}
+@endsection
+
+@section('script')
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+
+    document.getElementById('cancelForm').addEventListener('submit', 
+        function(e){
+            e.preventDefault(); 
+            Swal.fire({
+              title: 'Are you sure you want to cancel this order?',
+              showDenyButton: true,
+              confirmButtonText: 'Yes',
+              denyButtonText: 'No',
+            }).then((result) => {
+              /* Read more about isConfirmed, isDenied below */
+              if (result.isConfirmed) {
+                this.submit();
+              } else if (result.isDenied) {
+                Swal.fire('Your order is being continued', '', 'info')
+              }
+            })
+        }
+    );
+</script>
 @endsection

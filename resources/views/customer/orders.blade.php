@@ -65,13 +65,10 @@ style="display: none;"
                                             </div>
                                             
                                         </div>
-                                        
-                                            
-                                        
                                         <hr class="border-gray-200 dark:border-gray-700 my-2">
                                         <div class="w-full flex justify-between">
                                             <div class="">
-                                                <p class="text-gray-700 text-lg">Order status: <span class="uppercase font-bold text-yellow-700">{{ $item->getStatus() }}</span></p>
+                                                <p class="text-gray-700 text-lg">Order status: <span class=" font-bold text-black">{{ $item->getStatus()['message'] }}</span></p>
                                             </div>
                                             <div class="">
                                                 <p class="text-gray-700 text-lg uppercase">Total amount: <span class="font-bold text-black text-2xl">$ {{ number_format($item->orderDetails->reduce(function($total,$item) { return $total + $item->product->product_price * $item->quantity;
@@ -218,3 +215,4 @@ style="display: none;"
 	</section>
 </div> --}}
 @endsection
+

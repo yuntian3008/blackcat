@@ -54,7 +54,7 @@ Vue.use(VueSweetalert2, swal_options);
 Vue.use(VueConfirmDialog)
 
 //MIXINS
-//import responseHelper from './mixins/responseHelper'
+import responseHelper from './mixins/responseHelper'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -88,9 +88,11 @@ import ProductsIndex from './components/products/ProductsIndex.vue';
 import ProductsCreate from './components/products/ProductsCreate.vue';
 import ProductsEdit from './components/products/ProductsEdit.vue';
 
-import GetOrdersIndex from './components/orders/GetOrdersIndex.vue';
+import HandleOrdersIndex from './components/orders/HandleOrdersIndex.vue';
 import ShipOrdersIndex from './components/orders/ShipOrdersIndex.vue';
 import CompleteOrdersIndex from './components/orders/CompleteOrdersIndex.vue';
+
+import SettingIndex from './components/settings/Setting.vue';
 
 const routes = [
     {
@@ -103,7 +105,6 @@ const routes = [
             dashboardIndex: DashboardIndex,
             permissionsIndex: PermissionsIndex,
             staffIndex: StaffIndex,
-            getordersIndex: GetOrdersIndex,
             shipordersIndex: ShipOrdersIndex,
             completeordersIndex: CompleteOrdersIndex,
         }
@@ -127,6 +128,12 @@ const routes = [
     {path: '/staff', component: StaffIndex, name: 'indexStaff'},
     {path: '/create-staff', component: StaffCreate, name: 'createStaff'},
     {path: '/edit-staff/:id', component: StaffEdit, name: 'editStaff'},
+
+    {path: '/setting', component: SettingIndex, name: 'indexSetting'},
+
+    {path: '/handle-order', component: HandleOrdersIndex, name: 'indexHandleOrder'},
+    {path: '/ship-order', component: ShipOrdersIndex, name: 'indexShipOrder'},
+    {path: '/complete-order', component: CompleteOrdersIndex, name: 'indexCompleteOrder'},
 ]
 //GLOBAL DATA
 Vue.prototype.$csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute('content');
