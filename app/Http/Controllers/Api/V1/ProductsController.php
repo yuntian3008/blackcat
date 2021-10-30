@@ -71,6 +71,7 @@ class ProductsController extends Controller
         ]);
         $specs = $collection->get('product_specs');
         $product = Product::create($collection->except(['product_specs'])->toArray());
+        $product->update(['product_slug' => $this->sluger($product->id.'-'.$product->product_name)]);
         $product->specs()->createMany($specs);
         return $collection;
     }
@@ -115,7 +116,7 @@ class ProductsController extends Controller
         if ($request->has('data')) {
             $collection = collect(json_decode($request->data,true));
             $collection = $collection->merge([
-                'product_slug' => $this->sluger($collection->get('product_name')),
+                'product_slug' => $this->sluger($id.'-'.$collection->get('product_name'))
             ]);
 
             $product->update($collection->toArray());

@@ -55,6 +55,7 @@ class CategoriesController extends Controller
            'category_slug' => $this->sluger( $request->category_name),
         ]);
         $category = Category::create($request->all());
+        $category->update(['category_slug' => $this->sluger($category->id.'-'.$request->category_name)]);
         
         return $category;
     }
@@ -112,7 +113,7 @@ class CategoriesController extends Controller
         
         $category = Category::findOrFail($id);        
             $request->merge([
-                'category_slug' => $this->sluger($request->category_name)
+                'category_slug' => $this->sluger($id.'-'.$request->category_name)
             ]);
         $category->update($request->toArray());
         return $category;
