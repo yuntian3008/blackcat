@@ -37,6 +37,11 @@ style="display: none;"
                     <div class="flex justify-center">
                         <div class="bg-white w-full">
                             <ul class="divide-y divide-gray-300">
+                                @if ($orders->count() == 0)
+                                    <li class="p-10 hover:bg-gray-50 cursor-pointer flex justify-center">
+                                        <p class="text-xl">You don't have any orders yet</p>
+                                    </li>
+                                @endif
                                 @foreach ($orders as $item)
                                 <li class="p-10 hover:bg-gray-50 cursor-pointer">
                                     <a href="{{ route('customer.order.details', ['id' => $item->id]) }}" class="flex flex-col">

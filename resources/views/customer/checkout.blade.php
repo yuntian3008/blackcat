@@ -23,7 +23,7 @@ style="display: none;"
 @section('content')
 <div class="container px-6 py-8 mx-auto" id="shop">
     <div class="flex flex-col w-full px-0 mx-auto md:flex-row">
-        <checkout-view :shipping="{{ $shipping }}" :temporaryAmount="{{ $temporaryAmount }}" :totalAmount="{{ $totalAmount }}" :addresses="{{ $addresses }}" :user="{{ $user }}"></checkout-view>
+        <checkout-view :temporaryAmount="{{ $temporaryAmount }}" :addresses="{{ $addresses }}" :user="{{ $user }}"></checkout-view>
         <div class="flex flex-col w-full ml-0 lg:ml-12 lg:w-2/5">
             <div class="pt-12 md:pt-0 2xl:ps-4">
                 <h2 class="text-xl font-bold">Order Summary
@@ -53,10 +53,10 @@ style="display: none;"
                     Subtotal:<span class="ml-2">$ {{ number_format($temporaryAmount,2) }}</span></div>
                 <div
                     class="flex items-center w-full py-4 text-xl font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:pb-0">
-                    Shipping:<span class="ml-2">{{ $shipping == 0 ? "Gratis" : "$ " .number_format($shipping,2) }}</span></div>
+                    Shipping:  <span class="ml-2">Gratis</span>{{-- <span class="ml-2">{{ $shipping == 0 ? "Gratis" : "$ " .number_format($shipping,2) }}</span> --}}</div>
                 <div
                     class="flex items-center w-full py-4 text-xl font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:pb-0">
-                    Total:<span class="ml-2">$ {{ number_format($totalAmount,2) }}</span></div>
+                    Total:<span class="ml-2">$ {{ number_format($temporaryAmount+0,2) }}</span></div>
             </div>
         </div>
     </div>

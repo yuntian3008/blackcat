@@ -1,5 +1,5 @@
 @extends('errors::minimal')
 
-@section('title', __('Not Found'))
+@section('title', empty($exception->getMessage()) ? __('Not Found') : $exception->getMessage())
 @section('code', '404')
-@section('message', __('Not Found'))
+@section('message', empty($exception->getMessage()) ? __('Not Found') : $exception->getMessage())

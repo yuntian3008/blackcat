@@ -9,7 +9,7 @@
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-
+        <link href="{{ asset('css/web.css') }}" rel="stylesheet">
         <!-- Styles -->
         <style>
             html, body {
@@ -65,14 +65,12 @@
                 @yield('message')
             </div>
 
-            <div class="next">
-                <a style="text-decoration: none; color: green" href="{{ url()->previous() }}"> Back
-                </a>@auth/
-                <a style="text-decoration: none; color: orange" href="{{ route('logout') }}"
+            <div>
+                <a href="{{ route('home') }}" class="px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:ring-gray-700 focus:ring-opacity-80" id="send-link">Homepage</a>
+                @auth
+                <span class="mx-1">or</span><a href="{{ route('logout') }}"
                    onclick="event.preventDefault();
-                                 document.getElementById('logout-form').submit();">
-                    {{ __('Logout') }}
-                </a>
+                                 document.getElementById('logout-form').submit();" class="px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-yellow-700 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring focus:ring-gray-700 focus:ring-opacity-80" id="send-link">{{ __('Logout') }}</a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf

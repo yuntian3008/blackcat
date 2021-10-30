@@ -16,12 +16,21 @@ class CartController extends Controller
     }
 
     public function showCheckout(Request $request) {
+        $cartItems = $request->user()->cartItems;
+        if ($cartItems->count() == 0) {
+            abort(404,"You need to have at least 1 product in your cart.");
+        }
+        $addresses =  $request->user()->addresses;
+        $temporaryAmount = $request->user()->cartItems->reduce(
+            function($total,$item) 
+            {
+                return $total + $item->product->product_price * $item->quantity;
+            },
+            0);
         return view('customer.checkout',[
-            'shipping' => $request->shipping,
-            'temporaryAmount' => $request->temporaryAmount,
-            'totalAmount' => $request->totalAmount,
-            'addresses' => $request->user()->addresses,
-            'cartItem' => $request->user()->cartItems,
+            'temporaryAmount' => $temporaryAmount,
+            'addresses' =>$addresses,
+            'cartItem' => $cartItems,
             'user' => $request->user(),
         ]);
     }

@@ -155,7 +155,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
         components: {
             Loading,
         },
-        props: ['shipping','temporaryAmount','totalAmount','addresses','user',],
+        props: ['temporaryAmount','addresses','user',],
         data() {
             return {
                 isLoading: false,
@@ -219,7 +219,6 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                     }).then((result) => {
                         location.href = resp.data.next;
                     });
-                    
                 })
                 .catch(function (resp) {
                     var errors = resp.response.data.errors;
