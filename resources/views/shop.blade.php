@@ -1,6 +1,10 @@
 @extends('layouts.web.shop')
 @inject('imageProcessing', 'App\Components\Helper\ImageProcessing')
 
+@section('title')
+{{ is_null($category) ? __('Shop') : $category->category_name }}
+@endsection
+
 @section('products')
 @if(is_null($category))
 @foreach ($data as $key => $element)

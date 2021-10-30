@@ -6,6 +6,10 @@
 
 @endsection
 
+@section('title')
+{{ __('Log in') }}
+@endsection
+
 @section('main-class')
 mt-5
 @endsection

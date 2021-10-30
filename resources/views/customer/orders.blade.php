@@ -1,7 +1,9 @@
 @extends('layouts.web')
 @inject('imageProcessing', 'App\Components\Helper\ImageProcessing')
 @inject('product','App\Product')
+
 @section('title')
+{{ __('Orders') }}
 @endsection
 
 @section('style')

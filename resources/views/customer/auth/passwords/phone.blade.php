@@ -1,7 +1,7 @@
 @extends('layouts.web')
 
-@section('style')
-
+@section('title')
+{{ __('Verify Phone') }}
 @endsection
 
 @section('content')

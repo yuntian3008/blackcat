@@ -1,6 +1,7 @@
 @extends('layouts.web')
 
 @section('title')
+{{ __('Profile') }}
 @endsection
 
 @section('style')

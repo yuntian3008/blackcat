@@ -21,6 +21,10 @@
 
 @endsection
 
+@section('title')
+{{ __('Verify Phone') }}
+@endsection
+
 @section('content')
 <div class="lg:mt-20 flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-1xl">
     

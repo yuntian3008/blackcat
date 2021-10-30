@@ -1,6 +1,7 @@
 @extends('layouts.web')
 
 @section('title')
+{{ __('Cart') }}
 @endsection
 
 @section('style')

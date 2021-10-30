@@ -6,6 +6,10 @@
 
 @endsection
 
+@section('title')
+{{ __('Sign up') }}
+@endsection
+
 @section('main-class')
 mt-5
 @endsection

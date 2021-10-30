@@ -1,7 +1,6 @@
 @extends('layouts.web')
 
 @section('title')
-{{-- {{$current_category}} --}}
 @endsection
 
 @section('style')

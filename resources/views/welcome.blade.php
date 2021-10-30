@@ -1,7 +1,7 @@
 @extends('layouts.web')
 
 @section('title')
-Home
+Welcome
 @endsection
 
 @section('style')
