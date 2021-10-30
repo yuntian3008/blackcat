@@ -19,10 +19,10 @@ class CreateOrdersTable extends Migration
             $table->foreign('customer_id')
                 ->references('id')->on('customers')
                 ->onDelete('cascade');
-            $table->date('request_date');
-            $table->date('get_date');
-            $table->date('ship_date');
-            $table->date('completion_date');
+            $table->dateTime('request_date')->nullable()->default(null);
+            $table->dateTime('get_date')->nullable()->default(null);
+            $table->dateTime('ship_date')->nullable()->default(null);
+            $table->dateTime('completion_date')->nullable()->default(null);
             $table->unsignedTinyInteger('discount')->nullable();
             $table->string('payment');
             $table->string('address');
