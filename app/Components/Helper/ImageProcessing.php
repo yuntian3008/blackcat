@@ -67,7 +67,7 @@ class ImageProcessing
 				->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
 				->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
 				->first(); // có thể bị trùng tên file với nhau!
-				if (is_null($file['path']))
+				if (is_null($file))
 					return "";
 				return Storage::cloud()->url($file['path']);
 				break;
