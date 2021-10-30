@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Components\Helper\ImageProcessing;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 
 class CoreController extends Controller
 {
@@ -117,18 +118,44 @@ class CoreController extends Controller
                 //'current_category' => $category->category_name
             ]);
         }
-        $category = Category::where('category_slug',$category_slug)->firstOrFail();
-        $data = $category->products()->where('product_visible', 1);
+        //$category = Category::where('category_slug',$category_slug)->firstOrFail();
+        $categories = Category::with('children')->where('category_slug',$category_slug)->get();
+        $products = new Collection();
+        while(count($categories) > 0){
+            $nextCategories = [];
+            foreach ($categories as $category) {
+                $products = $products->merge($category->products()->where('product_visible', 1)->get());
+                $nextCategories = array_merge($nextCategories, $category->children->all());
+            }
+            $categories = $nextCategories;
+        }
 
+
+        //$data = $category->products()->where('product_visible', 1);
+        
         if ($request->sort && $request->sortBy) {
             Validator::make($request->all(), [
                 'sort' => 'string|in:product_name,product_price',
                 'sortBy' => 'numeric|between:0,1',
             ])->validate();
-            $data = $data->orderBy($request->sort, $request->sortBy ? "asc" : "desc");
+            $products = $request->sortBy ? $products->sortBy($request->sort) :  $products->sortByDesc($request->sort);
         }
 
-        $data = $data->paginate(8);
+        $total= $products->count();
+        $per_page = 8;
+        $current_page = $request->input("page") ?? 1;
+
+        $starting_point = ($current_page * $per_page) - $per_page;
+
+        $array = array_slice($products->all(), $starting_point, $per_page, true);
+
+        $data = new Paginator($array, $total, $per_page, $current_page, [
+            'path' => $request->url(),
+            'query' => $request->query(),
+        ]);
+
+       // dd($products->all());
+        //$data = $data->paginate(8);
         return view('shop', [
             'data' => $data,
             'category' => $category,
