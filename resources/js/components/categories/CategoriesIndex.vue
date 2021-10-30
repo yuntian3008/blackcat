@@ -413,7 +413,7 @@ import VueSimpleContextMenu from 'vue-simple-context-menu'
                 })
             },
             getLink(node) {
-                var a = window.location.origin + '/' + node.category_slug;
+                var a = window.location.origin + '/shop/' + node.category_slug;
                 function copyStringWithNewLineToClipBoard(stringWithNewLines){
                     // Step 1: create a textarea element.
                     // It is capable of holding linebreaks (newlines) unlike "input" element
@@ -453,7 +453,7 @@ import VueSimpleContextMenu from 'vue-simple-context-menu'
                     });
             },
             openTab(node) {
-                var a = window.location.origin + '/' + node.category_slug;
+                var a = window.location.origin + '/shop/' + node.category_slug;
                 window.open(a, '_blank');
             },
 

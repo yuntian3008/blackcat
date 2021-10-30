@@ -8,18 +8,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
 use App\Setting;
 use Illuminate\Support\Facades\DB;
-use App\Components\Helper\ImageProcessing;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
 
-    protected $imgProcess;
 
     function __construct()
     {
-        $this->imgProcess = new ImageProcessing();
+        //
     }
 
     /**

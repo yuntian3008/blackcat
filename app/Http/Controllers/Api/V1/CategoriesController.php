@@ -69,7 +69,8 @@ class CategoriesController extends Controller
         $category = Category::findOrFail($id);
         $category['products'] = $category->products()->with('category:id,category_name')->get();
         foreach ($category['products'] as $product) {
-            $product['product_image'] = Storage::url('public/sm_'.$product['product_image'].'.png');
+            $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
+            //Storage::url('public/sm_'.$product['product_image'].'.png');
             // $id_images = collect(json_decode($product['product_image'],true))->collapse();
             // $product['product_image'] = self::DRIVE_CONFIG_URL.$id_images['sm'];
             //asset('storage/sm_'.$product['product_image']);

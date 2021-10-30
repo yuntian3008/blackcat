@@ -34,7 +34,9 @@ class ProductsController extends Controller
         else $products = Product::with('category:id,category_name')->get();
         
         foreach ($products as $product) {
-            $product['product_image'] = Storage::url('public/sm_' . $product['product_image'] . '.' . config('image-processing')['format']);
+            $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
+            // Storage::url('public/sm_' . $product['product_image'] . '.' . config('image-processing')['format']);
+            //
             // $id_images = collect(json_decode($product['product_image'],true))->collapse();
             // $product['product_image'] = self::DRIVE_CONFIG_URL.$id_images['sm'];
             //asset('storage/sm_'.$product['product_image']);
@@ -84,7 +86,7 @@ class ProductsController extends Controller
         $product = Product::findOrFail($id);
         // $id_images = collect(json_decode($product['product_image'],true))->collapse();
         // $product['product_image'] = self::DRIVE_CONFIG_URL.$id_images['sm'];
-        $product['product_image'] = Storage::url('public/sm_' . $product['product_image'] . '.' .config('image-processing')['format']);
+        $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
         $product['product_specs'] = $product->specs;
         return $product;
     }

@@ -44,7 +44,7 @@ class Customer extends Authenticatable
     }
 
     public function getAvatar($size = "sm") {
-        return !$this->avatar ? null : Storage::url('public/'.$size.'_' . $this->avatar . '.' . config('image-processing')['format']);
+        return !$this->avatar ? null : \App\Components\Helper\ImageProcessing::getURL($this->avatar,'sm');
     }
 
     public function cartItems()
