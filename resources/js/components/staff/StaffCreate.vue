@@ -6,7 +6,7 @@
                 <div class="card-title h3 m-0">Create Staff Account</div>
                 <router-link :to="{ name: 'indexStaff' }" class="back-enti-btn"><i class="bi bi-arrow-return-left"></i>&ensp;Back</router-link>
             </div>
-            <form v-on:submit="saveForm()">
+            <form v-on:submit.prevent="saveForm()">
                 <div v-show="errors.length > 0" id="error" class="alert alert-warning alert-dismissible fade show" role="alert">
                     <div v-for="item in errors">
                         <strong>Warning: </strong>{{item}}.
