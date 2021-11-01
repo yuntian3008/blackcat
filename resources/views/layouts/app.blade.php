@@ -158,7 +158,7 @@
             @yield('content')
             </div>  
         </main>
-        <footer class="bd-footer text-muted">
+        {{-- <footer class="bd-footer text-muted">
             <div class="container p-3 p-md-5">
                 <ul class="bd-footer-links">
                 <li><a href="https://github.com/thiensgith/web0001">GitHub</a></li>
@@ -167,7 +167,7 @@
                 </ul>
                 <p>Designed and built with all the love of <a href="https://www.facebook.com/borntodiee">A Cute Cat</a> with the help of <a href="#">open source</a>.</p>
             </div>
-        </footer>
+        </footer> --}}
     </div>
     @yield('script')
     <script type="text/javascript">
