@@ -59,14 +59,13 @@ Vue.use(VueConfirmDialog)
 
 
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('add-to-cart', require('./components/AddToCart.vue').default);
-Vue.component('change-qty', require('./components/ChangeQuantity.vue').default);
-Vue.component('cart-count', require('./components/CartCount.vue').default);
-Vue.component('cart-view', require('./components/CartView.vue').default);
-Vue.component('checkout-view', require('./components/CheckoutView.vue').default);
-Vue.component('search-input', require('./components/SearchInput.vue').default);
-Vue.component('cart-view-total-amount', require('./components/CartViewTotalAmount.vue').default);
+Vue.component('add-to-cart', require('./components/shop/AddToCart.vue').default);
+//Vue.component('change-qty', require('./components/ChangeQuantity.vue').default);
+//Vue.component('cart-count', require('./components/CartCount.vue').default);
+Vue.component('cart-view', require('./components/shop/CartView.vue').default);
+Vue.component('checkout-view', require('./components/shop/CheckoutView.vue').default);
+Vue.component('search-input', require('./components/shop/SearchInput.vue').default);
+Vue.component('cart-view-total-amount', require('./components/shop/CartViewTotalAmount.vue').default);
 Vue.filter('toCurrency', function (value) {
     if (typeof value !== "number") {
         return value;

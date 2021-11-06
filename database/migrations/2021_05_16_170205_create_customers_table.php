@@ -27,6 +27,7 @@ class CreateCustomersTable extends Migration
             $table->date('dob')->nullable();
             $table->tinyInteger('gender')->default(-1);
             $table->boolean('block')->default(false);
+            $table->string('api_token', 60)->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

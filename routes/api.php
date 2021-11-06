@@ -46,3 +46,15 @@ Route::group(['middleware' => 'auth:api'], function() {
 	}
 	);
 });
+
+Route::group(['middleware' => 'auth:web_api'], function() {
+    Route::group([
+		'prefix' => '/customer',
+		'namespace' => 'Api\Customer',
+		'as' => 'web_api.',
+	], function () {
+		Route::get('test','TestController@test');
+		Route::resource('orders', 'OrdersController', ['except' => ['create', 'edit']]);
+	}
+	);
+});

@@ -32,7 +32,7 @@ class OrderController extends Controller
 
     public function show($id) {
         $user = Auth::user();
-        $order = $user->orders()->findOrFail($id);
+        $order = $user->orders()->find($id) ?? abort(404,"The order could not be found");
         $order_details = $order->orderDetails;
         foreach ($order_details as $index => $item) {
             $item['product'] = $item->product;

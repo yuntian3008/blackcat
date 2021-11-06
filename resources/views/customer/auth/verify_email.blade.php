@@ -1,5 +1,9 @@
 @extends('layouts.web')
 
+@section('title')
+{{ __('Verify Email') }}
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

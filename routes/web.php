@@ -36,8 +36,8 @@ Route::middleware(['auth'])->group(function (){
 	Route::middleware(['profile.updated'])->group(function () {
 		Route::get('cart', 'CartController@showCart')->name('cart');
 		Route::get('checkout', 'CartController@showCheckout')->name('show.checkout');
-		Route::post('customer/order/create', 'OrderController@create')->name('order.create'); //axios done
-		Route::post('order/cancel', 'OrderController@cancel')->name('customer.order.cancel');
+		// Route::post('customer/order/create', 'OrderController@create')->name('order.create'); //axios done
+		// Route::post('order/cancel', 'OrderController@cancel')->name('customer.order.cancel');
 		Route::get('customer/order', 'OrderController@history')->name('customer.order.all');
 		Route::get('customer/order/{id}', 'OrderController@show')->name('customer.order.details');
 	});

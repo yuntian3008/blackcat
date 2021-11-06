@@ -26,7 +26,8 @@ class OrderNotProcessedYet implements Rule
      */
     public function passes($attribute, $value)
     {
-        return Order::find($value)->whereNotNull("request_date")->whereNull("get_date")->whereNull("ship_date")->whereNull("completion_date")->exists();
+        return Order::findOrFail($value)->whereNotNull("request_date")->whereNull("get_date")->whereNull("ship_date")->whereNull("completion_date")->exists();
+        
     }
 
     /**

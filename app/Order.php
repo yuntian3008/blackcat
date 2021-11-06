@@ -7,6 +7,8 @@ use Carbon\Carbon;
 
 class Order extends Model
 {
+    protected $notFoundMessage = 'The order could not be found';
+
     protected $fillable = [
         'request_date', 'get_date', 'ship_date', 'completion_date', 'discount','payment', 'address', 'phone',
     ];

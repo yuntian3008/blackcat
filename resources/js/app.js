@@ -64,7 +64,7 @@ import responseHelper from './mixins/responseHelper'
 
 // PERSONAL
 
-import Security from './components/Security.vue';
+//import Security from './components/Security.vue';
 
 // MANAGER
 import DashboardIndex from './components/dashboard/DashboardIndex.vue';
