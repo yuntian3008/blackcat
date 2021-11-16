@@ -268,13 +268,34 @@ style="display: none;"
                 <div class="container">
                     <div class="w-full flex justify-between px-5">
                         <div class="">
-                            <p class="mt-1 text-gray-700 mb-0">Phone: {{$order->phone}}</p>
-                            <p class="text-gray-700">Address: {{$order->address}}</p>
+                            <p class="mt-1 text-gray-700 mb-0"><span class="font-black">Phone</span>: {{$order->phone}}</p>
+                            <p class="text-gray-700"><span class="font-black">Address</span>: {{$order->address}}</p>
                         </div>
                         <div class="">
                             <p class="mb-0">Expected Arrival: <span>{{ $expected_arrival }}</span></p>
                             <p>Total: <span class="font-bold text-lg">$ {{ number_format($order_details->reduce(function($total,$item) { return $total + $item->product->product_price * $item->quantity;
                                 }),2) }}</span>
+                            </p>
+                            <p class="inline-flex items-center">Payment: <span class="ml-1 gap-x-2 font-bold text-lg inline-flex items-center">
+                                        @if ($order->payment == "card")
+                                            Visa, Master, JCB
+                                              <img class="h-5 w-5" src="{{ asset('assets/images/payment/visa.svg') }}" alt="visa">
+                                              <img class="h-5 w-5" src="{{ asset('assets/images/payment/mastercard.svg') }}" alt="mastercard">
+                                              <img class="h-5 w-5" src="{{ asset('assets/images/payment/jcb.svg') }}" alt="jcb">
+                                            
+                                        @elseif($order->payment == "card")
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                            Cash payment upon delivery
+                                        @elseif($order->payment == "momo")
+                                            <img class="h-5 w-5" src="{{ asset('assets/images/payment/momo.svg') }} " alt="momo">
+                                            MoMo wallet payment
+                                        @elseif($order->payment == "zalo")
+                                            <img class="h-5 w-5" src="{{ asset('assets/images/payment/zalopay.svg') }}" alt="momo">
+                                            Zalopay wallet payment
+                                        @endif
+                                  </span>
                             </p>
                         </div>
                     </div> 

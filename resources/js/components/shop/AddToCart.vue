@@ -48,7 +48,6 @@
                 data: {
                     product_id: this.product_id,
                     quantity: this.quantity,
-                    secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
                 }
             }
         },
@@ -80,11 +79,11 @@
                 var data = app.data;
                 if (app.data.secret === '') 
                     window.location.href = '/login'
-                axios.post('/carts/add', data,{
-                    _token: app.$csrfToken,
-                })
+                axios.post('api/customer/carts', data,{
+                        headers: app.$bearerAPITOKEN
+                    })
                     .then(function (resp) {
-                        app.$root.$emit("updateCount")
+                        //app.$root.$emit("updateCount")
                         Toast.fire({
                           icon: 'success',
                           title: 'Item has been added to your cart'
@@ -92,7 +91,10 @@
                         //console.log(resp);
                     })
                     .catch(function () {
-                        alert("Could not load your product")
+                        Toast.fire({
+                          icon: 'error',
+                          title: 'Error'
+                        })
                     });
             }
         },

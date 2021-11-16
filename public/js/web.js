@@ -9587,8 +9587,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       data: {
         product_id: this.product_id,
-        quantity: this.quantity,
-        secret: document.querySelector("meta[name='api-token']").getAttribute('content')
+        quantity: this.quantity
       }
     };
   },
@@ -9621,16 +9620,19 @@ __webpack_require__.r(__webpack_exports__);
       });
       var data = app.data;
       if (app.data.secret === '') window.location.href = '/login';
-      axios.post('/carts/add', data, {
-        _token: app.$csrfToken
+      axios.post('api/customer/carts', data, {
+        headers: app.$bearerAPITOKEN
       }).then(function (resp) {
-        app.$root.$emit("updateCount");
+        //app.$root.$emit("updateCount")
         Toast.fire({
           icon: 'success',
           title: 'Item has been added to your cart'
         }); //console.log(resp);
       })["catch"](function () {
-        alert("Could not load your product");
+        Toast.fire({
+          icon: 'error',
+          title: 'Error'
+        });
       });
     }
   }
@@ -9744,10 +9746,8 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var app = this;
     app.isLoading = true;
-    axios.post('/carts', {
-      secret: document.querySelector("meta[name='api-token']").getAttribute('content')
-    }, {
-      _token: app.$csrfToken
+    axios.get('api/customer/carts', {
+      headers: app.$bearerAPITOKEN
     }).then(function (resp) {
       app.cartItems = resp.data;
       app.$root.$emit("updateTotal", app.cartItems);
@@ -9757,15 +9757,13 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    changeQty: function changeQty(product_id, quantity) {
+    changeQty: function changeQty(item) {
       var app = this;
       app.isLoading = true;
-      axios.post('/carts/change-quantity', {
-        product_id: product_id,
-        quantity: quantity,
-        secret: document.querySelector("meta[name='api-token']").getAttribute('content')
+      axios.patch('api/customer/carts/' + item.id, {
+        quantity: item.quantity
       }, {
-        _token: app.$csrfToken
+        headers: app.$bearerAPITOKEN
       }).then(function (resp) {
         app.isLoading = false;
         app.$root.$emit("updateTotal", app.cartItems); //console.log(resp);
@@ -9778,7 +9776,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    deleteItem: function deleteItem(index, product_id, product_name) {
+    deleteItem: function deleteItem(index, item) {
       var app = this;
       var Toast = app.$swal.mixin({
         toast: true,
@@ -9799,7 +9797,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.$confirm({
         title: 'Are you sure?',
-        message: 'Are you sure you want to remove ' + product_name + ' from the cart ?',
+        message: 'Are you sure you want to remove ' + item.product.product_name + ' from the cart ?',
         button: {
           no: 'No',
           yes: 'Yes'
@@ -9812,22 +9810,22 @@ __webpack_require__.r(__webpack_exports__);
         callback: function callback(a) {
           if (a) {
             app.isLoading = true;
-            axios.post('/carts/remove-item', {
-              product_id: product_id,
-              secret: document.querySelector("meta[name='api-token']").getAttribute('content')
-            }, {
-              _token: app.$csrfToken
+            axios["delete"]('api/customer/carts/' + item.id, {
+              headers: app.$bearerAPITOKEN
             }).then(function (resp) {
               app.isLoading = false;
               app.cartItems.splice(index, 1);
               app.$root.$emit("updateTotal", app.cartItems);
               Toast.fire({
                 icon: 'success',
-                title: 'Item has been deleted to your cart'
+                title: item.product.product_name + ' has been deleted to your cart'
               }); //console.log(resp);
             })["catch"](function () {
               app.isLoading = false;
-              alert("Could not load your product");
+              Toast.fire({
+                icon: 'success',
+                title: 'Could not remove' + item.product.product_name
+              });
             });
           }
         }
@@ -10181,8 +10179,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     order: function order() {
       var app = this;
-      axios.post('/customer/order/create', {
-        secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
+      axios.post('api/customer/orders', {
         country: app.address.country,
         province: app.address.province,
         district: app.address.district,
@@ -10192,7 +10189,7 @@ __webpack_require__.r(__webpack_exports__);
         payment: app.payment,
         newAddress: app.address_index < 0 || app.addresses.length == 0 ? true : false
       }, {
-        _token: app.$csrfToken
+        headers: app.$bearerAPITOKEN
       }).then(function (resp) {
         app.$swal.fire({
           title: resp.data.message,
@@ -45592,11 +45589,7 @@ var render = function() {
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
-                                      return _vm.deleteItem(
-                                        index,
-                                        item.product_id,
-                                        item.product.product_name
-                                      )
+                                      return _vm.deleteItem(index, item)
                                     }
                                   }
                                 },
@@ -45640,10 +45633,7 @@ var render = function() {
                                   domProps: { value: item.quantity },
                                   on: {
                                     change: function($event) {
-                                      return _vm.changeQty(
-                                        item.product_id,
-                                        item.quantity
-                                      )
+                                      return _vm.changeQty(item)
                                     },
                                     input: function($event) {
                                       if ($event.target.composing) {

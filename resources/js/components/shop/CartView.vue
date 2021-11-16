@@ -46,7 +46,7 @@
                         <a href="#">
                             <p class="mb-2 md:ml-4">{{ item.product.product_name }}</p>
                             <form action="" method="POST">
-                                <button type="button" class="text-gray-700 md:ml-4" @click="deleteItem(index,item.product_id,item.product.product_name)">
+                                <button type="button" class="text-gray-700 md:ml-4" @click="deleteItem(index,item)">
                                     <small>(Remove item)</small>
                                 </button>
                             </form>
@@ -55,7 +55,7 @@
                     <td class="justify-start items-center md:flex mt-6">
                         <div class="w-20 h-10">
                             <div class="relative flex flex-row w-full h-8">
-                                <input type="number" class="text-center rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-0 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"  v-model="item.quantity" @change="changeQty(item.product_id, item.quantity)" min="1" max="100" step="1"/>
+                                <input type="number" class="text-center rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-0 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"  v-model="item.quantity" @change="changeQty(item)" min="1" max="100" step="1"/>
                             </div>
                         </div>
                     </td>
@@ -92,11 +92,9 @@ import 'vue-loading-overlay/dist/vue-loading.css'
         mounted() {
             var app = this;
             app.isLoading = true;
-            axios.post('/carts', {
-                    secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
-                },{
-                    _token: app.$csrfToken,
-                })
+            axios.get('api/customer/carts', {
+                        headers: app.$bearerAPITOKEN
+                    })
                 .then(function (resp) {
                     app.cartItems = resp.data;
                     app.$root.$emit("updateTotal",app.cartItems);
@@ -108,16 +106,14 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                 });
         },
         methods: {
-            changeQty: function (product_id,quantity) {
+            changeQty: function (item) {
                 var app = this;
                 app.isLoading = true;
-                axios.post('/carts/change-quantity', {
-                    product_id: product_id,
-                    quantity: quantity,
-                    secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
+                axios.patch('api/customer/carts/'+ item.id, {
+                    quantity: item.quantity,
                 },{
-                    _token: app.$csrfToken,
-                })
+                        headers: app.$bearerAPITOKEN
+                    })
                 .then(function (resp) {
                     app.isLoading = false;
                     app.$root.$emit("updateTotal",app.cartItems);
@@ -132,7 +128,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                     });
                 });
             },
-            deleteItem: function (index,product_id, product_name) {
+            deleteItem: function (index,item) {
                 var app = this;
                 const Toast = app.$swal.mixin({
                   toast: true,
@@ -153,7 +149,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                 })
                 this.$confirm({
                     title: 'Are you sure?',
-                    message: 'Are you sure you want to remove '+ product_name + ' from the cart ?',
+                    message: 'Are you sure you want to remove '+ item.product.product_name + ' from the cart ?',
                     button: {
                         no: 'No',
                         yes: 'Yes'
@@ -165,11 +161,8 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                     callback: a => {
                         if (a) {
                             app.isLoading = true;
-                            axios.post('/carts/remove-item', {
-                                product_id: product_id,
-                                secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
-                            },{
-                                _token: app.$csrfToken,
+                             axios.delete('api/customer/carts/'+ item.id,{
+                                    headers: app.$bearerAPITOKEN
                             })
                             .then(function (resp) {
                                 app.isLoading = false;
@@ -177,13 +170,16 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                                 app.$root.$emit("updateTotal",app.cartItems);
                                 Toast.fire({
                                   icon: 'success',
-                                  title: 'Item has been deleted to your cart'
+                                  title: item.product.product_name + ' has been deleted to your cart'
                                 })
                                 //console.log(resp);
                             })
                             .catch(function () {
                                 app.isLoading = false;
-                                alert("Could not load your product")
+                                Toast.fire({
+                                  icon: 'success',
+                                  title: 'Could not remove' + item.product.product_name,
+                                })
                             });
                         }
                     },

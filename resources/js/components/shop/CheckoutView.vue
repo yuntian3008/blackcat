@@ -197,8 +197,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
             },
             order: function () {
                 var app = this;
-                axios.post('/customer/order/create', {
-                    secret: document.querySelector("meta[name='api-token']").getAttribute('content'),
+                axios.post('api/customer/orders', {
                     country : app.address.country,
                     province : app.address.province,
                     district : app.address.district,
@@ -208,8 +207,8 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                     payment : app.payment,
                     newAddress : (app.address_index < 0 || app.addresses.length == 0) ? true : false,
                 },{
-                    _token: app.$csrfToken,
-                })
+                        headers: app.$bearerAPITOKEN
+                    })
                 .then(function (resp) {
                     app.$swal.fire({
                         title: resp.data.message,
