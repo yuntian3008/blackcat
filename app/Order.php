@@ -104,4 +104,14 @@ class Order extends Model
     {
         return $this->hasMany('App\OrderDetail');
     }
+
+    public function customer()
+    {
+        return $this->belongsTo('App\Customer');
+    }
+
+    public function reviews()
+    {
+        return $this->hasManyThrough('App\Review', 'App\OrderDetail');
+    }
 }

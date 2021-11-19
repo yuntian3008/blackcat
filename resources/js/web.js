@@ -22,12 +22,18 @@ Vue.config.devtools = true;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 import VueConfirmDialog from 'vue-confirm-dialog';
 import VueSweetalert2 from 'vue-sweetalert2';
+import VModal from 'vue-js-modal';
 // import '@sweetalert2/theme-bootstrap-4/bootstrap-4.css';
 import 'animate.css';
 import 'sweetalert2/src/sweetalert2.scss'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import InfiniteLoading from 'vue-infinite-loading';
+import CoolLightBox from 'vue-cool-lightbox'
+import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css'
+
+
+
 
 global.jQuery = require('jquery');
 var $ = global.jQuery;
@@ -51,7 +57,9 @@ const swal_options = {
 Vue.use(InfiniteLoading, { /* options */ });
 Vue.use(Loading, loading_options);
 Vue.use(VueSweetalert2, swal_options);
-Vue.use(VueConfirmDialog)
+Vue.use(VueConfirmDialog);
+Vue.use(VModal);
+Vue.use(CoolLightBox)
 
 //MIXINS
 //import responseHelper from './mixins/responseHelper'
@@ -60,6 +68,8 @@ Vue.use(VueConfirmDialog)
 
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 Vue.component('add-to-cart', require('./components/shop/AddToCart.vue').default);
+Vue.component('review-button', require('./components/shop/ReviewButton.vue').default);
+Vue.component('review-image', require('./components/shop/ReviewImage.vue').default);
 //Vue.component('change-qty', require('./components/ChangeQuantity.vue').default);
 //Vue.component('cart-count', require('./components/CartCount.vue').default);
 Vue.component('cart-view', require('./components/shop/CartView.vue').default);

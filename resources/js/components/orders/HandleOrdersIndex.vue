@@ -18,21 +18,21 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="order, index in orders" >
-                    <td>{{ order.id }}</td>
-                    <td>{{ order.request_date }}</td>
-                    <td>{{ order.phone }}</td>
-                    <td>{{ order.address }}</td>
+                <tr v-for="order, index in orders" style=" cursor: pointer;">
+                    <td @click="showDetail(order.id)">{{ order.id }}</td>
+                    <td @click="showDetail(order.id)">{{ order.request_date }}</td>
+                    <td @click="showDetail(order.id)">{{ order.phone }}</td>
+                    <td @click="showDetail(order.id)">{{ order.address }}</td>
                     <td>
                         <a href="#"
                            class="btn btn-sm btn-success m-1"
-                           v-on:click="actionOrder(order.id, index)">
+                           v-on:click.prevent="actionOrder(order.id, index)">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                             </svg>
                         </a>
                     </td>
-                    <td>
+                    <td @click="showDetail(order.id)">
                         <div class="btn" disabled>
                             <svg v-show="order.late_level !== 0"xmlns="http://www.w3.org/2000/svg" :class="(order.late_level == 1) ? 'text-warning' : ((order.late_level == 2) ? 'text-danger' : '')"  height="24" width="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+    import OrderDetails from './component/OrderDetails.vue'
     export default {
         data: function () {
             return {
@@ -67,6 +68,19 @@
                 });
         },
         methods: {
+            showDetail(id) {
+                var app = this;
+                app.$modal.show(
+                    OrderDetails,
+                    { order_id: id },
+                    {
+                        width: "50%",
+                        height: "auto",
+                        classes: "bg-white",
+                        scrollable: true,
+                    }
+                )
+            },
             actionOrder(id, index) {
                 var app = this;
                 app.$swal.fire({

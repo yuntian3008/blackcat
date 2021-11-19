@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.cute-upload {
+	background-image: url('/assets/images/default/dropzone.gif') !important;
+  background-size: auto 100% !important;
+  text-align: center !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}

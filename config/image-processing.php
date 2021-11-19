@@ -19,5 +19,5 @@ return [
      * 	Google Drive: 'gdrive'
      * 	
      */
-    'storage_location' => 'gdrive',
+    'storage_location' => 'local',
 ];

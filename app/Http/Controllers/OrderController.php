@@ -16,9 +16,27 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    public function history() {
+    public function history(Request $request) {
         $user = Auth::user();
-        $orders = $user->orders;
+        $orders = $user->orders();
+
+        Validator::make($request->all(), [
+            'status' => 'string|in:processing,completed,cancelled|nullable',
+        ])->validate();
+        switch ($request->status) {
+            case 'completed':
+                $orders = $orders->whereNotNull('completion_date')->get();
+                break;
+            case 'processing':
+                $orders = $orders->whereNull('completion_date')->whereNotNull('request_date')->get();
+                break;
+            case 'cancelled':
+                $orders = $orders->whereNull('request_date')->get();
+                break;
+            default:
+                $orders = $orders->get();
+                break;
+        };
         foreach ($orders as $index => $order) {
             $order['represent'] = $order->orderDetails->first();
             $order['represent']->product = $order['represent']->product;

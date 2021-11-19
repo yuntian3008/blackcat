@@ -9,6 +9,6 @@ class TestController extends Controller
 {
     public function test(Request $request)
     {
-        return "Thành công rồi nhà ĐCM";
+        return "Thành công";
     }
 }

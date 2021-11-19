@@ -6,12 +6,20 @@
 
 @section('style')
 </style>
+
+@section('vue-id')
+id="shop"
+@endsection
+
+@section('script')
+    <script src="{{ asset('js/web.js') }}" defer></script>
+@endsection
     
 @endsection
 
 @section('content')
 <section class="text-gray-600 body-font overflow-hidden" id="shop">
-  <div class="container px-5 py-24 mx-auto">
+  <div class="container px-5 py-12 mx-auto">
     <div class="lg:w-4/5 mx-auto flex flex-wrap">
       <img alt="ecommerce" class="lg:w-1/3 w-full lg:h-auto h-64 object-cover object-center rounded" src="{{ $product->product_image_bg }}">
       <div class="lg:w-2/3 flex flex-wrap content-between w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0 p-5">
@@ -20,23 +28,21 @@
                     <h2 class="text-sm title-font text-gray-500 tracking-widest">{{ $product->category->category_name }}</h2>
                     <h1 class="text-gray-900 text-4xl title-font font-medium mb-1 uppercase">{{ $product->product_name }}</h1>
                 </div>
-                <span class="flex items-center">
-                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 text-gray-700" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
-                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 text-gray-700" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
-                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 text-gray-700" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
-                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 text-gray-700" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 text-gray-700" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                    </svg>
-                    <span class="text-gray-600 ml-3 text-xl">4 Reviews</span>
+                <span class="flex items-center text-yellow-500">
+                    <span class="mr-1 font-semibold">{{ round($stars, 1) }}</span>
+                    @for ($i = 1; $i < 6; $i++)
+                        <svg stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
+                            <defs>
+                                <linearGradient id="half">
+                                    <stop offset="50%" stop-color="currentColor"/>
+                                    <stop offset="50%" stop-color="white" stop-opacity="1" />
+                                </linearGradient>
+                            </defs>
+                          <path fill="{{ ($stars - $i >= 0 ? "currentColor" : ($stars - $i >= -0.5 ? "url(#half)" : "none" ))   }}" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                    @endfor
+                    
+                    <span class="text-gray-600 ml-3 text-xl">{{ $product->reviews->count() }} Reviews</span>
                 </span>
             </div>
             
@@ -115,7 +121,7 @@
       </div>
     </div>
     <div class="lg:w-4/5 mx-auto grid gap-x-8 gap-y-4 grid-cols-3 mt-5 grid-flow-row auto-rows-max">
-        <div class="col-span-2 w-full lg:pl-10 lg:py-10 mt-6 lg:mt-0 shadow-xl px-5 rounded-xl mr-5">
+        <div class="col-span-2 w-full lg:py-10 mt-6 lg:mt-0 shadow-xl px-5 rounded-xl mr-5">
             <h2 class="text-xl font-extrabold lg:mb-5 mb-3">Description</h2>
             <p class="leading-relaxed overflow-y-auto max-h-screen">{{ $product->product_desc }}</p>
         </div>
@@ -135,6 +141,56 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="lg:w-4/5 mx-auto grid gap-x-8 gap-y-4 grid-cols-1 mt-5 grid-flow-row auto-rows-max">
+        <div class="w-full lg:py-10 mt-6 lg:mt-0 shadow-xl px-5 rounded-xl">
+            <h2 class="text-xl font-extrabold lg:mb-5 mb-3">Reviews</h2>
+            <ul class="flex flex-col divide divide-y">
+                {{ $product->reviews->count() == 0 ? "There are no reviews yet" :"" }}
+                @foreach ($product->reviews as $review)
+                    <li class="flex flex-row">
+                        <div class="select-none flex flex-1 items-center p-4">
+                            <div class="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                                <a href="#" class="block relative">
+                                    <img alt="profil" src="{{ $review->orderDetail->order->customer->getAvatar() }}" class="mx-auto object-cover rounded-full h-10 w-10 "/>
+                                </a>
+                            </div>
+                            <div class="flex-1 pl-1 mr-16">
+                                <div class="flex font-medium dark:text-white items-center">
+                                    {{ $review->orderDetail->order->customer->getFullName() }}
+                                    <span class="flex text-green-500 items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                                        </svg>Purchased
+                                    </span>
+                                    
+                                </div>
+                                <div class="flex items-center gap-x-2 text-gray-600 dark:text-gray-200 text-sm">
+                                    {{ !empty($review->comment) ? $review->comment : "" }}
+                                    
+                                </div>
+                                @if (!empty($review->getImage()))
+                                    <review-image class="mt-2" :items="['{{ $review->getImage("bg") }}']"></review-image>
+                                    {{-- <img width="100" src="{{ $review->getImage() }}" alt="review image"> --}}
+                                @endif
+                            </div>
+
+                            <span class="flex text-yellow-500 items-center font-medium mx-1">
+                                {{ $review->level }}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </span>
+                            <div class="text-gray-600 dark:text-gray-200 text-xs">
+                                {{ $review->created_at }}
+                            </div>
+                        </div>
+                    </li>
+                @endforeach
+                
+            </ul>
+
         </div>
     </div>
   </div>

@@ -32,8 +32,13 @@ class Product extends Model
         return $this->hasMany('App\CartItem');
     }
 
-    public function orderDetail()
+    public function orderDetails()
     {
         return $this->hasMany('App\OrderDetail');
+    }
+
+    public function reviews()
+    {
+        return $this->hasManyThrough('App\Review', 'App\OrderDetail');
     }
 }

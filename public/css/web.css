@@ -33310,6 +33310,14 @@ select {
   content: none;
 }
 
+.cute-upload {
+  background-image: url('/assets/images/default/dropzone.gif') !important;
+  background-size: auto 100% !important;
+  text-align: center !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

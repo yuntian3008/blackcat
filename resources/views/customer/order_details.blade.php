@@ -1,9 +1,18 @@
 @extends('layouts.web')
 @inject('imageProcessing', 'App\Components\Helper\ImageProcessing')
 @inject('product','App\Product')
+@inject('review','App\Review')
 
 @section('title')
 {{ __('Order #'.$order->id) }}
+@endsection
+
+@section('vue-id')
+id="shop"
+@endsection
+
+@section('script')
+    <script src="{{ asset('js/web.js') }}" defer></script>
 @endsection
 
 @section('style')
@@ -302,7 +311,7 @@ style="display: none;"
                 </div>
             </div>
         </div>
-        <div class="shadow-xl rounded-lg py-10">
+        <div class="shadow-xl rounded-lg py-10" id="order-summary">
             <div class="flex px-10 mt-5">
                 <h1 class="text-xl font-bold">
                     #Order Summary
@@ -314,8 +323,8 @@ style="display: none;"
                         <div class="bg-white w-full">
                             <ul class="divide-y divide-gray-300">
                                 @foreach ($order_details as $item)
-                                <li class="p-4 hover:bg-gray-50 cursor-pointer">
-                                    <a href="{{ route('product.details',[$item->product->category->category_slug,$item->product->product_slug]) }}" class="flex space-x-4">
+                                <li class="p-4 hover:bg-gray-50 cursor-pointer flex">
+                                    <a href="{{ route('product.details',[$item->product->category->category_slug,$item->product->product_slug]) }}" class="flex-1 space-x-4">
                                         <div>
                                             <img src="{{ $item->product->product_image }}" alt="image"
                                                 class="w-40">
@@ -327,6 +336,26 @@ style="display: none;"
 
                                         </div>
                                     </a>
+                                    @if ($order->getStatus()['status'] == 4 )
+                                        <div>
+                                            @if ($review->where('order_detail_id',$item->id)->exists())
+                                                    <span class="flex items-center px-2 py-2 font-medium tracking-wide capitalize transition-colors duration-200 transform rounded-md text-yellow-500">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-1" viewBox="0 0 20 20" fill="currentColor">
+                                                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                        </svg>
+                                                        <span class="mx-1 uppercase">reviewed</span>
+                                                    </span>
+                                            @else
+                                            <div class="flex justify-end font-semibold text-yellow-500">
+                                                <p>Share your opinion about our products</p>
+                                            </div>
+                                            <div class="flex justify-end mt-2">
+                                                <review-button :order_detail_id="{{ $item->id }}"></review-button>
+                                            </div>
+                                            @endif
+                                        </div>
+                                        
+                                    @endif
                                 </li>
                                   
                                 @endforeach

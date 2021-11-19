@@ -68,10 +68,10 @@
         /* since nested groupes are not supported we have to use 
          regular css for the nested dropdowns 
         */
-        li>ul                 { transform: translatex(100%) scale(0) }
-        li:hover>ul           { transform: translatex(101%) scale(1) }
-        li > a svg       { transform: rotate(-90deg) }
-        li:hover > a svg { transform: rotate(-270deg) }
+        .multilevel-drop li>ul                 { transform: translatex(100%) scale(0) }
+        .multilevel-drop li:hover>ul           { transform: translatex(101%) scale(1) }
+        .multilevel-drop li > a svg       { transform: rotate(-90deg) }
+        .multilevel-drop li:hover > a svg { transform: rotate(-270deg) }
 
         /* Below styles fake what can be achieved with the tailwind config
          you need to add the group-hover variant to scale and define your custom
@@ -114,7 +114,7 @@
                     <a href="#" class="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-800 dark:hover:text-gray-200">docs</a>
                     <a href="#" class="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-800 dark:hover:text-gray-200">support</a>
                     <a href="#" class="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-800 dark:hover:text-gray-200">blog</a> --}}
-                    <div class="group inline-block">
+                    <div class="multilevel-drop group inline-block">
                       <a
                         href="#"
                         class="mt-2 lg:mt-0 flex items-center lg:mx-4 hover:text-gray-800 dark:hover:text-gray-200"

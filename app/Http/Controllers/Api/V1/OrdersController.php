@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Order;
 use Carbon\Carbon;
+use App\Components\Helper\ImageProcessing;
+
 class OrdersController extends Controller
 {
     function __construct() 
@@ -73,7 +75,14 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $order_details = $order->orderDetails;
+        foreach ($order_details as $index => $item) {
+            $item['product'] = $item->product;
+            $item['product']['category'] = $item->product->category;
+            $item['product']->product_image = ImageProcessing::getURL($item['product']->product_image,'sm');
+        }
+        return $order;
     }
 
     /**

@@ -167,7 +167,6 @@ class CoreController extends Controller
     {
         $product = Product::where('product_slug' , $product_slug)->where('product_visible', 1)->firstOrFail();
         $category = $product->category;
-
         $product['product_image_sm'] = ImageProcessing::getURL($product['product_image'],'sm');
         $product['product_image_bg'] = ImageProcessing::getURL($product['product_image'],'bg');
         if ($product->specs()->where("key","Brand")->count())
@@ -175,7 +174,9 @@ class CoreController extends Controller
 
         return view('product_details' , [
             'category' => $category,
-            'product' => $product]
+            'product' => $product,
+            'stars' => $product->reviews->avg('level'),
+            ]
         );
     }
 

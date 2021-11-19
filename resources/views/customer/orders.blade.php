@@ -1,6 +1,7 @@
 @extends('layouts.web')
 @inject('imageProcessing', 'App\Components\Helper\ImageProcessing')
 @inject('product','App\Product')
+@inject('review','App\Review')
 
 @section('title')
 {{ __('Orders') }}
@@ -10,6 +11,14 @@
 <style type="text/css">
 	
 </style>
+@endsection
+
+@section('vue-id')
+id="shop"
+@endsection
+
+@section('script')
+    <script src="{{ asset('js/web.js') }}" defer></script>
 @endsection
 
 @section('main-class')
@@ -23,10 +32,19 @@ style="display: none;"
 @section('content')
 <div class="container mx-auto">
     <div class="flex flex-col gap-y-10">
-        <div class="flex px-10 mt-5">
+        <div class="flex px-10 mt-5 items-center justify-between">
             <h1 class="text-2xl text-gray-700 font-extrabold uppercase">
                 Your Orders
             </h1>
+            <div class="flex items-center">
+                <p class="text-gray-500 dark:text-gray-300 mr-3">Status</p>
+                <select class="form-select rounded-lg focus:border-0 focus:border-none font-medium text-gray-700 bg-transparent dark:text-gray-500 focus:outline-none" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                    <option value="{{ url()->current() }}">All</option>
+                    <option value="{{ url()->current() }}?status=completed" {{ url()->full() == url()->current().'?status=completed' ? "selected" : "" }}>Completed</option>
+                    <option value="{{ url()->current() }}?status=processing" {{ url()->full() == url()->current().'?status=processing' ? "selected" : "" }}>Proceesing</option>
+                    <option value="{{ url()->current() }}?status=cancelled" {{ url()->full() == url()->current().'?status=cancelled' ? "selected" : "" }}>Cancelled</option>
+                </select>
+            </div>
         </div>
         <div class="shadow-xl rounded-lg py-10">
             {{-- <div class="flex px-10 mt-5">
@@ -40,13 +58,21 @@ style="display: none;"
                         <div class="bg-white w-full">
                             <ul class="divide-y divide-gray-300">
                                 @if ($orders->count() == 0)
-                                    <li class="p-10 hover:bg-gray-50 cursor-pointer flex justify-center">
+                                    <li class="p-10 hover:bg-gray-50 flex justify-center">
                                         <p class="text-xl">You don't have any orders yet</p>
                                     </li>
                                 @endif
                                 @foreach ($orders as $item)
-                                <li class="p-10 hover:bg-gray-50 cursor-pointer">
+                                <li class="p-10 hover:bg-gray-50">
                                     <a href="{{ route('customer.order.details', ['id' => $item->id]) }}" class="flex flex-col">
+                                        <div class="w-full flex justify-between mb-2 ">
+                                            <div class="">
+                                                <p class="text-yellow-500 text-lg font-semibold">Order #{{ $item->id }} - {{ $item->getStatus()['message'] }}</p>
+                                            </div>
+                                            <div class="">
+                                            </div>
+                                        </div>
+                                        
                                         <div class="flex gap-x-10">
                                             <div>
                                                 <img src="{{ $item->represent->product->product_image }}" alt="image"
@@ -55,35 +81,65 @@ style="display: none;"
                                             <div class="flex flex-wrap content-between w-full">
                                                 <div class="w-full flex justify-between">
                                                     <div class="">
-                                                        <h2 class="text-xl font-bold text-gray-700">{{ $item->represent->product->product_name }}</h2>
+                                                        <h2 class="text-xl text-gray-700">{{ $item->represent->product->product_name }}</h2>
                                                         {{-- <p class="text-sm">{{ $product->find($item->product_id)->product_desc }}</p> --}}
-                                                        <strong class="text-xl text-gray-700 mr-3">x {{ $item->represent->quantity }}</strong>
+                                                        <p class="text-xl text-gray-700 mr-3">x {{ $item->represent->quantity }}</p>
                                                     </div>
-                                                    <div class="text-gray-700">
-                                                        Price: <strong class="text-xl text-bold text-gray-700 mr-3">$ {{ $item->represent->product->product_price }}</strong>
+                                                    <div class="flex flex-col text-gray-700">
+                                                        <div class="flex justify-end">
+                                                            <div class="">Price: <strong class="text-xl text-bold text-gray-700 mr-3">$ {{ $item->represent->product->product_price }}</strong></div>
+                                                        </div>
+                                                        
+                                                        
                                                     </div>
 
                                                 </div>
                                                 <div class="flex w-full">
                                                     @if ($item->count > 1)
-                                                    <div class="text-xl text-gray-600 font-light uppercase">+ {{ ($item->count - 1) }} other item{{ ($item->count - 1) > 1 ? "s" : ""}}</div>
+                                                    <div class="text-md text-gray-600 font-light uppercase">+ {{ ($item->count - 1) }} other item{{ ($item->count - 1) > 1 ? "s" : ""}}</div>
                                                     @endif
                                                 </div>
                                             </div>
                                             
                                         </div>
+                                     </a>
                                         <hr class="border-gray-200 dark:border-gray-700 my-2">
                                         <div class="w-full flex justify-between">
                                             <div class="">
-                                                <p class="text-gray-700 text-lg">Order status: <span class=" font-bold text-black">{{ $item->getStatus()['message'] }}</span></p>
+                                                @if ($item->getStatus()['status'] == 4 )
+                                                @if ($item->reviews->count() == $item->orderDetails->count())
+                                                        <span class="flex items-center px-2 py-2 font-medium tracking-wide capitalize transition-colors duration-200 transform rounded-md text-yellow-500">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-1" viewBox="0 0 20 20" fill="currentColor">
+                                                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                            </svg>
+                                                            <span class="mx-1 uppercase">reviewed</span>
+                                                        </span>
+                                                @else
+                                                <div class="flex justify-start font-semibold text-yellow-500">
+                                                    <p>Share your opinion about our products</p>
+                                                </div>
+                                                <div class="flex justify-start mt-2">
+                                                    <a href="{{ route('customer.order.details', ['id' => $item->id])."#order-summary" }}" class="flex items-center px-2 py-2 font-medium tracking-wide capitalize transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80 text-yellow-500">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-1" viewBox="0 0 20 20" fill="currentColor">
+                                                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                        </svg>
+                                                        <span class="mx-1 uppercase">write review</span>
+                                                    </a>
+
+                                                </div>
+                                                @endif
+                                                @endif
                                             </div>
                                             <div class="">
-                                                <p class="text-gray-700 text-lg uppercase">Total amount: <span class="font-bold text-black text-2xl">$ {{ number_format($item->orderDetails->reduce(function($total,$item) { return $total + $item->product->product_price * $item->quantity;
-                                                }),2) }}</span></p>
+                                                <div class="flex justify-end">
+                                                    <p class="text-gray-700 text-lg uppercase">Total amount: <span class="font-bold text-black text-2xl">$ {{ number_format($item->orderDetails->reduce(function($total,$item) { return $total + $item->product->product_price * $item->quantity;
+                                                    }),2) }}</span></p>
+                                                </div>
+                                                
                                             </div>
                                         </div>
                                         
-                                    </a>
+                                   
                                 </li>
                                   
                                 @endforeach

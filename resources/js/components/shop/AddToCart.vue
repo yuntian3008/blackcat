@@ -79,7 +79,7 @@
                 var data = app.data;
                 if (app.data.secret === '') 
                     window.location.href = '/login'
-                axios.post('api/customer/carts', data,{
+                axios.post('/api/customer/carts', data,{
                         headers: app.$bearerAPITOKEN
                     })
                     .then(function (resp) {

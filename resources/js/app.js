@@ -28,6 +28,7 @@ import '@sweetalert2/theme-bootstrap-4/bootstrap-4.css';
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import InfiniteLoading from 'vue-infinite-loading';
+import VModal from 'vue-js-modal';
 
 global.jQuery = require('jquery');
 var $ = global.jQuery;
@@ -51,7 +52,8 @@ const swal_options = {
 Vue.use(InfiniteLoading, { /* options */ });
 Vue.use(Loading, loading_options);
 Vue.use(VueSweetalert2, swal_options);
-Vue.use(VueConfirmDialog)
+Vue.use(VueConfirmDialog);
+Vue.use(VModal);
 
 //MIXINS
 import responseHelper from './mixins/responseHelper'
@@ -98,7 +100,7 @@ const routes = [
     {
         path: '/',
         components: {
-            security: Security,
+            //security: Security,
         	customersIndex: CustomersIndex,
             categoriesIndex: CategoriesIndex,
             productsIndex: ProductsIndex,

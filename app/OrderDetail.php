@@ -20,4 +20,14 @@ class OrderDetail extends Model
     {
         return $this->belongsTo('App\Product');
     }
+
+    public function review()
+    {
+        return $this->hasOne('App\Review');
+    }
+
+    public function customer()
+    {
+        return $this->hasOneThrough('App\Customer', 'App\Order');
+    }
 }
