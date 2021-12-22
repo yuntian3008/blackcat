@@ -7,6 +7,8 @@ use App\Components\Helper\ImageProcessing;
 
 class Product extends Model
 {
+    protected $appends = ['images','stars','url'];
+
     public function category()
     {
         return $this->belongsTo('App\Category');
@@ -21,6 +23,24 @@ class Product extends Model
     public function getImage($size = 'sm')
     {
         return ImageProcessing::getURL($this->product_image,$size);
+    }
+
+    public function getUrlAttribute()
+    {
+        return url("/shop/{$this->category->category_slug}/{$this->product_slug}");
+    }
+
+    public function getImagesAttribute()
+    {
+        return [
+            ImageProcessing::getURL($this->product_image,'sm'),
+            ImageProcessing::getURL($this->product_image,'bg')
+        ];
+    }
+
+    public function getStarsAttribute()
+    {
+        return $this->reviews->avg('level');
     }
 
     protected $fillable = [

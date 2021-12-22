@@ -16,7 +16,9 @@
 @section('vue-id')
 id="shop"
 @endsection
-
+@section('search-input')
+<search-input></search-input>
+@endsection
 @section('script')
     <script src="{{ asset('js/web.js') }}" defer></script>
 @endsection

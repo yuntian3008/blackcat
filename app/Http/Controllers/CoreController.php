@@ -199,52 +199,50 @@ class CoreController extends Controller
     // }
 
     public function showFormSearch() {
-        $categories = Category::where('category_visible',1)->get();
-        return view('search_form',[
-            'categories' => $categories,
-        ]);
+        
     }
 
-    public function advancedSearch(Request $request) 
+    public function advancedSearch() 
     {
-        if ($request->min && $request->max) 
-                if ($request->min >= $request->max)
-                    return view('search', [
-                        'data' => null,
-                    ]);
-        if ($request->category_id)
-            $products = Product::where('category_id',$request->category_id)->where('product_visible', 1);
-        else
-            $products = Product::where('product_visible', 1);
+        return view('advanced_search');
+        // if ($request->min && $request->max) 
+        //         if ($request->min >= $request->max)
+        //             return view('search', [
+        //                 'data' => null,
+        //             ]);
+        // if ($request->category_id)
+        //     $products = Product::where('category_id',$request->category_id)->where('product_visible', 1);
+        // else
+        //     $products = Product::where('product_visible', 1);
 
-        if ($request->keyword) {
-            $keyword = $request->keyword;
+        // if ($request->keyword) {
+        //     $keyword = $request->keyword;
             
-            $products = $products->whereHas('specs', function (Builder $query) use($keyword) {
-                $query->where('key', 'LIKE', "%{$keyword}%")->orWhere('value', 'LIKE', "%{$keyword}%");
-            })
-            ->orWhere('product_name', 'LIKE', "%{$keyword}%")
-            ->orWhere('product_desc', 'LIKE', "%{$keyword}%");
-        }
+        //     $products = $products->whereHas('specs', function (Builder $query) use($keyword) {
+        //         $query->where('key', 'LIKE', "%{$keyword}%")->orWhere('value', 'LIKE', "%{$keyword}%");
+        //     })
+        //     ->orWhere('product_name', 'LIKE', "%{$keyword}%")
+        //     ->orWhere('product_desc', 'LIKE', "%{$keyword}%");
+        // }
 
-        if ($request->min)
-                $products = $products->where('product_price', '>=', $request->min);
+        // if ($request->min)
+        //         $products = $products->where('product_price', '>=', $request->min);
 
-        if ($request->max)
-            $products = $products->where('product_price', '>=', $request->max);
+        // if ($request->max)
+        //     $products = $products->where('product_price', '>=', $request->max);
 
-        $products = $products->paginate(8);
+        // $products = $products->paginate(8);
         
         
-        foreach ($products as $product) {
-            $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
-            if ($product->specs()->where("key","Brand")->count())
-            $product['product_brand'] = $product->specs()->where("key","Brand")->first()->value;
-        }
-        return view('advanced_search', [
-            'data' => $products,
-            'param' => $request->query(),
-        ]);
+        // foreach ($products as $product) {
+        //     $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
+        //     if ($product->specs()->where("key","Brand")->count())
+        //     $product['product_brand'] = $product->specs()->where("key","Brand")->first()->value;
+        // }
+        // return view('advanced_search', [
+        //     'data' => $products,
+        //     'param' => $request->query(),
+        // ]);
     }
 
 

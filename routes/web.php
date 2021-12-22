@@ -98,8 +98,6 @@ Route::middleware(['auth'])->group(function (){
 
 Route::get('search','CoreController@search')->name('search');
 
-Route::get('advanced-search-form','CoreController@showFormSearch')->name('search.form');
-
 Route::get('advanced-search','CoreController@advancedSearch')->name('search.advanced');
 
 Route::get('/', 'CoreController@home')->name('home');

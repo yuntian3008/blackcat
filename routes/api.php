@@ -60,3 +60,12 @@ Route::group(['middleware' => 'auth:web_api'], function() {
 	}
 	);
 });
+
+Route::group([
+		'prefix' => '/public',
+		'namespace' => 'Api',
+		'as' => 'public.',
+	], function () {
+		Route::get('product','ProductController@index');
+	}
+);

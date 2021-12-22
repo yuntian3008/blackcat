@@ -75,6 +75,7 @@ Vue.component('review-image', require('./components/shop/ReviewImage.vue').defau
 Vue.component('cart-view', require('./components/shop/CartView.vue').default);
 Vue.component('checkout-view', require('./components/shop/CheckoutView.vue').default);
 Vue.component('search-input', require('./components/shop/SearchInput.vue').default);
+Vue.component('search-view', require('./components/shop/SearchView.vue').default);
 Vue.component('cart-view-total-amount', require('./components/shop/CartViewTotalAmount.vue').default);
 Vue.filter('toCurrency', function (value) {
     if (typeof value !== "number") {
