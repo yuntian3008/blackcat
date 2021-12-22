@@ -42,9 +42,31 @@ Route::group(['middleware' => 'auth:api'], function() {
 			->middleware('api.role:superadmin');
 		Route::resource('settings', 'SettingsController', ['except' => ['create', 'edit']])
 			->middleware('api.role:admin');
-
-	}
-	);
+		Route::resource('suppliers', 'SuppliersController', ['except' => ['create', 'edit']])
+			->middleware('api.role:productmanager');
+		Route::resource('goods-receipts', 'GoodsReceiptsController', ['except' => ['create', 'edit','store','update']])
+			->middleware('api.role:productmanager');
+		Route::group([
+			'prefix' => 'statistics',
+			'namespace' => 'Statistics',
+			'as' => 'statistics.',
+		], function () {
+			Route::group([
+			'prefix' => 'reviews',
+			'as' => 'reviews.',
+			], function () {
+				Route::get('top/{top?}','RatingStatisticsController@top');
+				Route::get('count-product-by-rating','RatingStatisticsController@countProductByRating');
+			});
+		});
+		Route::group([
+			'prefix' => 'inventory',
+			'middleware' => 'api.role:productmanager',
+		], function () {
+			Route::post('request','InventoryController@goodsReceiptsRequest');
+			Route::post('goods-receipt','InventoryController@goodsReceipts');
+		});
+	});
 });
 
 Route::group(['middleware' => 'auth:web_api'], function() {

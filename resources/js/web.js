@@ -54,7 +54,11 @@ const swal_options = {
         popup: 'animate__animated animate__bounceOut animate__faster'
       },
   };
-Vue.use(InfiniteLoading, { /* options */ });
+Vue.use(InfiniteLoading, { 
+    props: {
+        spinner: 'spiral',
+        /* other props need to configure */
+    }, });
 Vue.use(Loading, loading_options);
 Vue.use(VueSweetalert2, swal_options);
 Vue.use(VueConfirmDialog);
@@ -76,6 +80,7 @@ Vue.component('cart-view', require('./components/shop/CartView.vue').default);
 Vue.component('checkout-view', require('./components/shop/CheckoutView.vue').default);
 Vue.component('search-input', require('./components/shop/SearchInput.vue').default);
 Vue.component('cart-view-total-amount', require('./components/shop/CartViewTotalAmount.vue').default);
+Vue.component('orders', require('./components/shop/Orders.vue').default);
 Vue.filter('toCurrency', function (value) {
     if (typeof value !== "number") {
         return value;

@@ -54,17 +54,11 @@
             </a>
         </div>      
         <div class="card-body row">
-            <div class="col-sm mx-3 card">
+            <div class="col-sm mx-6 card">
                 <canvas ref="chart1" height="300"></canvas>                
             </div>
-            <div class="col-sm mx-3 card" >
-                <canvas ref="chart2" height="300" @mouseover="chart2move" @mouseleave="chart2move"></canvas>                
-            </div>
-            <div class="col-sm mx-3 card" >
+            <div class="col-sm mx-6 card" >
                 <canvas ref="chart3" height="300"></canvas>                
-            </div>
-            <div class="col-sm mx-3 card" >
-                <canvas ref="chart4" height="300"></canvas>                
             </div>
         </div>
     </div>
@@ -76,6 +70,7 @@
 export default {
     data: function() {
         return {
+            loaded: false,
             chart1 : null,
             chart2 : null,
             chart3 : null,
@@ -88,140 +83,161 @@ export default {
                 blue: 'rgb(54, 162, 235)',
                 purple: 'rgb(153, 102, 255)',
                 grey: 'rgb(201, 203, 207)'
-            }
+            },
+            top: [],
+            countProductByRating : [],
         }
     },
     mounted() {
         var color = Chart.helpers.color;
-        this.chart1 = new Chart(this.$refs.chart1.getContext('2d'), {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-                datasets: [{
-                    label: '2018 Sales',
-                    data: [300, 700, 450, 750, 1200],
-                    borderColor: color(this.colors.orange).alpha(0.5).rgbString(),
-                    fill: false,
-                    },
-                    {
-                    label: '2017 Sales',
-                    data: [200, 450, 900, 600, 1000],
-                    borderColor: color(this.colors.green).alpha(0.5).rgbString(),
-                    fill: false,
-                    },
-                    {
-                    label: '2019 Sales',
-                    data: [400, 900, 1000, 500, 700],
-                    borderColor: color(this.colors.blue).alpha(0.5).rgbString(),
-                    fill: false,
-                    }],
-            },
-            options: {
-                responsive: true,
-                legend: {
-                position: 'bottom',
-                },
-                title: {
-                display: true,
-                text: 'Sales Chart'
-                }
-            }
-        });
+        var app = this;
+        axios.get('/api/v1/statistics/reviews/count-product-by-rating',{
+                headers: app.$bearerAPITOKEN
+            })
+                .then(function (resp) {
+                    app.countProductByRating = resp.data;
+                    app.loaded = true;
+                    app.initChart1();
+                    
+                })
+                .catch(function (resp) {
+                    console.log(resp);
+                    alert("Could not load Count Product By Rating");
+                });
+        axios.get('/api/v1/statistics/reviews/top/5',{
+                headers: app.$bearerAPITOKEN
+            })
+                .then(function (resp) {
+                    app.top = resp.data;
+                    app.loaded = true;
+                    app.initChart3();
+                    
+                })
+                .catch(function (resp) {
+                    console.log(resp);
+                    alert("Could not load Count Product By Rating");
+                });
+        
 
-        this.chart2 = new Chart(this.$refs.chart2.getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: [
-                    'Ho Chi Minh',
-                    'Ha Noi',
-                    'Da Nang'
-                ],
-                datasets: [{
-                    data: [10, 20, 30],
-                    backgroundColor: [
-                        color(this.colors.red).alpha(0.5).rgbString(),
-                        color(this.colors.green).alpha(0.5).rgbString(),
-                        color(this.colors.yellow).alpha(0.5).rgbString(),
-                    ],
-                    hoverBorderWidth: 8,
-                    hoverBorderColor: '#ffffff',
-                }],
-            },
-            options: {
-                responsive: true,
-                legend: {
-                    position: 'right',
-                },
-                title: {
-                    display: true,
-                    text: 'Location Chart'
-                }
-            }
-        });
+        // this.chart2 = new Chart(this.$refs.chart2.getContext('2d'), {
+        //     type: 'doughnut',
+        //     data: {
+        //         labels: [
+        //             'Ho Chi Minh',
+        //             'Ha Noi',
+        //             'Da Nang'
+        //         ],
+        //         datasets: [{
+        //             data: [10, 20, 30],
+        //             backgroundColor: [
+        //                 color(this.colors.red).alpha(0.5).rgbString(),
+        //                 color(this.colors.green).alpha(0.5).rgbString(),
+        //                 color(this.colors.yellow).alpha(0.5).rgbString(),
+        //             ],
+        //             hoverBorderWidth: 8,
+        //             hoverBorderColor: '#ffffff',
+        //         }],
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         legend: {
+        //             position: 'right',
+        //         },
+        //         title: {
+        //             display: true,
+        //             text: 'Location Chart'
+        //         }
+        //     }
+        // });
 
-        this.char3 = new Chart(this.$refs.chart3.getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: ['2017', '2018', '2019', '2020'],
-                datasets: [{
-                    label: '< 20 age customer',
-                    data: [300, 700, 450, 750],
-                    backgroundColor: color(this.colors.red).alpha(0.5).rgbString(),
-                    fill: false,
-                    },
-                    {
-                    label: '20 - 60 age customer',
-                    data: [200, 450, 900, 600],
-                    backgroundColor: color(this.colors.blue).alpha(0.5).rgbString(),
-                    fill: false,
-                    },
-                    {
-                    label: '> 60 age customer',
-                    data: [400, 900, 1000, 500],
-                    backgroundColor: color(this.colors.green).alpha(0.5).rgbString(),
-                    fill: false,
-                    }],
-            },
-            options: {
-                responsive: true,
-                legend: {
-                position: 'bottom',
-                },
-                title: {
-                display: true,
-                text: 'Customer Chart'
-                }
-            }
-        });
-        this.char4 = new Chart(this.$refs.chart4.getContext('2d'), {
-            type: 'polarArea',
-            data: {
-                labels: ['Ho Chi Minh', 'Ha Noi', 'Can tho', 'Da nang', 'Hai Phong'],
-                datasets: [{
-                    label: '< 20 age customer',
-                    data: [500,400,100,200,150],
-                    backgroundColor: [
-                        color(this.colors.red).alpha(0.5).rgbString(),
-                        color(this.colors.orange).alpha(0.5).rgbString(),
-                        color(this.colors.yellow).alpha(0.5).rgbString(),
-                        color(this.colors.green).alpha(0.5).rgbString(),
-                        color(this.colors.blue).alpha(0.5).rgbString(),
-                    ],
-                }],
-            },
-            options: {
-                responsive: true,
-                legend: {
-                position: 'right',
-                },
-                title: {
-                display: true,
-                text: 'Customer Chart'
-                }
-            }
-        });
+        
+        // this.char4 = new Chart(this.$refs.chart4.getContext('2d'), {
+        //     type: 'polarArea',
+        //     data: {
+        //         labels: ['Ho Chi Minh', 'Ha Noi', 'Can tho', 'Da nang', 'Hai Phong'],
+        //         datasets: [{
+        //             label: '< 20 age customer',
+        //             data: [500,400,100,200,150],
+        //             backgroundColor: [
+        //                 color(this.colors.red).alpha(0.5).rgbString(),
+        //                 color(this.colors.orange).alpha(0.5).rgbString(),
+        //                 color(this.colors.yellow).alpha(0.5).rgbString(),
+        //                 color(this.colors.green).alpha(0.5).rgbString(),
+        //                 color(this.colors.blue).alpha(0.5).rgbString(),
+        //             ],
+        //         }],
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         legend: {
+        //         position: 'right',
+        //         },
+        //         title: {
+        //         display: true,
+        //         text: 'Customer Chart'
+        //         }
+        //     }
+        // });
     },
     methods: {
+        initChart1: function() {
+            var color = Chart.helpers.color;
+            var app = this;
+            app.chart1 = new Chart(app.$refs.chart1.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['0', '1', '2', '3', '4','5'],
+                    datasets: [
+                        {
+                        label: 'Quantity Product',
+                        data: [0, app.countProductByRating[0], app.countProductByRating[1], app.countProductByRating[2], app.countProductByRating[3], app.countProductByRating[4]],
+                        borderColor: color(app.colors.blue).alpha(0.5).rgbString(),
+                        fill: false,
+                        }],
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                    position: 'bottom',
+                    },
+                    title: {
+                    display: true,
+                    text: 'Sales Chart'
+                    }
+                }
+            });
+        },
+        initChart3: function() {
+            var color = Chart.helpers.color;
+            var app = this;
+            app.char3 = new Chart(app.$refs.chart3.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: [app.top[0].product_name, app.top[1].product_name, app.top[2].product_name],
+                    datasets: [
+                        {
+                        label: 'Stars',
+                        data: [app.top[0].avg_rating, app.top[1].avg_rating, app.top[2].avg_rating],
+                        backgroundColor: color(app.colors.yellow).alpha(0.5).rgbString(),
+                        fill: false,
+                        }],
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Top 5',
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                            barPercentage: 0.3
+                        }]
+                    },
+                }
+            });
+        },
         chart2move: function(){
             if (this.chart2.options.circumference === Math.PI) {
                 this.chart2.options.circumference = 2 * Math.PI;

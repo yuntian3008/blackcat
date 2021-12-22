@@ -86,6 +86,10 @@ import StaffIndex from './components/staff/StaffIndex.vue';
 import StaffCreate from './components/staff/StaffCreate.vue';
 import StaffEdit from './components/staff/StaffEdit.vue';
 
+import SuppliersIndex from './components/suppliers/SuppliersIndex.vue';
+import SuppliersCreate from './components/suppliers/SuppliersCreate.vue';
+import SuppliersEdit from './components/suppliers/SuppliersEdit.vue';
+
 import ProductsIndex from './components/products/ProductsIndex.vue';
 import ProductsCreate from './components/products/ProductsCreate.vue';
 import ProductsEdit from './components/products/ProductsEdit.vue';
@@ -95,6 +99,8 @@ import ShipOrdersIndex from './components/orders/ShipOrdersIndex.vue';
 import CompleteOrdersIndex from './components/orders/CompleteOrdersIndex.vue';
 
 import SettingIndex from './components/settings/Setting.vue';
+
+import StatisticsIndex from './components/statistics/StatisticsIndex.vue';
 
 const routes = [
     {
@@ -109,6 +115,7 @@ const routes = [
             staffIndex: StaffIndex,
             shipordersIndex: ShipOrdersIndex,
             completeordersIndex: CompleteOrdersIndex,
+            suppliersIndex: SuppliersIndex,
         }
     },
 
@@ -131,7 +138,13 @@ const routes = [
     {path: '/create-staff', component: StaffCreate, name: 'createStaff'},
     {path: '/edit-staff/:id', component: StaffEdit, name: 'editStaff'},
 
+    {path: '/supplier', component: SuppliersIndex, name: 'indexSupplier'},
+    {path: '/create-supplier', component: SuppliersCreate, name: 'createSupplier'},
+    {path: '/edit-supplier/:id', component: SuppliersEdit, name: 'editSupplier'},
+
     {path: '/setting', component: SettingIndex, name: 'indexSetting'},
+
+    {path: '/statistic', component: StatisticsIndex, name: 'indexStatistic'},
 
     {path: '/handle-order', component: HandleOrdersIndex, name: 'indexHandleOrder'},
     {path: '/ship-order', component: ShipOrdersIndex, name: 'indexShipOrder'},

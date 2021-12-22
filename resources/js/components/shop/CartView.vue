@@ -30,6 +30,7 @@
                     </th>
                     <th class="hidden text-left md:table-cell">Unit price</th>
                     <th class="text-left">Total price</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -45,11 +46,6 @@
                     <td>
                         <a href="#">
                             <p class="mb-2 md:ml-4">{{ item.product.product_name }}</p>
-                            <form action="" method="POST">
-                                <button type="button" class="text-gray-700 md:ml-4" @click="deleteItem(index,item)">
-                                    <small>(Remove item)</small>
-                                </button>
-                            </form>
                         </a>
                     </td>
                     <td class="justify-start items-center md:flex mt-6">
@@ -68,6 +64,13 @@
                         <span class="text-sm lg:text-base font-medium">
                             {{item.quantity * item.product.product_price | toCurrency}}
                         </span>
+                    </td>
+                    <td>
+                        <button type="button" class="text-gray-700 hover:text-red-500 md:ml-4" @click="deleteItem(index,item)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
                     </td>
                 </tr> 
             </tbody>
