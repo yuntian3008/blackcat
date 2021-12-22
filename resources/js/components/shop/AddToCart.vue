@@ -77,7 +77,7 @@
                   timer: 1500
                 })
                 var data = app.data;
-                if (app.data.secret === '') 
+                if (app.$bearerAPITOKEN.Authorization === '') 
                     window.location.href = '/login'
                 axios.post('/api/customer/carts', data,{
                         headers: app.$bearerAPITOKEN

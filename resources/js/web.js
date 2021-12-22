@@ -91,7 +91,7 @@ Vue.filter('toCurrency', function (value) {
 Vue.prototype.$csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute('content');
 Vue.prototype.$bearerAPITOKEN = {
                 'Accept' : 'application/json',
-                'Authorization' : 'Bearer ' + document.querySelector("meta[name='api-token']").getAttribute('content'),
+                'Authorization' : document.querySelector("meta[name='api-token']").getAttribute('content').length == 0 ? '' :'Bearer ' + document.querySelector("meta[name='api-token']").getAttribute('content'),
                 };
 
 
