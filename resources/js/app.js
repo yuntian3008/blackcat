@@ -8,7 +8,6 @@ require('./bootstrap');
 require('@fortawesome/fontawesome-free/js/all')
 window.Vue = require('vue');
 import VueRouter from 'vue-router';
-
 window.Vue.use(VueRouter);
 Vue.config.debug = true;
 Vue.config.devtools = true;
@@ -96,6 +95,8 @@ import CompleteOrdersIndex from './components/orders/CompleteOrdersIndex.vue';
 
 import SettingIndex from './components/settings/Setting.vue';
 
+import StatisticIndex from './components/statistic/Index.vue';
+
 const routes = [
     {
         path: '/',
@@ -109,8 +110,11 @@ const routes = [
             staffIndex: StaffIndex,
             shipordersIndex: ShipOrdersIndex,
             completeordersIndex: CompleteOrdersIndex,
+            statisticsIndex: StatisticIndex,
         }
     },
+
+    {path: '/statistic', component: StatisticIndex, name: 'indexStatistic'},
 
     {path: '/customer', component: CustomersIndex, name: 'indexCustomer'},
     {path: '/create-customer', component: CustomersCreate, name: 'createCustomer'},
@@ -136,6 +140,7 @@ const routes = [
     {path: '/handle-order', component: HandleOrdersIndex, name: 'indexHandleOrder'},
     {path: '/ship-order', component: ShipOrdersIndex, name: 'indexShipOrder'},
     {path: '/complete-order', component: CompleteOrdersIndex, name: 'indexCompleteOrder'},
+
 ]
 //GLOBAL DATA
 Vue.prototype.$csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute('content');

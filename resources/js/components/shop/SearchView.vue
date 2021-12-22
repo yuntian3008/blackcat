@@ -150,7 +150,7 @@
                                 <p class="mt-2 text-gray-600 text-sm">
                                     {{ product.product_desc.substring(0,150) }}
                                 </p>
-                                <div class="flex item-center mt-2">
+                                <div class="flex item-center mt-2 text-yellow-500">
                                     <svg v-if="product.stars != null" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24"  v-for="i in 5">
                                         <defs>
                                             <linearGradient id="half">
