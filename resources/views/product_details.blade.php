@@ -121,27 +121,29 @@ id="shop"
       </div>
     </div>
     <div class="lg:w-4/5 mx-auto grid gap-x-8 gap-y-4 grid-cols-3 mt-5 grid-flow-row auto-rows-max">
-        <div class="col-span-2 w-full lg:py-10 mt-6 lg:mt-0 shadow-xl px-5 rounded-xl mr-5">
+        <div class="{{ $product->specs->count() == 0 ? "col-span-3" : "col-span-2"}} w-full lg:py-10 mt-6 lg:mt-0 shadow-xl px-5 rounded-xl mr-5">
             <h2 class="text-xl font-extrabold lg:mb-5 mb-3">Description</h2>
             <p class="leading-relaxed overflow-y-auto max-h-screen">{{ $product->product_desc }}</p>
         </div>
-        <div class="w-full lg:py-10 mt-6 lg:mt-0 shadow-xl px-5 rounded-xl">
-            <h2 class="text-xl font-extrabold lg:mb-5 mb-3">More information</h2>
-            <table class="table w-full">
-                <tbody>
-                    @foreach($product->specs()->get() as $spec)
-                    <tr class="text-gray-700">
-                        <th scope="row" class="border-b p-4 dark:border-dark-5 text-left">
-                            {{ $spec->key }}
-                        </th>
-                        <td class="border-b p-4 dark:border-dark-5">
-                            {{ $spec->value }}
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+        @if ($product->specs->count() != 0)
+            <div class="w-full lg:py-10 mt-6 lg:mt-0 shadow-xl px-5 rounded-xl">
+                <h2 class="text-xl font-extrabold lg:mb-5 mb-3">More information</h2>
+                <table class="table w-full">
+                    <tbody>
+                        @foreach($product->specs()->get() as $spec)
+                        <tr class="text-gray-700">
+                            <th scope="row" class="border-b p-4 dark:border-dark-5 text-left">
+                                {{ $spec->key }}
+                            </th>
+                            <td class="border-b p-4 dark:border-dark-5">
+                                {{ $spec->value }}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
     </div>
     <div class="lg:w-4/5 mx-auto grid gap-x-8 gap-y-4 grid-cols-1 mt-5 grid-flow-row auto-rows-max">
         <div class="w-full lg:py-10 mt-6 lg:mt-0 shadow-xl px-5 rounded-xl">
