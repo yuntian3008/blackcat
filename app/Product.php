@@ -10,6 +10,7 @@ class Product extends Model
     protected $fillable = [
         'product_name', 'product_image', 'product_slug', 'category_id', 'product_price', 'product_desc', 'product_visible'
     ];
+    protected $appends = ['images','stars','url'];
 
     public function category()
     {
@@ -38,6 +39,29 @@ class Product extends Model
         $this->stock -= $quantity;
         $this->save();
     }
+    public function getUrlAttribute()
+    {
+        return url("/shop/{$this->category->category_slug}/{$this->product_slug}");
+    }
+
+    public function getImagesAttribute()
+    {
+        return [
+            ImageProcessing::getURL($this->product_image,'sm'),
+            ImageProcessing::getURL($this->product_image,'bg')
+        ];
+    }
+
+    public function getStarsAttribute()
+    {
+        $stars = $this->reviews->avg('level');
+        $stars = is_null($stars) ? 0 : $stars;
+        return $stars;
+    }
+
+    protected $fillable = [
+        'product_name', 'product_image', 'product_slug', 'category_id', 'product_price', 'product_desc', 'product_visible'
+    ];
 
     public function cartItems()
     {

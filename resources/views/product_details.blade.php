@@ -10,7 +10,9 @@
 @section('vue-id')
 id="shop"
 @endsection
-
+@section('search-input')
+<search-input></search-input>
+@endsection
 @section('script')
     <script src="{{ asset('js/web.js') }}" defer></script>
 @endsection
@@ -144,7 +146,6 @@ id="shop"
                 </table>
             </div>
         @endif
-       
     </div>
     <div class="lg:w-4/5 mx-auto grid gap-x-8 gap-y-4 grid-cols-1 mt-5 grid-flow-row auto-rows-max">
         <div class="w-full lg:py-10 mt-6 lg:mt-0 shadow-xl px-5 rounded-xl">

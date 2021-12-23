@@ -12,7 +12,7 @@ class ShippingController extends Controller
 {
     function __construct() 
     {
-        $this->middleware('api.role:shipper');
+        $this->middleware('api.role:shipper,ordermanager');
     }
 
     /**

@@ -8,7 +8,8 @@
 @section('products')
 @if(is_null($category))
 @foreach ($data as $key => $element)
-<h2 class="text-2xl font-extrabold text-gray-700 mt-4">{{ $element['category']->category_name }}</h2>
+
+<h2 class="text-2xl font-extrabold text-gray-700 mt-6">{{ $element['category']->category_name }}</h2>
 <div class="grid grid-cols-1 gap-8 mt-4 md:grid-cols-2 xl:grid-cols-4">
     @foreach ($element['products'] as $product)
         <a href="{{ route('product.details',[$product->category->category_slug,$product->product_slug]) }}" class="flex flex-col max-w-xs mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 {{-- transform hover:scale-105 motion-reduce:transform-none --}}">
