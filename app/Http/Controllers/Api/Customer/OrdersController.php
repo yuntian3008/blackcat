@@ -24,9 +24,40 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->user->orders;
+        $orders = $this->user->orders();
+
+        Validator::make($request->all(), [
+            'status' => 'string|in:processing,completed,cancelled|nullable',
+        ])->validate();
+        switch ($request->status) {
+            case 'completed':
+                $orders = $orders->whereNotNull('completion_date');
+                break;
+            case 'processing':
+                $orders = $orders->whereNull('completion_date')->whereNotNull('request_date');
+                break;
+            case 'cancelled':
+                $orders = $orders->whereNull('request_date');
+                break;
+            default:
+                //$orders = $orders->get();
+                break;
+        };
+        $orders = $orders->paginate(5);
+        foreach ($orders as $index => $order) {
+            $order['order_status'] = $order->getStatus();
+            $order['is_reviewed'] = ($order->reviews->count() == $order->orderDetails->count());
+            $order['total_amount'] = number_format($order->orderDetails->reduce(function($total,$item) { return $total + $item->product->product_price * $item->quantity;
+                                        }),2);
+            $order['details_count'] = $order->orderDetails->count();
+            $order['details_link'] = route('customer.order.details', ['id' => $order->id]);
+            $order['represent'] = $order->orderDetails()->first();
+            $order['represent']->product->product_image = ImageProcessing::getURL($order['represent']->product->product_image,'sm');
+            
+        }
+        return $orders;
     }
 
     /**

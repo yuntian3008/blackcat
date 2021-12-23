@@ -55,7 +55,7 @@ style="display: none;"
                 </h1>
             </div> --}}
             <div class="flex items-center justify-center h-auto py">
-                <div class="container">
+                {{-- <div class="container">
                     <div class="flex justify-center">
                         <div class="bg-white w-full">
                             <ul class="divide-y divide-gray-300">
@@ -84,7 +84,7 @@ style="display: none;"
                                                 <div class="w-full flex justify-between">
                                                     <div class="">
                                                         <h2 class="text-xl text-gray-700">{{ $item->represent->product->product_name }}</h2>
-                                                        {{-- <p class="text-sm">{{ $product->find($item->product_id)->product_desc }}</p> --}}
+                                                        <p class="text-sm">{{ $product->find($item->product_id)->product_desc }}</p>
                                                         <p class="text-xl text-gray-700 mr-3">x {{ $item->represent->quantity }}</p>
                                                     </div>
                                                     <div class="flex flex-col text-gray-700">
@@ -148,7 +148,8 @@ style="display: none;"
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> --}}
+                <orders></orders>
             </div>
         </div>
         

@@ -28,6 +28,11 @@ class Staff extends Authenticatable
         return $this->belongsToMany('App\Role');
     }
 
+    public function goodsReceipts()
+    {
+        return $this->hasMany('App\GoodsReceipt');
+    }
+
     /**
     * Check multiple roles
     * @param array $roles

@@ -1,5 +1,5 @@
 <template>
-        <button @click.prevent="addToCart">Add to cart</button>
+        <button @click.prevent="addToCart" class="disabled:opacity-50" :disabled="available == 0">{{ available ? "Add to cart" : "Sold out" }}</button>
 </template>
 <style>
 .colored-toast.swal2-icon-success {
@@ -9,7 +9,7 @@
     color: white !important;
   /*background-color: #a5dc86 !important;*/
 }
-/*
+
 
  
 .colored-toast.swal2-icon-error {
@@ -38,16 +38,17 @@
  
 .colored-toast .swal2-html-container {
   color: white;
-}*/
+}
 </style>
 <script>
     export default {
-        props: ['product_id','quantity'],
+        props: ['product_id','quantity','available','login_url'],
         data() {
             return {
                 data: {
                     product_id: this.product_id,
                     quantity: this.quantity,
+                    available: this.available,
                 }
             }
         },
@@ -90,11 +91,15 @@
                         })
                         //console.log(resp);
                     })
-                    .catch(function () {
+                    .catch(function (resp) {
+                        if (resp.response.status == 401) {
+                            window.location = app.login_url;
+                        }
                         Toast.fire({
-                          icon: 'error',
+                          icon: 'warning',
                           title: 'Error'
                         })
+                        
                     });
             }
         },

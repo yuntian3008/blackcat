@@ -28,24 +28,24 @@ class ImageProcessing
 	 * @param  String $key [keyword of image]
 	 * @return String      [name of image]
 	 */
-	public function run(Object $img, String $key)
+	public function run($img, String $key)
 	{
 		$name = $this->createName($key);
 		$format = $this->config['format'];
 		$resolution = $this->config['resolution'];	
 		$location = $this->config['storage_location'];
-		foreach ($resolution as $value) {
-			$image = $this->createImage($img,$format,$value['x'], $value['y']);
-			switch ($location) {
-				case 'local':
-					Storage::disk('public')->put($value['key'].'_'.$name.'.'.$format,$image);
-					break;
-				case 'gdrive':
-					Storage::cloud()->put($value['key'].'_'.$name.'.'.$format, $image);
-					break;
-				default:
-					break;
-			}
+		$image = $this->createImage($img,$format,$resolution);
+		switch ($location) {
+			case 'local':
+				foreach ($image as $element)
+					Storage::disk('public')->put($element['key'].'_'.$name.'.'.$format,$element['image']);
+				break;
+			case 'gdrive':
+				foreach ($image as $img)
+				Storage::cloud()->put($element['key'].'_'.$name.'.'.$format, $element['image']);
+				break;
+			default:
+				break;
 		}
 		return $name;
 	}
@@ -81,12 +81,22 @@ class ImageProcessing
 		return time().'_'.random_int(0, 1000).'_'.$key;
 	}
 
-	protected function createImage(String $img,String $format, int $x, int $y)
+	protected function createImage($img,String $format,$resolution)
 	{
-		$image = \Image::make($img);
-        $image->resize($x, $y, function ($constraint) {
-                $constraint->aspectRatio();
-                        });
-        return $image->encode($format,90);
+		$originalImage = \Image::make($img);
+		$image = [];
+		foreach ($resolution as $value) {
+			$temp = clone $originalImage;
+			$temp->resize($value['x'], $value['y'], function ($constraint) {
+	                	$constraint->aspectRatio();
+	                });
+                	$temp->encode($format,90);
+                	array_push($image,[
+                		'image' => $temp,
+                		'key' => $value['key'],
+                	] );
+		}
+        
+        	return $image;
 	}
 }
