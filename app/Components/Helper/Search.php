@@ -23,12 +23,6 @@ class Search
 			'sort.field' => 'required_with:sort.by|in:product_name,product_price|string|nullable',
 			'sort.by' => 'required_with:sort.field|in:asc,desc|string|nullable',
 		])->validate();
-		if (!is_null($request->min_price) && !is_null($request->max_price) && ($request->min_price > $request->max_price)) {
-			return [];
-		}
-		if (!is_null($request->min_price)) $products = $products->where('product_price', '>=',$request->min_price);
-		if (!is_null($request->max_price)) $products = $products->where('product_price', '<=',$request->max_price);
-		if (!is_null($request->category_id)) $products = $products->where('category_id',$request->category_id);		
 		if (!is_null($request->keywords)) {
 			$products = $products->whereHas('category', function (Builder $query) use($request) {
 		                $query->where('category_name', 'like', "%{$request->keywords}%");
@@ -37,6 +31,13 @@ class Search
 		                ->orWhere('product_desc', 'like', "%{$request->keywords}%")
 		                ->orWhere('product_price', 'like', "%{$request->keywords}%");
 	        }
+		if (!is_null($request->min_price) && !is_null($request->max_price) && ($request->min_price > $request->max_price)) {
+			return [];
+		}
+		if (!is_null($request->min_price)) $products = $products->where('product_price', '>=',$request->min_price);
+		if (!is_null($request->max_price)) $products = $products->where('product_price', '<=',$request->max_price);
+		if (!is_null($request->category_id)) $products = $products->where('category_id',$request->category_id);		
+		
 		if (!is_null($request->sort) && !is_null($request->sort['field']) && !is_null($request->sort['by'])) $products = $products->orderBy($request->sort['field'],$request->sort['by']);		
 
 
