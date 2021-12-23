@@ -77,14 +77,14 @@
                         <router-link :to="{name: 'indexCompleteOrder'}" class="nav-link" data-bs-dismiss="offcanvas">Orders are being delivered</router-link>
                     </li>
                     @endif
-                    @if (Auth::guard('admin')->user()->hasAnyRole(['shipper','superadmin']))
+                    {{-- @if (Auth::guard('admin')->user()->hasAnyRole(['shipper','superadmin']))
                     <li class="nav-item">
                         <router-link :to="{name: 'indexShipOrder'}" class="nav-link" data-bs-dismiss="offcanvas">Ready Orders</router-link>
                     </li>
                     <li class="nav-item">
                         <router-link :to="{name: 'indexCompleteOrder'}" class="nav-link" data-bs-dismiss="offcanvas">Orders are being delivered</router-link>
                     </li>
-                    @endif
+                    @endif --}}
                     @if (Auth::guard('admin')->user()->hasAnyRole(['accountant','superadmin']))
                     <li class="nav-item">
                         <router-link :to="{name: 'indexStatistic'}" class="nav-link" data-bs-dismiss="offcanvas">Statistic</router-link>
