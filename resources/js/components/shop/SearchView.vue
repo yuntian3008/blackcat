@@ -140,11 +140,16 @@
                 </header>
                 <div class="overflow-auto h-screen pb-24 pt-2 pr-2 pl-2 md:pt-0 md:pr-0 md:pl-0">
                     <div class="grid grid-cols-3 gap-y-2 gap-x-3 my-2">
+                        <div v-if="products.length == 0" class="flex justify-center items-center col-span-3 rounded-lg overflow-hidden">
+                            <h2 class="text-2xl font-light">
+                                No results were found.
+                            </h2>
+                        </div>
                         <a class="flex bg-white shadow-lg rounded-lg overflow-hidden"  v-for="product in products" :href="product.url">
                             <div class="w-1/3 bg-cover" :style="'background-image: url('+product.images[0]+')'">
                             </div>
-                            <div class="w-2/3 p-4">
-                                <h1 class="text-gray-900 font-bold text-2xl">
+                            <div class="w-2/3 p-4 flex flex-col">
+                                <h1 class="text-gray-900 font-bold text-2xl flex-grow">
                                     {{ product.product_name.substring(0,50) }}
                                 </h1>
                                 <p class="mt-2 text-gray-600 text-sm">
