@@ -102,13 +102,13 @@
                                             <a href="#" class="hover:bg-gray-100 hover:text-gray-900 text-gray-700 block px-4 py-2 text-sm"  @click="criteria.sort = {
                                                 field: 'product_name',
                                                 by: 'asc'
-                                            }; toggle.sort = false;">Name (A-Z)</a>
+                                            }; toggle.sort = false; search();">Name (A-Z)</a>
                                         </li>
                                         <li>
                                             <a href="#" class="hover:bg-gray-100 hover:text-gray-900 text-gray-700 block px-4 py-2 text-sm"  @click="criteria.sort = {
                                                 field: 'product_name',
                                                 by: 'desc'
-                                            }; toggle.sort = false;">Name (Z-A)</a>
+                                            }; toggle.sort = false; search();">Name (Z-A)</a>
                                         </li>
                                     </div>  
                                     <div class="py-1" role="none">
@@ -116,7 +116,7 @@
                                             <a href="#" class="hover:bg-gray-100 hover:text-gray-900 text-gray-700 block px-4 py-2 text-sm flex items-center"  @click="criteria.sort = {
                                                 field: 'product_price',
                                                 by: 'asc'
-                                            }; toggle.sort = false;">Price: Low to High 
+                                            }; toggle.sort = false; search();">Price: Low to High 
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                   <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                                                 </svg>
@@ -126,7 +126,7 @@
                                             <a href="#" class="hover:bg-gray-100 hover:text-gray-900 text-gray-700 block px-4 py-2 text-sm flex items-center" @click="criteria.sort = {
                                                 field: 'product_price',
                                                 by: 'desc'
-                                            }; toggle.sort = false;">Price: High to Low
+                                            }; toggle.sort = false; search();">Price: High to Low
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                   <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                                 </svg>
@@ -145,7 +145,7 @@
                             </div>
                             <div class="w-2/3 p-4">
                                 <h1 class="text-gray-900 font-bold text-2xl">
-                                    {{ product.product_name }}
+                                    {{ product.product_name.substring(0,50) }}
                                 </h1>
                                 <p class="mt-2 text-gray-600 text-sm">
                                     {{ product.product_desc.substring(0,150) }}

@@ -40,7 +40,9 @@ class Product extends Model
 
     public function getStarsAttribute()
     {
-        return $this->reviews->avg('level');
+        $stars = $this->reviews->avg('level');
+        $stars = is_null($stars) ? 0 : $stars;
+        return $stars;
     }
 
     protected $fillable = [
