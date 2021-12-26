@@ -8,9 +8,9 @@ use App\Components\Helper\ImageProcessing;
 class Product extends Model
 {
     protected $fillable = [
-        'product_name', 'product_image', 'product_slug', 'category_id', 'product_price', 'product_desc', 'product_visible'
+        'product_name', 'product_image', 'product_slug', 'category_id', 'product_price', 'product_desc', 'product_visible', 'stock'
     ];
-    protected $appends = ['images','stars','url'];
+    protected $appends = ['images','stars','url','available'];
 
     public function category()
     {
@@ -59,10 +59,6 @@ class Product extends Model
         return $stars;
     }
 
-    protected $fillable = [
-        'product_name', 'product_image', 'product_slug', 'category_id', 'product_price', 'product_desc', 'product_visible'
-    ];
-
     public function cartItems()
     {
         return $this->hasMany('App\CartItem');
@@ -95,8 +91,6 @@ class Product extends Model
 
         return ($relation) ? $relation->aggregate : null;
     }
-
-    protected $appends = ['available'];
 
     public function getAvailableAttribute()
     {

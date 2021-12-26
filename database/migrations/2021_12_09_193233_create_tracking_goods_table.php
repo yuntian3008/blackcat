@@ -23,6 +23,7 @@ class CreateTrackingGoodsTable extends Migration
             $table->foreign('goods_receipt_detail_id')
                 ->references('id')->on('goods_receipt_details')
                 ->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

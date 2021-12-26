@@ -112,7 +112,21 @@
                         })
                         .catch(function (resp) {
                             console.log(resp);
-                            app.handingError(resp,'Could not Mark the order as processed');
+                            var values =  Object.values(resp.response.data.errors);
+                                var str = '';
+                                for (const e of values) {
+                                    str += e[0] + '<br/>';
+                                }
+                                app.$swal.fire({
+                                    title: 'Error',
+                                    html: str,
+                                    icon: 'warning',
+                                    showClass: {
+                                        popup: 'animate__animated animate__headShake',
+                                        icon: 'animate__animated animate__shakeX',
+                                    },
+                                }
+                                )
                         });
                     }
                 })

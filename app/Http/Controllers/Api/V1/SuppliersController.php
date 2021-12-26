@@ -14,9 +14,10 @@ class SuppliersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Supplier::paginate(10);
+        
+        return $request->has('page') ? Supplier::paginate(5) : Supplier::all();
     }
 
     /**

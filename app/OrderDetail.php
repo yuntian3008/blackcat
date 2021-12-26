@@ -30,4 +30,9 @@ class OrderDetail extends Model
     {
         return $this->hasOneThrough('App\Customer', 'App\Order');
     }
+
+    public function trackingGoods()
+    {
+        return $this->hasOne('App\TrackingGoods');
+    }
 }

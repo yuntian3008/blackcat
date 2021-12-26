@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 			->middleware('api.role:admin');
 		Route::resource('suppliers', 'SuppliersController', ['except' => ['create', 'edit']])
 			->middleware('api.role:productmanager');
-		Route::resource('goods-receipts', 'GoodsReceiptsController', ['except' => ['create', 'edit','store','update']])
+		Route::resource('goods-receipts', 'GoodsReceiptsController', ['except' => ['create', 'edit']])
 			->middleware('api.role:productmanager');
 		Route::group([
 			'prefix' => 'statistics',

@@ -121,6 +121,7 @@
                     <th>Price</th>
                     <th>Description</th>
                     <th>Category</th>
+                    <th>Stock</th>
                     <th>Created at</th>
                     <th>Updated at</th>
                     <th>Visible</th>
@@ -142,6 +143,7 @@
                     <td v-on:click="actionEntry(product.id,index)">{{ product.product_price }}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.product_desc }}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.category.category_name }}</td>
+                    <td v-on:click="actionEntry(product.id,index)">{{ product.stock }}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.created_at }}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.updated_at }}</td>
                     <td><div class="form-check form-switch">

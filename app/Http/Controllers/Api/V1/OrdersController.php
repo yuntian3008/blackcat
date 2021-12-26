@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Order;
 use Carbon\Carbon;
 use App\Components\Helper\ImageProcessing;
-
+use Illuminate\Support\Facades\Validator;
+use App\TrackingGoods;
 class OrdersController extends Controller
 {
     function __construct() 
@@ -105,7 +106,24 @@ class OrdersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $order = Order::findOrFail($id);
+        Validator::make(['id' => $id], [
+            'id' => ['required','exists:orders'],
+        ])->validate();
+        $order = Order::find($id);
+        foreach ($order->orderDetails as $detail) {
+            if($detail->product->stock - $detail->quantity < 0)
+                return response()->json([
+                    'message' => 'something went wrong',
+                    'errors' => [
+                        'stock' => ['Product id:'.$detail->product->id.' is sold out']
+                    ]
+                ], 400);
+        }
+        foreach ($order->orderDetails as $detail) {
+            $detail->product->subStock($detail->quantity);
+            $detail->trackingGoods()->create();
+            //TrackingGoods::create(['order_detail_id' => $detail->id]);
+        }
         $order->update(['get_date' => Carbon::now()]);
         
         return $order;

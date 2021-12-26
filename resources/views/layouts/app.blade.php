@@ -20,6 +20,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('css/web.css') }}" rel="stylesheet"> --}}
+    
     <style>
     body {
         font-family: 'Quicksand', 'Open Sans';
@@ -70,6 +72,9 @@
                     </li>
                     <li class="nav-item">
                         <router-link :to="{name: 'indexSupplier'}" class="nav-link" data-bs-dismiss="offcanvas">Supplier</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{name: 'indexGoodsReceipt'}" class="nav-link" data-bs-dismiss="offcanvas">Goods Receipts</router-link>
                     </li>
                     @endif
                     @if (Auth::guard('admin')->user()->hasAnyRole(['ordermanager','superadmin']))

@@ -25,8 +25,8 @@ class CreateGoodsReceiptsTable extends Migration
                 ->references('id')
                 ->on('suppliers')
                 ->onDelete('restrict');
-            $table->timestamp('receipt_date')->nullable();
-            $table->unsignedBigInteger('total_amount')->nullable()->default(null);
+            $table->unsignedBigInteger('total_amount');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

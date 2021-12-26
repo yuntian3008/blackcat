@@ -24,7 +24,8 @@ class CreateGoodsReceiptDetailsTable extends Migration
                 ->references('id')->on('products')
                 ->onDelete('cascade');
             $table->unsignedInteger('quantity');
-            $table->unsignedInteger('unit_price')->nullable()->default(null);
+            $table->unsignedInteger('unit_price');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
