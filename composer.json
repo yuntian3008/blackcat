@@ -8,14 +8,14 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.2.5||^8.0",
+        "php": "^8.0",
         "ext-gd": "*",
-        "doctrine/dbal": "v2.4.2",
         "fideloper/proxy": "^4.0",
+        "fzaninotto/faker": "^1.4",
         "google/apiclient": "^2.0",
         "guzzlehttp/guzzle": "^7.3",
         "intervention/image": "^2.5",
-        "laravel/framework": "^6.0",
+        "laravel/framework": "^6.20",
         "laravel/passport": "9.4",
         "laravel/tinker": "^1.0",
         "laravolt/avatar": "^4.1",
@@ -23,7 +23,6 @@
         "phpseclib/phpseclib": "2.0"
     },
     "require-dev": {
-        "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",

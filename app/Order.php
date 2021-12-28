@@ -13,6 +13,17 @@ class Order extends Model
         'request_date', 'get_date', 'ship_date', 'completion_date', 'discount','payment', 'address', 'phone',
     ];
 
+    protected $appends = ['total_amount','total_quantity',];
+
+    public function getTotalAmountAttribute()
+    {
+        return $this->orderDetails->sum('total');
+    }
+
+    public function getTotalQuantityAttribute()
+    {
+        return $this->orderDetails->sum('quantity');
+    }
 
     public function getLateLevel()
     {

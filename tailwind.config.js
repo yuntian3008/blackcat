@@ -1,6 +1,7 @@
 
 //const plugin = require('tailwindcss/plugin');
-
+const path = require('path');
+const colors = require('tailwindcss/colors');
 module.exports = {
   purge: [
       './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
@@ -11,7 +12,8 @@ module.exports = {
       './resources/js/components/*.vue',
   ],  
   theme: {
-    extend: {},
+    extend: {
+    },
   },
   variants: {
     extend: {
@@ -19,6 +21,9 @@ module.exports = {
       backgroundColor: ['checked'],
       borderColor: ['checked'],
       opacity: ['disabled'],
+      cursor: ['disabled'],
+      textOpacity: ['disabled'],
+      textColor: ['disabled']
     },
 
   },

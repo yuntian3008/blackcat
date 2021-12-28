@@ -28,7 +28,7 @@ import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import InfiniteLoading from 'vue-infinite-loading';
 import VModal from 'vue-js-modal';
-
+import "tailwindcss/tailwind.css"
 global.jQuery = require('jquery');
 var $ = global.jQuery;
 window.$ = $;

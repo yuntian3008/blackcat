@@ -47,25 +47,19 @@ Route::group(['middleware' => 'auth:api'], function() {
 		Route::resource('goods-receipts', 'GoodsReceiptsController', ['except' => ['create', 'edit']])
 			->middleware('api.role:productmanager');
 		Route::group([
+			'middleware' => 'api.role:productmanager',
 			'prefix' => 'statistics',
-			'namespace' => 'Statistics',
 			'as' => 'statistics.',
 		], function () {
-			Route::group([
-			'prefix' => 'reviews',
-			'as' => 'reviews.',
-			], function () {
-				Route::get('top/{top?}','RatingStatisticsController@top');
-				Route::get('count-product-by-rating','RatingStatisticsController@countProductByRating');
-			});
+			Route::get('sales','StatisticsController@sales');
 		});
-		Route::group([
-			'prefix' => 'inventory',
-			'middleware' => 'api.role:productmanager',
-		], function () {
-			Route::post('request','InventoryController@goodsReceiptsRequest');
-			Route::post('goods-receipt','InventoryController@goodsReceipts');
-		});
+		// Route::group([
+		// 	'prefix' => 'inventory',
+		// 	'middleware' => 'api.role:productmanager',
+		// ], function () {
+		// 	Route::post('request','InventoryController@goodsReceiptsRequest');
+		// 	Route::post('goods-receipt','InventoryController@goodsReceipts');
+		// });
 	});
 });
 
