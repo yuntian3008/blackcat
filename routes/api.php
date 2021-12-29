@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 			'as' => 'statistics.',
 		], function () {
 			Route::get('sales','StatisticsController@sales');
+			Route::get('customers','StatisticsController@customer');
 		});
 		// Route::group([
 		// 	'prefix' => 'inventory',
