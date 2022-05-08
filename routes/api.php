@@ -72,11 +72,12 @@ Route::group(['middleware' => 'auth:web_api'], function() {
 	], function () {
 		Route::get('test','TestController@test');
 		Route::resource('orders', 'OrdersController', ['except' => ['create', 'edit']]);
-		Route::resource('carts', 'CartsController', ['except' => ['create', 'edit']]);
+		// Route::resource('carts', 'CartsController', ['except' => ['create', 'edit']]);
 		Route::resource('reviews', 'ReviewsController', ['except' => ['create', 'edit']]);
 	}
 	);
 });
+Route::get('customer/carts','Api\Customer\CartsController@index');
 
 Route::group([
 		'prefix' => '/public',

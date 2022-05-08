@@ -55,7 +55,7 @@ class OrdersController extends Controller
             $order['details_link'] = route('customer.order.details', ['id' => $order->id]);
             $order['represent'] = $order->orderDetails()->first();
             $order['represent']->product->product_image = ImageProcessing::getURL($order['represent']->product->product_image,'sm');
-            
+
         }
         return $orders;
     }
@@ -78,17 +78,20 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
-        $cartItems = $this->user->cartItems;
-        if ($cartItems->count() == 0) {
-            return response()->json([
-                "message" => "Cart is empty.",
-                "errors" => [
-                    "cart" => "Cart is empty."
-                ],
-            ], 422);
-        }
-        
+
+        //$cartItems = $this->user->cartItems;
+        // if ($cartItems->count() == 0) {
+        //     return response()->json([
+        //         "message" => "Cart is empty.",
+        //         "errors" => [
+        //             "cart" => "Cart is empty."
+        //         ],
+        //     ], 422);
+        // }
+
         Validator::make($request->all(), [
+                'cartItems' => 'required|array|min:1',
+                'cartItems.*.quantity' => 'required|numeric|min:1',
                 'phone' => 'digits:10|nullable',
                 'address' => 'required|string|max:255',
                 'ward' => 'required|string|max:255',
@@ -97,6 +100,8 @@ class OrdersController extends Controller
                 'country' => 'required|string|max:255',
                 'payment' =>  'required',
             ])->validate();
+
+        //dd($request->all());
 
         if ($request->newAddress == "true") {
 
@@ -108,7 +113,7 @@ class OrdersController extends Controller
                 'country' => $request->country,
             ]);
         }
-        
+
         $address = $request->address.', '.$request->ward.', '.$request->district.', '.$request->province.', '.$request->country;
 
 
@@ -118,15 +123,15 @@ class OrdersController extends Controller
             'payment' => $request->payment,
             'request_date' => Carbon::now(),
         ]);
-        
-        foreach ($cartItems as $item) {
+
+        foreach ($request->cartItems as $item) {
             $order->orderDetails()->create([
-                'product_id' => $item->product_id,
-                'quantity' => $item->quantity,
+                'product_id' => $item["product_id"],
+                'quantity' => $item["quantity"],
             ]);
         }
 
-        $this->user->cartItems()->delete();
+        //$this->user->cartItems()->delete();
 
         return response()
             ->json(['message' => 'Order has been created successfully.',
@@ -178,7 +183,7 @@ class OrdersController extends Controller
         Validator::make(['id'=>$id], [
             'id' => ['required', 'exists:orders', new OrderNotProcessedYet ],
         ])->validate();
-        
+
         $order = $this->user->orders()->findOrFail($id);
 
         $order->update([

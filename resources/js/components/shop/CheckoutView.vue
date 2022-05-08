@@ -76,12 +76,12 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="mt-4">
                     <div class="w-full">
                         <label for="Phone"
                             class="block mb-3 text-sm font-semibold text-gray-500">Other Number Phone (Optional)</label>
-                        <input type="text" 
+                        <input type="text"
                             class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="phone">
                     </div>
                 </div>
@@ -178,8 +178,8 @@ import 'vue-loading-overlay/dist/vue-loading.css'
             if (app.addresses.length > 0) {
                 app.address = app.addresses[0];
             }
-            
-            
+
+
         },
         methods: {
             choose: function () {
@@ -198,6 +198,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
             order: function () {
                 var app = this;
                 axios.post('api/customer/orders', {
+                    cartItems : JSON.parse(window.localStorage.getItem('cart')),
                     country : app.address.country,
                     province : app.address.province,
                     district : app.address.district,
@@ -216,6 +217,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                         icon: 'success',
                         timer: 1500,
                     }).then((result) => {
+                        window.localStorage.removeItem('cart');
                         location.href = resp.data.next;
                     });
                 })
@@ -228,7 +230,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                           text: errors[k],
                         });
                     }
-                    
+
                 });
             }
         },

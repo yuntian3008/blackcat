@@ -9,7 +9,7 @@
 </style>
 <template>
     <div>
-        <loading :active.sync="isLoading" 
+        <loading :active.sync="isLoading"
         :can-cancel="false"
         :is-full-page="fullPage"></loading>
         <vue-confirm-dialog></vue-confirm-dialog>
@@ -40,7 +40,7 @@
                 <tr v-else v-for="item, index in cartItems">
                     <td class="hidden pb-4 md:table-cell">
                   <a href="#">
-                    <img :src="item.product.product_image" class="w-20 rounded" alt="Thumbnail">
+                    <img :src="item.product.images[0]" class="w-20 rounded" alt="Thumbnail">
                   </a>
                     </td>
                     <td>
@@ -72,7 +72,7 @@
                                     </svg>
                                 </button>
                     </td>
-                </tr> 
+                </tr>
             </tbody>
         </table>
     </div>
@@ -94,31 +94,20 @@ import 'vue-loading-overlay/dist/vue-loading.css'
         },
         mounted() {
             var app = this;
+
+            if (window.localStorage.getItem("cart") == null) {
+                    let initCart = [];
+                    window.localStorage.setItem("cart",JSON.stringify(initCart));
+                }
+
             app.isLoading = true;
             axios.get('api/customer/carts', {
-                        headers: app.$bearerAPITOKEN
-                    })
-                .then(function (resp) {
-                    app.cartItems = resp.data;
-                    app.$root.$emit("updateTotal",app.cartItems);
-                    app.isLoading = false;
-                    //console.log(resp);
+                    params: JSON.parse(window.localStorage.getItem('cart')),
+                    headers: app.$bearerAPITOKEN
                 })
-                .catch(function () {
-                    alert("Could not load your product")
-                });
-        },
-        methods: {
-            changeQty: function (item) {
-                var app = this;
-                app.isLoading = true;
-                axios.patch('api/customer/carts/'+ item.id, {
-                    quantity: item.quantity,
-                },{
-                        headers: app.$bearerAPITOKEN
-                    })
                 .then(function (resp) {
                     app.isLoading = false;
+                    app.cartItems = resp.data;
                     app.$root.$emit("updateTotal",app.cartItems);
                     //console.log(resp);
                 })
@@ -130,6 +119,38 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                       text: 'Something went wrong!',
                     });
                 });
+        },
+        methods: {
+            changeQty: function (item) {
+                var app = this;
+                let cart = JSON.parse(window.localStorage.getItem("cart"));
+                let obj = cart.find(o => o.product_id === item.product_id);
+                let index = cart.indexOf(obj);
+
+                if (index >= 0)
+                    cart.fill(obj.quantity = item.quantity,index,index++);
+
+                window.localStorage.setItem('cart',JSON.stringify(cart));
+                app.$root.$emit("updateTotal",app.cartItems);
+                // app.isLoading = true;
+                // axios.patch('api/customer/carts/'+ item.id, {
+                //     quantity: item.quantity,
+                // },{
+                //         headers: app.$bearerAPITOKEN
+                //     })
+                // .then(function (resp) {
+                //     app.isLoading = false;
+                //     app.$root.$emit("updateTotal",app.cartItems);
+                //     //console.log(resp);
+                // })
+                // .catch(function () {
+                //     app.isLoading = false;
+                //     app.$swal.fire({
+                //       icon: 'error',
+                //       title: 'Oops...',
+                //       text: 'Something went wrong!',
+                //     });
+                // });
             },
             deleteItem: function (index,item) {
                 var app = this;
@@ -159,31 +180,43 @@ import 'vue-loading-overlay/dist/vue-loading.css'
                     },
                     /**
                     * Callback Function
-                    * @param {Boolean} confirm 
+                    * @param {Boolean} confirm
                     */
                     callback: a => {
                         if (a) {
-                            app.isLoading = true;
-                             axios.delete('api/customer/carts/'+ item.id,{
-                                    headers: app.$bearerAPITOKEN
-                            })
-                            .then(function (resp) {
-                                app.isLoading = false;
-                                app.cartItems.splice(index, 1);
-                                app.$root.$emit("updateTotal",app.cartItems);
-                                Toast.fire({
-                                  icon: 'success',
-                                  title: item.product.product_name + ' has been deleted to your cart'
-                                })
-                                //console.log(resp);
-                            })
-                            .catch(function () {
-                                app.isLoading = false;
-                                Toast.fire({
-                                  icon: 'success',
-                                  title: 'Could not remove' + item.product.product_name,
-                                })
-                            });
+                            let cart = JSON.parse(window.localStorage.getItem("cart"));
+                            let obj = cart.find(o => o.product_id === item.product_id);
+                            let indexCart = cart.indexOf(obj);
+
+                            let arr = [];
+                            if (index >= 0)
+                                cart.splice(indexCart,1 );
+
+                            window.localStorage.setItem('cart',JSON.stringify(cart));
+
+                            app.cartItems.splice(index, 1);
+                            app.$root.$emit("updateTotal",app.cartItems);
+                            // app.isLoading = true;
+                            //  axios.delete('api/customer/carts/'+ item.id,{
+                            //         headers: app.$bearerAPITOKEN
+                            // })
+                            // .then(function (resp) {
+                            //     app.isLoading = false;
+                            //     app.cartItems.splice(index, 1);
+                            //     app.$root.$emit("updateTotal",app.cartItems);
+                            //     Toast.fire({
+                            //       icon: 'success',
+                            //       title: item.product.product_name + ' has been deleted to your cart'
+                            //     })
+                            //     //console.log(resp);
+                            // })
+                            // .catch(function () {
+                            //     app.isLoading = false;
+                            //     Toast.fire({
+                            //       icon: 'success',
+                            //       title: 'Could not remove' + item.product.product_name,
+                            //     })
+                            // });
                         }
                     },
                 });
@@ -192,7 +225,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
         computed: {
             total: function(){
                 let sum = 0;
-                this.cartItem.forEach(function(item) {
+                this.cartItems.forEach(function(item) {
                     sum+= item.quantity;
                 });
 

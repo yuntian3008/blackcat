@@ -34,7 +34,6 @@ Route::post('password/reset', 'Customer\Auth\ResetPasswordController@reset')->na
 
 Route::middleware(['auth'])->group(function (){
 	Route::middleware(['profile.updated'])->group(function () {
-		Route::get('cart', 'CartController@showCart')->name('cart');
 		Route::get('checkout', 'CartController@showCheckout')->name('show.checkout');
 		Route::post('order/cancel', 'OrderController@cancel')->name('customer.order.cancel');
 		Route::get('customer/order', 'OrderController@history')->name('customer.order.all');
@@ -43,10 +42,10 @@ Route::middleware(['auth'])->group(function (){
 	Route::get('customer/profile', 'Customer\ProfileController@show')->name('customer.profile');
 	Route::post('customer/profile', 'Customer\ProfileController@update')->name('customer.profile.update');
 	Route::post('customer/profile/avatar', 'Customer\ProfileController@changeAvatar')->name('customer.profile.update.avatar');
-	
+
 });
 //Group : Login page
-//Auth::routes(); 
+//Auth::routes();
 
 /*
 	admin/
@@ -74,7 +73,7 @@ Route::middleware(['auth'])->group(function (){
 
 //     Route::get('/permissions', 'AdminController@permission')->name('permissions.index')
 //     	->middleware('permission:'.config('permission.web.AdminController@permission'));
-    
+
 // });
 // /*
 // 	user/
@@ -97,6 +96,8 @@ Route::middleware(['auth'])->group(function (){
  */
 
 Route::get('search','CoreController@search')->name('search');
+
+Route::get('cart', 'CartController@showCart')->name('cart');
 
 Route::get('advanced-search','CoreController@advancedSearch')->name('search.advanced');
 

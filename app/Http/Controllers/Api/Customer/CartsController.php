@@ -25,14 +25,28 @@ class CartsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cartItems = $this->user->cartItems;
-        foreach ($cartItems as $item) {
-            $item["product"] = $item->product;
-            $item["product"]->product_image = ImageProcessing::getURL($item["product"]->product_image,'sm');
+        // $cartItems = $this->user->cartItems;
+        // dd($request->all());
+        // foreach ($cartItems as $item) {
+        //     $item["product"] = $item->product;
+        //     $item["product"]->product_image = ImageProcessing::getURL($item["product"]->product_image,'sm');
+        // }
+        // return $cartItems;
+        $cartItems = $request->all();
+
+        foreach ($cartItems as $index => $item) {
+            $item = json_decode($item);
+            $item->product = Product::find($item->product_id);
+            $cartItems[$index] = $item;
+            //dd($item);
+            // $item["product"] = $item->product;
+            // $item["product"]->product_image = ImageProcessing::getURL($item["product"]->product_image,'sm');
         }
+        //dd($cartItems);
         return $cartItems;
+
     }
 
     /**
@@ -60,7 +74,7 @@ class CartsController extends Controller
         $product = Product::where('product_visible',1)->where('id',$request->product_id)->firstOrFail();
 
         // VALIDATE
-        if ($request->quantity <= 0) 
+        if ($request->quantity <= 0)
             return response('Quantity isn\'t invalid', 412);
 
         // neu trung thi tang len 1

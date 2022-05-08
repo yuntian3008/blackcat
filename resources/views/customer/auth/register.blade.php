@@ -68,10 +68,10 @@ style="display:none;"
                         </div>
                     </div>
                 </div>
-                
+
                 @enderror
                 <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="phone"> {{  __('Phone number') }}</label>
-                <input type="tel" id="phone" name="phone" pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" value="{{ old('phone') }}" required autocomplete="phone">   
+                <input type="tel" id="phone" name="phone" pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" value="{{ old('phone') }}" required autocomplete="phone">
             </div>
 
             <div class="mt-4">
@@ -95,13 +95,13 @@ style="display:none;"
                         </div>
                     </div>
                 </div>
-                
+
                 @enderror
                 <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="email"> {{  __('Email') }}</label>
                 <input type="email" id="email" name="email" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" value="{{ old('email') }}" required autocomplete="email">
             </div>
 
-            <div class="mt-4">
+            {{-- <div class="mt-4">
                 @error('username')
                 <div x-data="{ errorOpen : true }">
                     <div class="w-full text-white bg-red-500 mb-2" x-show="errorOpen">
@@ -122,11 +122,11 @@ style="display:none;"
                         </div>
                     </div>
                 </div>
-                
+
                 @enderror
                 <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="username"> {{  __('Username') }}</label>
                 <input id="username" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" type="text" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
-            </div>
+            </div> --}}
 
             <div class="mt-4">
                 @error('password')
@@ -149,7 +149,7 @@ style="display:none;"
                         </div>
                     </div>
                 </div>
-                
+
                 @enderror
                 <div class="flex justify-between">
                     <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="password">{{  __('Password') }}</label>
@@ -171,15 +171,15 @@ style="display:none;"
                     {{ __('Sign up') }}
                 </button>
             </div>
-            
+
             <div class="flex items-center justify-between mt-4">
                 <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
 
                 <a href="{{ route('login') }}" class="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline">or sign in</a>
-                
+
                 <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
             </div>
-        </form> 
+        </form>
     </div>
     <div class="hidden bg-cover lg:block lg:w-1/2" style="background-image:url('https://images.unsplash.com/photo-1513211888420-0a4531c612b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80')"></div>
 </div>
@@ -438,7 +438,7 @@ style="display:none;"
                     </div>
                 </form>
             </div>
-            
+
         </div>
         <div class="col"></div>
     </div>

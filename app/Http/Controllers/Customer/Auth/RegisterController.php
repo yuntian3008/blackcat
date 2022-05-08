@@ -51,7 +51,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             // 'firstname' => ['required', 'string', 'max:255'],
             // 'lastname' => ['required', 'string', 'max:255'],
-            'username' => ['required','unique:customers','regex:/^[a-z0-9_-]{3,16}$/'],
+            //'username' => ['required','unique:customers','regex:/^[a-z0-9_-]{3,16}$/'],
             // 'gender' => ['required', 'digits_between:-1,1'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:customers'],
             'phone' => ['required', 'digits:10', 'unique:customers'],
@@ -61,7 +61,7 @@ class RegisterController extends Controller
             // 'province' => ['required', 'string', 'max:255'],
             // 'district' => ['required', 'string', 'max:255'],
             // 'ward' => ['required', 'string', 'max:255'],
-            // 'address' => ['required', 'string', 'max:255'],       
+            // 'address' => ['required', 'string', 'max:255'],
         ]);
     }
 
@@ -80,7 +80,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
             // 'dob' => $data['dob'],
-            'username' => $data['username'],
+            'username' => $data['phone'],
             'password' => Hash::make($data['password']),
         ]);
         $user->generateToken();
