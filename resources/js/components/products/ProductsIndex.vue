@@ -130,12 +130,13 @@
                 </thead>
                 <tbody>
                 <tr v-for="product, index in (isFilter ? resultQuery : products)" :key="product.id">
-                    <td @click="changeImage(product)">
+                    <!-- <td @click="changeImage(product)"> -->
+                    <td>
                         <div class="container-image rounded">
                             <img :src="product.product_image" class="rounded img-fluid" :alt="product.product_name" style="width:100%">
-                            <div class="mask-image">
+                            <!-- <div class="mask-image">
                                 <i class="bi bi-cloud-upload"></i>
-                            </div>
+                            </div> -->
                         </div>
 
                     </td>
