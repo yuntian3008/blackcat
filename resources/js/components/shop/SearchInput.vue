@@ -12,7 +12,7 @@
             <li class="p-4 hover:bg-gray-50 cursor-pointer animate__animated animate__slideInUp" v-for="item in products" :key="item.id">
                 <a :href="item.href" class="flex space-x-4">
                     <div>
-                        <img :src="item.product_image" alt="image"
+                        <img :src="item.image[0]" alt="image"
                             class="w-20">
                     </div>
                     <div>
@@ -50,7 +50,7 @@
 	        		app.search = '';
 	        		app.products = [];
         		}, 200);
-        		
+
         	},
             find: function () {
             	var app = this;

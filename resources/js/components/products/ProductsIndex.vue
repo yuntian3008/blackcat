@@ -77,13 +77,13 @@
             <div class="d-flex justify-content-between mb-2 align-items-center">
                 <div class="card-title display-6 m-0">Products</div>
                 <div>
-                    <div class="form-check form-switch form-check-inline">
+                    <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" @click="filter">
                         <label class="form-check-label" for="flexSwitchCheckDefault"><i class="bi bi-funnel" ></i>&ensp;Filter</label>
                     </div>
                     <router-link :to="{name: 'createProduct'}" class="add-enti-btn"><i class="bi bi-plus-lg"></i>&ensp;Create</router-link>
                 </div>
-                
+
             </div>
             <hr>
             <div class="col-12 row gx-1 gy-2" v-show="isFilter">
@@ -112,7 +112,7 @@
                     </select>
                 </div>
             </div>
-            
+
             <table class="table table-hover">
                 <thead class="thead-dark">
                 <tr>
@@ -137,7 +137,7 @@
                                 <i class="bi bi-cloud-upload"></i>
                             </div>
                         </div>
-                        
+
                     </td>
                     <td v-on:click="actionEntry(product.id,index)" class="font-weight-bold">{{product.product_name}}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.product_price }}</td>
@@ -146,15 +146,15 @@
                     <td v-on:click="actionEntry(product.id,index)">{{ product.stock }}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.created_at }}</td>
                     <td v-on:click="actionEntry(product.id,index)">{{ product.updated_at }}</td>
-                    <td><div class="form-check form-switch">
+                    <td><div class="form-check">
                             <input type="checkbox" class="form-check-input" :id="'blockat_'+product.id" v-model="product.product_visible" v-on:click="deleteEntry(product.id, index)">
                             <label class="form-check-label" :for="'blockat_'+product.id">{{ product.product_visible ? "Yes" : "No" }}</label>
                         </div></td>
                 </tr>
                 </tbody>
-                
+
                 <caption class="text-center fsize-24" v-if="resultQuery.length == 0">No thing.</caption>
-                
+
             </table>
             <pagination
                  v-show="!isFilter"
@@ -243,7 +243,7 @@ import UploadImage from '../utils/vue-advanced-cropper/UploadImage'
                         });
                 }
                 else this.onPageChange(this.current_page);
-                
+
             },
             onPageChange(page) {
                 console.log(page)
@@ -340,16 +340,16 @@ import UploadImage from '../utils/vue-advanced-cropper/UploadImage'
                                 }).then((result) => {
                                     app.$router.go();
                                 });
-                                
+
                             })
                             .catch(function (resp) {
                                 console.log(resp);
                                 app.handingError(resp,'Could not change product status');
                             });
-                        
+
                     }
                     else if (result.isDismissed) {
-                        app.products[index].product_visible = !visible; 
+                        app.products[index].product_visible = !visible;
                     }
                 })
             }

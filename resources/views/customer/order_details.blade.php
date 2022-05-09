@@ -172,7 +172,7 @@ style="display: none;"
                 </button>
             </form>
             @endif
-            
+
         </div>
         <div class="shadow-xl rounded-lg py-10">
             <div class="flex px-10">
@@ -266,7 +266,7 @@ style="display: none;"
                 {{ $order->getStatus()['message'] }}
             </div>
             @endif
-            
+
         </div>
         <div class="shadow-xl rounded-lg py-10">
             <div class="flex px-10">
@@ -293,7 +293,7 @@ style="display: none;"
                                               <img class="h-5 w-5" src="{{ asset('assets/images/payment/visa.svg') }}" alt="visa">
                                               <img class="h-5 w-5" src="{{ asset('assets/images/payment/mastercard.svg') }}" alt="mastercard">
                                               <img class="h-5 w-5" src="{{ asset('assets/images/payment/jcb.svg') }}" alt="jcb">
-                                            
+
                                         @elseif($order->payment == "card")
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -309,7 +309,7 @@ style="display: none;"
                                   </span>
                             </p>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
@@ -328,7 +328,7 @@ style="display: none;"
                                 <li class="p-4 hover:bg-gray-50 cursor-pointer flex">
                                     <a href="{{ route('product.details',[$item->product->category->category_slug,$item->product->product_slug]) }}" class="flex-1 space-x-4">
                                         <div>
-                                            <img src="{{ $item->product->product_image }}" alt="image"
+                                            <img src="{{ $item->product->image[0] }}" alt="image"
                                                 class="w-40">
                                         </div>
                                         <div>
@@ -356,10 +356,10 @@ style="display: none;"
                                             </div>
                                             @endif
                                         </div>
-                                        
+
                                     @endif
                                 </li>
-                                  
+
                                 @endforeach
                             </ul>
                         </div>
@@ -367,10 +367,10 @@ style="display: none;"
                 </div>
             </div>
         </div>
-        
-        
-        
-               
+
+
+
+
     </div>
 </div>
 {{-- <div class="container px-1 px-md-4 mx-auto">
@@ -400,7 +400,7 @@ style="display: none;"
             </div>
         </div>
         <div class="row justify-content-between top">
-            <div class="row d-flex"> 
+            <div class="row d-flex">
                 <div class="d-flex flex-column">
                 	@empty($order->request_date)
                 	@else
@@ -472,10 +472,10 @@ style="display: none;"
 			                            <span class="fsize-32">
 			                                <strong id="summary" class="text-brown">$ {{$item->quantity * $item->product->product_price}}</strong>
 			                            </span>
-			                        </p class="mb-0"> 
+			                        </p class="mb-0">
 	                        </div>
 	                    </div>
-	                </div> 
+	                </div>
 	            </div>
             </a>
         </div>
@@ -502,9 +502,9 @@ style="display: none;"
 <script>
 
 
-    document.getElementById('cancelForm').addEventListener('submit', 
+    document.getElementById('cancelForm').addEventListener('submit',
         function(e){
-            e.preventDefault(); 
+            e.preventDefault();
             Swal.fire({
               title: 'Are you sure you want to cancel this order?',
               showDenyButton: true,

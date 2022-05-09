@@ -31,6 +31,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 import InfiniteLoading from 'vue-infinite-loading';
 import CoolLightBox from 'vue-cool-lightbox'
 import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css'
+import Carousel3d from 'vue-carousel-3d';
 
 
 
@@ -65,6 +66,9 @@ Vue.use(VueConfirmDialog);
 Vue.use(VModal);
 Vue.use(CoolLightBox)
 
+
+Vue.use(Carousel3d);
+
 //MIXINS
 //import responseHelper from './mixins/responseHelper'
 
@@ -83,6 +87,7 @@ Vue.component('search-view', require('./components/shop/SearchView.vue').default
 Vue.component('cart-view-total-amount', require('./components/shop/CartViewTotalAmount.vue').default);
 Vue.component('orders', require('./components/shop/Orders.vue').default);
 Vue.component('summary-cart', require('./components/shop/Summary.vue').default);
+Vue.component('product-image', require('./components/shop/ProductImage.vue').default);
 Vue.filter('toCurrency', function (value) {
     if (typeof value !== "number") {
         return value;

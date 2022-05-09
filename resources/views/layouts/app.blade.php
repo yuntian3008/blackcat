@@ -21,7 +21,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     {{-- <link href="{{ asset('css/web.css') }}" rel="stylesheet"> --}}
-    
+
     <style>
     body {
         font-family: 'Quicksand', 'Open Sans';
@@ -47,45 +47,45 @@
             <div class="offcanvas-body navbar-dark">
                 <ul class="navbar-nav flex-column fsize-24 text-light">
                     <li class="nav-item">
-                        <router-link to="/" class="nav-link" data-bs-dismiss="offcanvas">Dashboard</router-link>
+                        <router-link to="/" class="nav-link">Dashboard</router-link>
                     </li>
                     @if (Auth::guard('admin')->user()->hasAnyRole(['admin','superadmin']))
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexCustomer'}" class="nav-link" data-bs-dismiss="offcanvas">Customer</router-link>
+                        <router-link :to="{name: 'indexCustomer'}" class="nav-link">Customer</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexStaff'}" class="nav-link" data-bs-dismiss="offcanvas">Staff</router-link>
+                        <router-link :to="{name: 'indexStaff'}" class="nav-link">Staff</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexSetting'}" class="nav-link" data-bs-dismiss="offcanvas">Setting</router-link>
+                        <router-link :to="{name: 'indexSetting'}" class="nav-link">Setting</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexStatistic'}" class="nav-link" data-bs-dismiss="offcanvas">Statistic</router-link>
+                        <router-link :to="{name: 'indexStatistic'}" class="nav-link">Statistic</router-link>
                     </li>
                     @endif
                     @if (Auth::guard('admin')->user()->hasAnyRole(['productmanager','superadmin']))
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexCategory'}" class="nav-link" data-bs-dismiss="offcanvas">Category</router-link>
+                        <router-link :to="{name: 'indexCategory'}" class="nav-link">Category</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexProduct'}" class="nav-link" data-bs-dismiss="offcanvas">Product</router-link>
+                        <router-link :to="{name: 'indexProduct'}" class="nav-link">Product</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexSupplier'}" class="nav-link" data-bs-dismiss="offcanvas">Supplier</router-link>
+                        <router-link :to="{name: 'indexSupplier'}" class="nav-link">Supplier</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexGoodsReceipt'}" class="nav-link" data-bs-dismiss="offcanvas">Goods Receipts</router-link>
+                        <router-link :to="{name: 'indexGoodsReceipt'}" class="nav-link">Goods Receipts</router-link>
                     </li>
                     @endif
                     @if (Auth::guard('admin')->user()->hasAnyRole(['ordermanager','superadmin']))
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexHandleOrder'}" class="nav-link" data-bs-dismiss="offcanvas">Handle Orders</router-link>
+                        <router-link :to="{name: 'indexHandleOrder'}" class="nav-link">Handle Orders</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexShipOrder'}" class="nav-link" data-bs-dismiss="offcanvas">Ready Orders</router-link>
+                        <router-link :to="{name: 'indexShipOrder'}" class="nav-link">Ready Orders</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexCompleteOrder'}" class="nav-link" data-bs-dismiss="offcanvas">Orders are being delivered</router-link>
+                        <router-link :to="{name: 'indexCompleteOrder'}" class="nav-link">Orders are being delivered</router-link>
                     </li>
                     @endif
                     {{-- @if (Auth::guard('admin')->user()->hasAnyRole(['shipper','superadmin']))
@@ -98,15 +98,15 @@
                     @endif --}}
                     @if (Auth::guard('admin')->user()->hasAnyRole(['accountant','superadmin']))
                     <li class="nav-item">
-                        <router-link :to="{name: 'indexStatistic'}" class="nav-link" data-bs-dismiss="offcanvas">Statistic</router-link>
+                        <router-link :to="{name: 'indexStatistic'}" class="nav-link">Statistic</router-link>
                     </li>
                     @endif
-                    
+
                     {{-- <li class="nav-item">
                         <router-link :to="{name: 'indexPermission'}" class="nav-link" data-bs-dismiss="offcanvas">Permission</router-link>
                     </li> --}}
-                    
-                    
+
+
                 </ul>
             </div>
         </div>
@@ -131,7 +131,7 @@
                             <a href="#" class="nav-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="bi bi-list"></i>Menu</a>
                         </li>
                         @endauth
-                        
+
                     </ul>
 
 
@@ -166,7 +166,7 @@
                                         @csrf
                                     </form>
                                 </li>
-                                
+
                             </ul>
                         </li>
                         @endguest
@@ -178,7 +178,7 @@
         <main class="pb-4">
             <div class="container">
             @yield('content')
-            </div>  
+            </div>
         </main>
         {{-- <footer class="bd-footer text-muted">
             <div class="container p-3 p-md-5">

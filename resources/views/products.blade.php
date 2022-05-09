@@ -9,7 +9,7 @@
   font-size: 16px;
 }
 </style>
-    
+
 @endsection
 
 @section('content')
@@ -37,7 +37,7 @@
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ strlen($item->product_desc) > 100 ? substr($item->product_desc, 0, 100)."..." : $item->product_desc }}</p>
                         </div>
 
-                        <img class="object-cover w-full h-48 mt-2" src="{{$item->product_image}}" alt="{{$item->product_name}}">
+                        <img class="object-cover w-full h-48 mt-2" src="{{$item->image[0]}}" alt="{{$item->product_name}}">
 
                         <div class="flex items-center justify-between px-4 py-2 bg-gray-900">
                             <h1 class="text-lg font-bold text-white">$ {{$item->product_price}}</h1>
@@ -74,7 +74,7 @@
                                 <add-to-cart :product_id="{{ $item->id }}" :quantity="1"></add-to-cart>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </a>
@@ -85,7 +85,7 @@
                 {{ $data->links() }}
             </div>
         </div>
-        
+
 </div> --}}
 {{-- <div class="container-fluid pt-4">
         <div class="row justify-content-center">
@@ -110,7 +110,7 @@
                                     <h4>
                                     {{$item->plant_name}}
                                     </h4>
-                                </div>  
+                                </div>
                             </a>
                         @endforeach
                     </div>
@@ -125,11 +125,11 @@
 
 
  --}}
-                
+
                 {{-- <div class="card-body row p-0">
                     @if ($data->isNotEmpty())
                     @foreach ($data as $index=>$item)
-                    <a href="{{url()->current()."/".$item->plant_slug}}" class="card col-md-6 text-center 
+                    <a href="{{url()->current()."/".$item->plant_slug}}" class="card col-md-6 text-center
                         @if($index % 2 == 0)
                             border-right
                         @endif
@@ -144,9 +144,9 @@
                         <div class="card-body">
                             <img class="align-self-center plant_img" height="128" width="128" src="{{asset('storage/sm_'.$item->plant_image)}}" alt="{{$item->plant_slug}}">
                             <h5 class="card-title my-2">{{$item->plant_name}}</h5>
-                            
+
                         </div>
-                    </a> 
+                    </a>
                     @endforeach
                     @else
                     <div class="col-12 text-center" role="Nodata">

@@ -54,7 +54,7 @@ class OrdersController extends Controller
             $order['details_count'] = $order->orderDetails->count();
             $order['details_link'] = route('customer.order.details', ['id' => $order->id]);
             $order['represent'] = $order->orderDetails()->first();
-            $order['represent']->product->product_image = ImageProcessing::getURL($order['represent']->product->product_image,'sm');
+            $order['represent']->product;
 
         }
         return $orders;

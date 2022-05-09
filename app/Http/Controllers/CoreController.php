@@ -87,14 +87,14 @@ class CoreController extends Controller
                 ->orWhere('product_desc', 'like', "%{$request->search}%")
                 ->orWhere('product_price', 'like', "%{$request->search}%")->where('product_visible', 1)->get();
             foreach ($products as $product) {
-                $product->product_image = ImageProcessing::getURL($product->product_image,'sm');
+                //$product->product_image = ImageProcessing::getURL($product->product_image,'sm');
                 $product["href"] = route('product.details', [
                     'category_slug' => $product->category->category_slug,
                     'product_slug' => $product->product_slug,
                 ]);
             }
             return $products;
-        } 
+        }
         return [];
     }
 
@@ -132,7 +132,7 @@ class CoreController extends Controller
 
 
         //$data = $category->products()->where('product_visible', 1);
-        
+
         if ($request->sort && $request->sortBy) {
             Validator::make($request->all(), [
                 'sort' => 'string|in:product_name,product_price',
@@ -167,8 +167,8 @@ class CoreController extends Controller
     {
         $product = Product::where('product_slug' , $product_slug)->where('product_visible', 1)->firstOrFail();
         $category = $product->category;
-        $product['product_image_sm'] = ImageProcessing::getURL($product['product_image'],'sm');
-        $product['product_image_bg'] = ImageProcessing::getURL($product['product_image'],'bg');
+        //$product['product_image_sm'] = ImageProcessing::getURL($product['product_image'],'sm');
+        //$product['product_image_bg'] = ImageProcessing::getURL($product['product_image'],'bg');
         if ($product->specs()->where("key","Brand")->count())
         $product['product_brand'] = $product->specs()->where("key","Brand")->first()->value;
 
@@ -180,7 +180,7 @@ class CoreController extends Controller
         );
     }
 
-    // public function search($keyword = null) 
+    // public function search($keyword = null)
     // {
     //     $products = Product::whereHas('specs', function (Builder $query) use($keyword) {
     //         $query->where('key', 'LIKE', "%{$keyword}%")->orWhere('value', 'LIKE', "%{$keyword}%");
@@ -199,13 +199,13 @@ class CoreController extends Controller
     // }
 
     public function showFormSearch() {
-        
+
     }
 
-    public function advancedSearch() 
+    public function advancedSearch()
     {
         return view('advanced_search');
-        // if ($request->min && $request->max) 
+        // if ($request->min && $request->max)
         //         if ($request->min >= $request->max)
         //             return view('search', [
         //                 'data' => null,
@@ -217,7 +217,7 @@ class CoreController extends Controller
 
         // if ($request->keyword) {
         //     $keyword = $request->keyword;
-            
+
         //     $products = $products->whereHas('specs', function (Builder $query) use($keyword) {
         //         $query->where('key', 'LIKE', "%{$keyword}%")->orWhere('value', 'LIKE', "%{$keyword}%");
         //     })
@@ -232,8 +232,8 @@ class CoreController extends Controller
         //     $products = $products->where('product_price', '>=', $request->max);
 
         // $products = $products->paginate(8);
-        
-        
+
+
         // foreach ($products as $product) {
         //     $product['product_image'] = ImageProcessing::getURL($product['product_image'],'sm');
         //     if ($product->specs()->where("key","Brand")->count())
@@ -248,5 +248,5 @@ class CoreController extends Controller
 
 
 
-    
+
 }

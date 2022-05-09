@@ -48,6 +48,14 @@ Route::group(['middleware' => 'auth:api'], function() {
 			->middleware('api.role:productmanager');
 		Route::group([
 			'middleware' => 'api.role:productmanager',
+			'prefix' => 'product',
+			'as' => 'product.',
+		], function () {
+			Route::post('image','ProductsController@storeImage');
+			Route::delete('image/{dir}/{image}','ProductsController@destroyImage');
+		});
+        Route::group([
+			'middleware' => 'api.role:productmanager',
 			'prefix' => 'statistics',
 			'as' => 'statistics.',
 		], function () {

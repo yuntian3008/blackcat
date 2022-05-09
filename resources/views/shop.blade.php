@@ -18,7 +18,7 @@
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ strlen($product->product_desc) > 100 ? substr($product->product_desc,0,100)."..." : $product->product_desc }}</p>
             </div>
 
-            <img class="object-cover w-full h-48 mt-2" src="{{ $imageProcessing->getURL($product->product_image,'sm') }}" alt="NIKE AIR">
+            <img class="object-cover w-full h-48 mt-2" src="{{ $product->image[0] }}" alt="{{$product->product_name}}">
 
             <div class="flex items-center justify-between px-4 py-2 bg-gray-700">
                 <h1 class="text-lg font-bold text-white">$ {{ number_format($product->product_price, 2)  }}</h1>
@@ -26,7 +26,7 @@
             </div>
         </a>
     @endforeach
-    
+
 </div>
 @endforeach
 
@@ -71,15 +71,15 @@
                 <p class="mt-1 text-xs text-gray-600 dark:text-gray-400">{{ strlen($product->product_desc) > 100 ? substr($product->product_desc,0,100)."..." : $product->product_desc }}</p>
             </div>
 
-            <img class="object-cover w-full h-48 mt-2" src="{{ $imageProcessing->getURL($product->product_image,'sm') }}" alt="NIKE AIR">
-          
+            <img class="object-cover w-full h-48 mt-2" src="{{ $product->image[0] }}" alt="{{ $product->product_name}}">
+
             <div class="flex items-center justify-between px-4 py-2 bg-gray-700">
                 <h1 class="text-lg font-bold text-white">$ {{ number_format($product->product_price, 2)  }}</h1>
                 <add-to-cart class="px-2 py-1 text-xs font-semibold text-gray-700 uppercase transition-colors duration-200 transform bg-white rounded hover:bg-gray-200 focus:outline-none" :product_id="{{ $product->id }}" :quantity="1" :available="{{ $product->available ? 1 : 0 }}" :login_url="'{{ route('login') }}'"></add-to-cart>
             </div>
         </a>
     @endforeach
-    
+
 </div>
 <div class="flex justify-center mt-6">
     {{ $data->links('pagination.tailwind') }}

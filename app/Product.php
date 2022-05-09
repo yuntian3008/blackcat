@@ -10,7 +10,7 @@ class Product extends Model
     protected $fillable = [
         'product_name', 'product_image', 'product_slug', 'category_id', 'product_price', 'product_desc', 'product_visible', 'stock'
     ];
-    protected $appends = ['images','stars','url','available'];
+    protected $appends = ['images','image','stars','url','available'];
 
     public function category()
     {
@@ -25,7 +25,7 @@ class Product extends Model
 
     public function getImage($size = 'sm')
     {
-        return ImageProcessing::getURL($this->product_image,$size);
+        return ImageProcessing::getAllURL($this->product_image,$size);
     }
 
     public function addStock($quantity)
@@ -45,6 +45,14 @@ class Product extends Model
     }
 
     public function getImagesAttribute()
+    {
+        return [
+            ImageProcessing::getAllURL($this->product_image,'sm'),
+            ImageProcessing::getAllURL($this->product_image,'bg')
+        ];
+    }
+
+    public function getImageAttribute()
     {
         return [
             ImageProcessing::getURL($this->product_image,'sm'),

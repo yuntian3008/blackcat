@@ -26,7 +26,7 @@
                     </div>
                     <div class="col-md-2">
                         <label class="control-label" for="customSwitch1">Visible</label>
-                        <div class="form-check form-switch">
+                        <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="customSwitch1" v-model="product.product_visible">
                             <label class="form-check-label" for="customSwitch1">{{ product.product_visible ? "Yes" : "No" }}</label>
                         </div>
@@ -48,28 +48,41 @@
                         <div class="d-grid gap-2">
                             <button type="button" class="ml-3 btn btn-sm btn-outline-dark" @click="addSpec"><i class="bi bi-plus-lg"></i>&ensp;Add</button>
                         </div>
-                    </div>  
-                    
+                    </div>
+
                     <div class="col-md-8">
                         <label class="control-label">Product image</label>
-                        <upload-image v-if="imageUpload == null" @save="saveImage"></upload-image>
-                        <div v-if="imageUpload != null" class="d-block w-100 position-relative border rounded">
-                            <img  :src="imageUpload.canvas.toDataURL()" class="rounded mx-auto d-block" alt="product_image" width="200">
-                            <div class=" position-absolute bottom-0 end-0 p-2">
+                        <upload-image @save="saveImage"></upload-image>
+                        <!-- <upload-image v-if="imageUpload == null" @save="saveImage"></upload-image> -->
+                        <div class="flex flex-wrap gap-2 w-100 position-relative border rounded mt-2">
+                            <!-- <div class=" position-absolute bottom-0 end-0 p-2">
                                 <button class="btn btn-primary" @click="imageUpload = null"><i class="bi bi-arrow-clockwise"></i>&ensp;Reset</button>
+                            </div> -->
+                            <div class="relative"  v-for="img, index in product.product_image" :key="index">
+                                <img :src="img" class="rounded mr-2" alt="product_image" width="200">
+                                <span  @click.prevent="product.product_image.splice(index,1)" class="cursor-pointer absolute border-2 right-1 top-1 transform -translate-x-1/2 border-white text-white p-1 bg-red-500 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
                             </div>
-                            
+<div class="flex justify-center">
+  <div class="form-check form-switch">
+    <input class="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+    <label class="form-check-label inline-block text-gray-800" for="flexSwitchCheckDefault">Default switch checkbox input</label>
+  </div>
+</div>
                         </div>
-                        
+
                         <label for="desc" class="mt-2">Description</label>
                         <textarea class="form-control" v-model.trim="product.product_desc" id="desc" rows="5"></textarea required>
                     </div>
-                    
+
                 </div>
-                
+
                 <div class="row g-1 mt-2">
                     <div class="col-sm-12 form-group">
-                        
+
                         <button class="m-1 btn btn-outline-primary" @click="saveForm()">Create</button>
                     </div>
                 </div>
@@ -97,10 +110,11 @@ import UploadImage from '../utils/vue-advanced-cropper/UploadImage'
                     product_visible: 1,
                     product_desc: '',
                     product_specs: [],
+                    product_image: [],
                 },
                 categories: [],
                 errors: [],
-                imageUpload : null,
+                imageUrls: [],
             }
         },
         mounted() {
@@ -120,11 +134,8 @@ import UploadImage from '../utils/vue-advanced-cropper/UploadImage'
                 });
         },
         methods: {
-            resetImage() {
-                 this.imageUpload = null;
-            },
             saveImage(image) {
-                this.imageUpload = image;
+                this.product.product_image.push(image.canvas.toDataURL());
             },
             addSpec: function () {
                 this.product.product_specs.push({ key: '', value: '' });
@@ -133,9 +144,9 @@ import UploadImage from '../utils/vue-advanced-cropper/UploadImage'
                 this.product.product_specs.splice(index, 1);
             },
             validate() {
-                if (this.imageUpload == null)
+                if (this.product.product_image.length == 0)
                 {
-                    this.errors.push("Please upload and save image before continue");
+                    this.errors.push("Please upload and save image least at 1 before continue");
                 }
                 if (this.product.product_name === '')
                 {
@@ -164,14 +175,17 @@ import UploadImage from '../utils/vue-advanced-cropper/UploadImage'
                 app.errors = [];
                 app.validate();
                 if (app.errors.length == 0)
+                //if(true)
                 {
                     var loader = app.$loading.show();
-                    app.imageUpload.canvas.toBlob(blob => {
-                        const form = new FormData();
+
+                    const form = new FormData();
 
                         form.append('data',JSON.stringify(app.product));
-                        form.append('product_image',blob);
-                        axios.post('/api/v1/products', form,{
+                        form.append('product_image',app.imageUrls);
+                        axios.post('/api/v1/products',
+                            app.product
+                        ,{
                             headers: app.$bearerAPITOKEN
                         })
                         .then(function (resp) {
@@ -190,7 +204,10 @@ import UploadImage from '../utils/vue-advanced-cropper/UploadImage'
                             loader.hide();
                             app.handingError(resp,'Could not create product');
                         });
-                    },app.imageUpload.type);
+
+                    // app.imageUpload.canvas.toBlob(blob => {
+
+                    // },app.imageUpload.type);
                 }
             }
         }

@@ -2,7 +2,7 @@
 
 <div>
     <div class="upload-area__cropper-wrapper">
-        <cropper ref="cropper" class="upload-area__cropper border rounded cute-upload" :stencil-props="{
+        <cropper ref="cropper" class="upload-area__cropper border rounded cute-upload h-4" :stencil-props="{
 		aspectRatio: 1/1,
 	}" check-orientation :src="image.src" />
 		<vertical-buttons v-if="image.src">
@@ -30,14 +30,14 @@
             <button class="btn btn-primary" title="Reset Image" @click="reset()">
                 <i class="bi bi-arrow-clockwise"></i>&ensp;Reset
             </button>
-            
+
         </div>
         <div class="upload-area__file-type" v-if="image.type">
             Format: {{ image.type }}
         </div>
     </div>
 </div>
-    
+
 </template>
 
 <script>
@@ -85,16 +85,19 @@ export default {
 	methods: {
 		save() {
 			const { canvas } = this.$refs.cropper.getResult();
-			if (canvas)
-				this.$emit('save', { canvas: canvas, type: this.image.type });
-			
+			if (canvas) {
+                this.$emit('save', { canvas: canvas, type: this.image.type });
+                this.reset();
+            }
+
+
 		},
 		reset() {
 			this.image = {
 				src: null,
 				type: null,
 			};
-			
+
 		},
 		flip(x, y) {
 			if (this.$refs.cropper.customImageTransforms.rotate % 180 !== 0) {
@@ -165,7 +168,7 @@ export default {
 .upload-area {
 	user-select: none;
 	&__cropper {
-		
+
 		min-height: 500px;
 		max-height: 500px;
 		width: 100%;

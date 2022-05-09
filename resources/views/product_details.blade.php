@@ -16,17 +16,22 @@ id="shop"
 @section('script')
     <script src="{{ asset('js/web.js') }}" defer></script>
 @endsection
-    
+
 @endsection
 
 @section('content')
 <section class="text-gray-600 body-font overflow-hidden" id="shop">
   <div class="container px-5 py-12 mx-auto">
+
     <div class="lg:w-4/5 mx-auto flex flex-wrap">
-      <img alt="ecommerce" class="lg:w-1/3 w-full lg:h-auto h-64 object-cover object-center rounded" src="{{ $product->product_image_bg }}">
+
+        {{-- {{ $product->getImage('sm') }} --}}
+    <product-image class="lg:w-1/3 w-full lg:h-auto h-64 object-cover object-center rounded" :imgs='@json($product->images)'></product-image>
+
+      {{-- <img alt="ecommerce" class="lg:w-1/3 w-full lg:h-auto h-64 object-cover object-center rounded" src="{{ $product->getImage('sm')[0] }}"> --}}
       <div class="lg:w-2/3 flex flex-wrap content-between w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0 p-5">
             <div class="w-full flex flex-col gap-y-5">
-                <div class=""> 
+                <div class="">
                     <h2 class="text-sm title-font text-gray-500 tracking-widest">{{ $product->category->category_name }}</h2>
                     <h1 class="text-gray-900 text-4xl title-font font-medium mb-1 uppercase">{{ $product->product_name }}</h1>
                 </div>
@@ -43,11 +48,11 @@ id="shop"
                           <path fill="{{ ($stars - $i >= 0 ? "currentColor" : ($stars - $i >= -0.5 ? "url(#half)" : "none" ))   }}" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                         </svg>
                     @endfor
-                    
+
                     <span class="text-gray-600 ml-3 text-xl">{{ $product->reviews->count() }} Reviews</span>
                 </span>
             </div>
-            
+
             <div class="flex w-full">
                   <span class="title-font font-medium text-3xl text-gray-900">$ {{ number_format($product->product_price,2) }}</span>
                   <add-to-cart class="flex ml-auto text-white font-bold bg-gray-700 border-0 py-2 px-6 focus:outline-none hover:bg-gray-500 rounded uppercase" :product_id="{{ $product->id }}" :quantity="1" :available="{{ $product->available ? 1 : 0 }}"  :login_url="'{{ route('login') }}'"></add-to-cart>
@@ -57,9 +62,9 @@ id="shop"
                     </svg>
                   </button> --}}
             </div>
-        
+
         {{-- <div class="flex mb-4">
-             REVIEWWWWWWWWWWWWW 
+             REVIEWWWWWWWWWWWWW
           <span class="flex items-center">
             <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-indigo-500" viewBox="0 0 24 24">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
@@ -119,7 +124,7 @@ id="shop"
             </div>
           </div>
         </div> --}}
-        
+
       </div>
     </div>
     <div class="lg:w-4/5 mx-auto grid gap-x-8 gap-y-4 grid-cols-3 mt-5 grid-flow-row auto-rows-max">
@@ -168,11 +173,11 @@ id="shop"
                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                                         </svg>Purchased
                                     </span>
-                                    
+
                                 </div>
                                 <div class="flex items-center gap-x-2 text-gray-600 dark:text-gray-200 text-sm">
                                     {{ !empty($review->comment) ? $review->comment : "" }}
-                                    
+
                                 </div>
                                 @if (!empty($review->getImage()))
                                     <review-image class="mt-2" :items="['{{ $review->getImage("bg") }}']"></review-image>
@@ -192,13 +197,13 @@ id="shop"
                         </div>
                     </li>
                 @endforeach
-                
+
             </ul>
 
         </div>
     </div>
   </div>
-</section>{{-- 
+</section>{{--
 <div class="container bg-white py-3 mt-4" id="product">
         <div class="col-12">
             <nav aria-label="breadcrumb">
@@ -227,11 +232,11 @@ id="shop"
                             <span class="h3" id="price">$ {{ $product->product_price }}</span>
                         </div>
                         <change-qty></change-qty>
-                        
+
                         <add-to-cart :product_id="{{ $product->id }}" :quantity="1"></add-to-cart>
                     </div>
-                    
-                </div>         
+
+                </div>
             </div>
 
             <div class="col-md-12">
@@ -254,7 +259,7 @@ id="shop"
                         <span class="far fa-star"></span>
                     </div>
                 </div>
- --}}                
+ --}}
            {{--  </div>
             <div class="col-md-4">
                 <h5>Details</h5>
@@ -264,7 +269,7 @@ id="shop"
                             @foreach($product->specs()->get() as $spec)
                             <tr><th scope="row">{{ $spec->key }}</th><td>{{ $spec->value }}</td></tr>
                             @endforeach
-                        </tbody>      
+                        </tbody>
                     </table>
                 </div>
             </div>

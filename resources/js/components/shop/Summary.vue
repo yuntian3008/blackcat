@@ -11,7 +11,7 @@
                 <div class="flex flex-col space-y-4">
                     <div class="flex space-x-4" v-for="item, index in cartItems" :key="item.product_id">
                         <div>
-                            <img :src="item.product.images[0]" alt="image"
+                            <img :src="item.product.images[0][0]" alt="image"
                                 class="w-60">
                         </div>
                         <div>

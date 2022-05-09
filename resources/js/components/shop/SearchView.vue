@@ -3,15 +3,15 @@
         <div class="flex items-start justify-between">
             <div class="h-screen hidden lg:block my-4 ml-4 shadow-lg relative w-80">
                 <div class="bg-white h-full rounded-2xl dark:bg-gray-700">
-                    
+
                     <nav class="pt-3 px-4 text-gray-700">
                         <div class="divide-y divide-gray-100 flex flex-col ">
-                            
+
                             <div class=" my-2 ">
                                 <h1 class="text-xl font-extrabold text-gray-700">
                                 Advanced Search
                                 </h1>
-                                
+
                             </div>
 
                             <div class="grid grid-cols-2 gap-y-2 gap-x-3 my-2 pt-2">
@@ -74,7 +74,7 @@
                                 </div>
                             </div>
 
-                            
+
                         </div>
                     </nav>
                 </div>
@@ -110,13 +110,13 @@
                                                 by: 'desc'
                                             }; toggle.sort = false; search();">Name (Z-A)</a>
                                         </li>
-                                    </div>  
+                                    </div>
                                     <div class="py-1" role="none">
                                         <li>
                                             <a href="#" class="hover:bg-gray-100 hover:text-gray-900 text-gray-700 block px-4 py-2 text-sm flex items-center"  @click="criteria.sort = {
                                                 field: 'product_price',
                                                 by: 'asc'
-                                            }; toggle.sort = false; search();">Price: Low to High 
+                                            }; toggle.sort = false; search();">Price: Low to High
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                   <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                                                 </svg>
@@ -132,7 +132,7 @@
                                                 </svg>
                                             </a>
                                         </li>
-                                    </div>  
+                                    </div>
                                 </ul>
                             </transition>
                         </div>
@@ -146,7 +146,7 @@
                             </h2>
                         </div>
                         <a class="flex bg-white shadow-lg rounded-lg overflow-hidden"  v-for="product in products" :href="product.url">
-                            <div class="w-1/3 bg-cover" :style="'background-image: url('+product.images[0]+')'">
+                            <div class="w-1/3 bg-cover" :style="'background-image: url('+product.image[0]+')'">
                             </div>
                             <div class="w-2/3 p-4 flex flex-col">
                                 <h1 class="text-gray-900 font-bold text-2xl flex-grow">
@@ -169,9 +169,9 @@
                                 <div class="flex item-center justify-between mt-3">
                                     <h1 class="text-gray-700 font-bold text-xl">
                                         $ {{ product.product_price }}
-                                    </h1> 
-                                    
-                                    <add-to-cart class="flex ml-auto text-white text-xs font-bold bg-gray-700 border-0 py-2 px-3 focus:outline-none hover:bg-gray-500 rounded uppercase" :product_id="product.id" :quantity="1"></add-to-cart>
+                                    </h1>
+
+                                    <add-to-cart class="flex ml-auto text-white text-xs font-bold bg-gray-700 border-0 py-2 px-3 focus:outline-none hover:bg-gray-500 rounded uppercase" :product_id="product.id" :quantity="1" :available="product.available ? 1 : 0"></add-to-cart>
                                 </div>
                             </div>
                         </a>
@@ -944,7 +944,7 @@ export default {
         },
         keywords: null,
       },
-      
+
     };
   },
   methods: {

@@ -41,32 +41,57 @@
                         <div class="d-grid gap-2">
                             <button type="button" class="ml-3 btn btn-sm btn-outline-dark" @click="addSpec"><i class="bi bi-plus-lg"></i>&ensp;Add</button>
                         </div>
-                    </div>  
-                    
+                    </div>
+
                     <div class="col-md-8">
-                        <label for="desc">Description</label>
+
+
+                        <label for="desc mt-2">Description</label>
                         <textarea class="form-control" v-model.trim="product.product_desc" id="desc" rows="5"></textarea required>
                     </div>
-                    
+
                 </div>
-                
+
                 <div class="row g-1 mt-2">
                     <div class="col-sm-12 form-group">
-                        
+
                         <button class="m-1 btn btn-outline-primary" @click="saveForm()">Edit</button>
                     </div>
                 </div>
             </form>
+            <div>
+                <label class="text-xl my-2">Image Manager</label>
+                <upload-image @save="saveImage"></upload-image>
+                <!-- <upload-image v-if="imageUpload == null" @save="saveImage"></upload-image> -->
+                <div class="flex flex-wrap gap-2 w-100 position-relative border rounded mt-2 p-2" v-if="productAny != null">
+                    <div class="relative"  v-for="img, index in productAny.images[0]" :key="index">
+                        <img :src="img" class="rounded mr-2" alt="product_image" width="200">
+                        <span  @click.prevent="deleteImage(img)" class="cursor-pointer absolute border-2 right-1 top-1 transform -translate-x-1/2 border-white text-white p-1 bg-red-500 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                    </div>
+
+                    <!-- <div class=" position-absolute bottom-0 end-0 p-2">
+                        <button class="btn btn-primary" @click="imageUpload = null"><i class="bi bi-arrow-clockwise"></i>&ensp;Reset</button>
+                    </div> -->
+
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
 <script>
 
 import VueNumeric from 'vue-numeric'
+import UploadImage from '../utils/vue-advanced-cropper/UploadImage'
 
     export default {
         components: {
             VueNumeric,
+            UploadImage,
         },
         data: function () {
             return {
@@ -81,6 +106,7 @@ import VueNumeric from 'vue-numeric'
                 },
                 categories: [],
                 errors: [],
+                productAny: null,
             }
         },
         mounted() {
@@ -95,6 +121,7 @@ import VueNumeric from 'vue-numeric'
                     for (const [key, value] of Object.entries(app.product)) {
                         app.product[key] = resp.data[key];
                     }
+                    app.productAny = resp.data;
                     app.loader.hide();
                 })
                 .catch(function () {
@@ -116,6 +143,84 @@ import VueNumeric from 'vue-numeric'
                 });
         },
         methods: {
+            saveImage(image) {
+                //alert(image.canvas.toDataURL());
+                var app = this;
+                var loader = app.$loading.show();
+                //this.product.product_image.push(image.canvas.toDataURL());
+                axios.post('/api/v1/product/image',{
+                            images: [image.canvas.toDataURL()],
+                            dir: app.productAny.product_image,
+
+                        },{
+                            headers: app.$bearerAPITOKEN
+                        })
+                        .then(function (resp) {
+                            loader.hide();
+                            app.$swal.fire({
+                                title: 'Added a image!',
+                                icon: 'success',
+                            }).then((result) => {
+                                app.$router.go();
+                            });
+                        })
+                        .catch(function (resp) {
+                            console.log(resp);
+                            loader.hide();
+                            app.$swal.fire({
+                                title: 'Lỗi!',
+                                text: resp.response.data.message,
+                                icon: 'error',
+                            });
+                        });
+            },
+            deleteImage(image) {
+                var app = this;
+                var dir = image.split("/")[2];
+                var file = image.split("/")[3];
+                //alert(image.split("/")[1]);
+
+                app.$swal.fire({
+                    title: 'Are you sure you want to delete this image?',
+                    html: "<img  width=\"100\" height=\"100\"  class=\"mx-auto\" src=\""+ image +"\"/>" ,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    showClass: {
+                        popup: 'animate__animated animate__headShake',
+                        icon: 'animate__animated animate__shakeX',
+                    },
+                    confirmButtonColor: '#dc3545',
+                    confirmButtonText: 'Yes, Delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                       var loader = app.$loading.show();
+                        axios.delete('/api/v1/product/image/' + dir + '/' + file,{
+                            headers: app.$bearerAPITOKEN
+                        })
+                        .then(function (resp) {
+                            loader.hide();
+                            app.$swal.fire({
+                                title: 'Deleted!',
+                                icon: 'success',
+                            }).then((result) => {
+                                app.$router.go();
+                            });
+
+                        })
+                        .catch(function (resp) {
+                            console.log(resp);
+                            loader.hide();
+                            app.$swal.fire({
+                                title: 'Lỗi!',
+                                text: resp.response.data.message,
+                                icon: 'error',
+                            });
+                        });
+
+                    }
+                })
+                //this.product.product_image.push(image.canvas.toDataURL());
+            },
             addSpec: function () {
                 this.product.product_specs.push({ key: '', value: '' });
             },

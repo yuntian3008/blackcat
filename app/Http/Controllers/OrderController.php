@@ -53,8 +53,7 @@ class OrderController extends Controller
         $order = $user->orders()->find($id) ?? abort(404,"The order could not be found");
         $order_details = $order->orderDetails;
         foreach ($order_details as $index => $item) {
-            $item['product'] = $item->product;
-            $item['product']->product_image = ImageProcessing::getURL($item['product']->product_image,'sm');
+            $item->product;
         }
         return view('customer.order_details', [
             'order' => $order,
@@ -88,7 +87,7 @@ class OrderController extends Controller
 	    		'country' => $request->country,
 	    	]);
         }
-    	
+
     	$address = $request->address.', '.$request->ward.', '.$request->district.', '.$request->province.', '.$request->country;
 
 
@@ -111,14 +110,14 @@ class OrderController extends Controller
         return response()
             ->json(['message' => 'Order has been created successfully.',
                     'next' => route('customer.order.details',['id'=> $order->id]) ]);
-        
+
     }
 
     public function cancel(Request $request) {
         Validator::make($request->all(), [
             'id' => ['required', 'exists:orders', new OrderNotProcessedYet ],
         ])->validate();
-        
+
         $order = Order::findOrFail($request->id);
 
         $order->update([
@@ -126,6 +125,6 @@ class OrderController extends Controller
         ]);
 
         return redirect()->back();
-        
+
     }
 }

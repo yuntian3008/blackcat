@@ -40,7 +40,7 @@
                 <tr v-else v-for="item, index in cartItems">
                     <td class="hidden pb-4 md:table-cell">
                   <a href="#">
-                    <img :src="item.product.images[0]" class="w-20 rounded" alt="Thumbnail">
+                    <img :src="item.product.image[0]" class="w-20 rounded" alt="Thumbnail">
                   </a>
                     </td>
                     <td>
