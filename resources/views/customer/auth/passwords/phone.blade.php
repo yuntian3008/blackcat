@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="lg:mt-20 flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-1xl">
-    
+
         <div class="w-full px-6 py-8 md:px-8">
             <h2 class="text-2xl text-center text-gray-700 dark:text-white"><strong>Black</strong>Cat</h2>
 
@@ -51,7 +51,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     @enderror
                     <div class="flex justify-between">
                         <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="verification">{{  __('Verification Code') }}</label>
@@ -70,7 +70,7 @@
                     </button>
                 </div>
         </div>
-    
+
 </div>
 @endsection
 
@@ -85,14 +85,16 @@
 
 <script type="application/javascript">
   // Your web app's Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyC67ztfyyqe6bUsZQ6DuwAheZ7YzjsjV6o",
-    authDomain: "blackcat-6457a.firebaseapp.com",
-    projectId: "blackcat-6457a",
-    storageBucket: "blackcat-6457a.appspot.com",
-    messagingSenderId: "1008282368219",
-    appId: "1:1008282368219:web:d93f28c3b67d55791d74fe"
-  };
+  const firebaseConfig = {
+  apiKey: "AIzaSyA1faUfcsyeQ6HrCvO8AsPycOtXGy2EHcg",
+  authDomain: "blackcat-322610.firebaseapp.com",
+  databaseURL: "https://blackcat-322610-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "blackcat-322610",
+  storageBucket: "blackcat-322610.appspot.com",
+  messagingSenderId: "585485829153",
+  appId: "1:585485829153:web:d22ed075dcb9e943298f60",
+  measurementId: "G-NY2YV5MC3Y"
+};
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
 </script>
@@ -142,7 +144,7 @@
                     countdown(59,$("#countdownDisplay"));
                     $('.verification').fadeIn();
                 });
-                
+
             }).catch(function (error) {
                 Swal.fire(
                   'Error?',
@@ -172,11 +174,11 @@
                     $.post(
                         '/password/otp',
                         {
-                            _token: CSRF_TOKEN, 
+                            _token: CSRF_TOKEN,
                             token: user.refreshToken,
                             uid: user.uid,
-                        }, function (data, status) { 
-                            document.location.href = '/password/reset/'+data; 
+                        }, function (data, status) {
+                            document.location.href = '/password/reset/'+data;
                     }).catch(function (error) {
                         Swal.fire(
                           'Error?',
@@ -185,7 +187,7 @@
                         );
                 });
             });
-            
+
         }).catch(function (error) {
             Swal.fire(
               'Error?',
