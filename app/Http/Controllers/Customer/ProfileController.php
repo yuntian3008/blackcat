@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Components\Helper\ImageProcessing;
-
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -47,7 +47,9 @@ class ProfileController extends Controller
             $request->validate([
                 'avatar' => 'image|required'
             ]);
-            $avatar = $this->imgProcess->run($file, 'avatars');
+            if($request->user()->avatar)
+                Storage::disk('public')->deleteDirectory($request->user()->avatar);
+            $avatar = $this->imgProcess->runForArray([$file], 'avatars');
             $request->user()->update([
                 'avatar' => $avatar,
             ]);

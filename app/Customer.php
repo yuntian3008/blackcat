@@ -8,13 +8,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
+use App\Components\Helper\ImageProcessing;
 
 class Customer extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
     /**
-     *  Generate Api_Token 
+     *  Generate Api_Token
      */
     public function generateToken()
     {
@@ -57,7 +58,7 @@ class Customer extends Authenticatable
     }
 
     public function getAvatar($size = "sm") {
-        return !$this->avatar ? \Avatar::create($this->getFullName())->toBase64() : \App\Components\Helper\ImageProcessing::getURL($this->avatar,'sm');
+        return !$this->avatar ? \Avatar::create($this->getFullName())->toBase64() : ImageProcessing::getURL($this->avatar,$size);
     }
 
     public function cartItems()
