@@ -57,7 +57,7 @@ class ResetPasswordController extends Controller
             );
         }
         return null;
-        
+
     }
 
     public function reset(Request $request)
@@ -70,10 +70,10 @@ class ResetPasswordController extends Controller
         ], $this->validationErrorMessages());
 
 
-        if (DB::table('password_resets')->where('token', $request->token)->exists() 
-            && DB::table('password_resets')->where('uid', $request->uid)->exists() 
+        if (DB::table('password_resets')->where('token', $request->token)->exists()
+            && DB::table('password_resets')->where('uid', $request->uid)->exists()
             && DB::table('customers')->where('id',$request->id)->where('firebase_uid',$request->uid)->exists()) {
-            
+
 
             $customer = Customer::find($request->id);
             $customer->password = Hash::make($request->password);
@@ -82,7 +82,7 @@ class ResetPasswordController extends Controller
 
             Auth::loginUsingId(1);
 
-            return redirect('/home');
+            return redirect()->route('customer.profile');
         }
         else abort(403, 'Unauthorized action.');
     }
