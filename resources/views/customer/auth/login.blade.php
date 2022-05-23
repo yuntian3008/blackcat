@@ -50,7 +50,7 @@ style="display:none;"
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="mt-4">
-                    @error('username')
+                    @error('phone')
                     <div x-data="{ errorOpen : true }">
                         <div class="w-full text-white bg-red-500 mb-2" x-show="errorOpen">
                             <div class="container flex items-center justify-between px-6 py-4 mx-auto">
