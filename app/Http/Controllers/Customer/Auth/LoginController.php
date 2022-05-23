@@ -54,4 +54,12 @@ class LoginController extends Controller
     {
         return view('customer.auth.login');
     }
+
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => ['required', 'digits:10', 'unique:customers'],
+            'password' => 'required|string',
+        ]);
+    }
 }

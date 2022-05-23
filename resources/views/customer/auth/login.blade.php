@@ -21,7 +21,7 @@ style="display:none;"
 @section('content')
 <div class="lg:mt-20 flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl">
     <div class="hidden bg-cover lg:block lg:w-1/2" style="background-image:url('https://images.unsplash.com/photo-1513211888420-0a4531c612b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80')"></div>
-    
+
         <div class="w-full px-6 py-8 md:px-8 lg:w-1/2">
             <h2 class="text-2xl text-center text-gray-700 dark:text-white"><strong>Black</strong>Cat</h2>
 
@@ -70,10 +70,10 @@ style="display:none;"
                             </div>
                         </div>
                     </div>
-                    
+
                     @enderror
                     <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="phone"> {{  __('Phone number') }}</label>
-                    <input id="phone" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" type="text" name="phone" value="{{ old('phone') }}" required autocomplete="username" autofocus>
+                    <input id="phone" pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" type="text" name="phone" value="{{ old('phone') }}" required autocomplete="username" autofocus>
                 </div>
 
                 <div class="mt-4">
@@ -97,7 +97,7 @@ style="display:none;"
                             </div>
                         </div>
                     </div>
-                    
+
                     @enderror
                     <div class="flex justify-between">
                         <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="password">{{  __('Password') }}</label>
@@ -119,19 +119,19 @@ style="display:none;"
                         {{ __('Login') }}
                     </button>
                 </div>
-                
+
                 <div class="flex items-center justify-between mt-4">
                     <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
 
                     <a href="{{ route('register') }}" class="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline">or sign up</a>
-                    
+
                     <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
                 </div>
-            </form> 
+            </form>
         </div>
-    
+
 </div>
- 
+
 {{-- <div class="container-fluid">
     <div class="row">
         <div class="col"></div>
@@ -194,7 +194,7 @@ style="display:none;"
                             <a href=" {{ route('register') }}" class="text- text-decoration-none">{{ __('Register') }}</a>
                             @if (Route::has('password.request'))
                                 <i>or</i>  <a href="{{ route('password.request')  }}" class="text-primary text-decoration-none text-right">{{ __(' forgot Your Password?') }}</a>
-                            @endif 
+                            @endif
                         </div>
                     </div>
                     <div class="form-group row">
@@ -204,7 +204,7 @@ style="display:none;"
                     </div>
                 </form>
             </div>
-            
+
         </div>
         <div class="col"></div>
     </div>
