@@ -122,6 +122,16 @@ import 'vue-loading-overlay/dist/vue-loading.css'
         },
         methods: {
             changeQty: function (item) {
+                if (item.quantity <= 0) {
+                    app.$swal.fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'Something went wrong!',
+                    });
+                    item.quantity = 1;
+                    return;
+                }
+
                 var app = this;
                 let cart = JSON.parse(window.localStorage.getItem("cart"));
                 let obj = cart.find(o => o.product_id === item.product_id);
