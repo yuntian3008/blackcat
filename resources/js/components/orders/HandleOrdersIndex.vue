@@ -31,6 +31,15 @@
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                             </svg>
                         </a>
+                        <a href="#"
+                           class="btn btn-sm btn-danger m-1"
+                           v-on:click.prevent="cancelOrder(order.id, index)">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+
+
+                        </a>
                     </td>
                     <td @click="showDetail(order.id)">
                         <div class="btn" disabled>
@@ -81,6 +90,54 @@
                     }
                 )
             },
+            cancelOrder(id, index) {
+                var app = this;
+                app.$swal.fire({
+                    title: 'Are you sure about that?',
+                    html: "Cancel this order ? (ORDER ID: <strong>"+ id +"</strong>)",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    showClass: {
+                        popup: 'animate__animated animate__headShake',
+                        icon: 'animate__animated animate__shakeX',
+                    },
+                    confirmButtonText: 'OK!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.delete('/api/v1/orders/' + id
+                        ,{
+                            headers: app.$bearerAPITOKEN
+                        })
+                        .then(function (resp) {
+                            app.orders.splice(index, 1);
+                            app.$swal.fire({
+                                title: 'Successfully!',
+                                showConfirmButton: false,
+                                icon: 'success',
+                                timer: 1500,
+                            });
+                        })
+                        .catch(function (resp) {
+                            console.log(resp);
+                            var values =  Object.values(resp.response.data.errors);
+                                var str = '';
+                                for (const e of values) {
+                                    str += e[0] + '<br/>';
+                                }
+                                app.$swal.fire({
+                                    title: 'Error',
+                                    html: str,
+                                    icon: 'warning',
+                                    showClass: {
+                                        popup: 'animate__animated animate__headShake',
+                                        icon: 'animate__animated animate__shakeX',
+                                    },
+                                }
+                                )
+                        });
+                    }
+                })
+            },
             actionOrder(id, index) {
                 var app = this;
                 app.$swal.fire({
@@ -96,8 +153,8 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         axios.patch('/api/v1/orders/' + id,{
-                            
-                        }     
+
+                        }
                         ,{
                             headers: app.$bearerAPITOKEN
                         })

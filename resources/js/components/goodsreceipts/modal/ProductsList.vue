@@ -24,7 +24,7 @@
                     <span class="form-label inline-block mb-2 text-gray-700">Price</span>
                     <div class="grid grid-cols-2 gap-x-2">
                         <vue-numeric currency="$" separator="." v-model="search.price_from" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="from" ></vue-numeric>
-                        <vue-numeric currency="$" separator="." v-model="search.price_to" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="to"></vue-numeric>    
+                        <vue-numeric currency="$" separator="." v-model="search.price_to" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="to"></vue-numeric>
                     </div>
                 </div>
                 <div>
@@ -62,10 +62,11 @@
                       </thead>
                       <tbody>
                         <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer" v-for="product, index in resultQuery" :key="product.id" @click="choose(product.id)">
+                            <td  class="text-sm text-gray-900 font-bold px-6 py-4">{{product.id}}</td>
                             <td>
                                 <img :src="product.product_image" class="mx-auto object-cover rounded-md h-20 w-20 " :alt="product.product_name">
                             </td>
-                            <td  class="text-sm text-gray-900 font-bold px-6 py-4">{{product.id}}</td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4">{{ product.product_name }}</td>
                             <td class="text-sm text-gray-900 font-light px-6 py-4">{{ product.product_price }}</td>
                             <td class="text-sm text-gray-900 font-light px-6 py-4">{{ product.category.category_name }}</td>
                             <td class="text-sm text-gray-900 font-light px-6 py-4">{{ product.stock }}</td>
@@ -74,7 +75,7 @@
                         </tr>
                       </tbody>
                     </table>
-                    
+
                   </div>
                 </div>
               </div>
@@ -106,7 +107,7 @@ import VueNumeric from 'vue-numeric'
                 products: [],
                 categories: [],
                 category_id: '',
-                
+
             }
         },
         mounted() {

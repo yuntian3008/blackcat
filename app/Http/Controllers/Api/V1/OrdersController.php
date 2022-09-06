@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use App\TrackingGoods;
 class OrdersController extends Controller
 {
-    function __construct() 
+    function __construct()
     {
         $this->middleware('api.role:ordermanager');
     }
@@ -62,9 +62,9 @@ class OrdersController extends Controller
         //     'password' => Hash::make(1),
         // ]);
         // if ($request->admin) $request->permissions->append(['id' => 1]);
-        // //if ($request->permissions != null) 
+        // //if ($request->permissions != null)
         // $user->permissions()->sync($request->permissions);
-        
+
         // return $user;
     }
 
@@ -125,7 +125,7 @@ class OrdersController extends Controller
             //TrackingGoods::create(['order_detail_id' => $detail->id]);
         }
         $order->update(['get_date' => Carbon::now()]);
-        
+
         return $order;
     }
 
@@ -137,9 +137,14 @@ class OrdersController extends Controller
      */
     public function destroy($id)
     {
-        // $user = User::findOrFail($id);
-        // $user->permissions()->detach();
-        // $user->delete();
-        // return '';
+        Validator::make(['id' => $id], [
+            'id' => ['required','exists:orders'],
+        ])->validate();
+        $order = Order::find($id);
+        $order->update([
+            'request_date' => null,
+        ]);
+
+        return $order;
     }
 }

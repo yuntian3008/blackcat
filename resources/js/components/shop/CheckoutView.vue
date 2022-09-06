@@ -81,8 +81,7 @@
                     <div class="w-full">
                         <label for="Phone"
                             class="block mb-3 text-sm font-semibold text-gray-500">Other Number Phone (Optional)</label>
-                        <input type="text"
-                            class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="phone">
+                        <input type="text" pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base" v-model="phone">
                     </div>
                 </div>
 
