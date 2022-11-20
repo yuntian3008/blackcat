@@ -56,7 +56,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:customers'],
             'phone' => ['required', 'digits:10', 'unique:customers'],
             // 'dob' => ['required', 'date_format:Y-m-d','before:today'],
-            'password' => ['required', 'string', 'min:8', 'confirmed','regex:/[a-z]/',      // must contain at least one lowercase letter
+            'password' => ['required', 'string', 'min:8', 'confirmed','regex:/[a-z]/'],      // must contain at least one lowercase letter
             'regex:/[A-Z]/',      // must contain at least one uppercase letter
             'regex:/[0-9]/',      // must contain at least one digit
             'regex:/[@$!%*#?&]/', // must contain a special character],
