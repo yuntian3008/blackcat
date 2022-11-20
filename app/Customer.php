@@ -26,6 +26,17 @@ class Customer extends Authenticatable
     }
 
     /**
+     * Find the user instance for the given username.
+     *
+     * @param  string  $username
+     * @return \App\User
+     */
+    public function findForPassport($username)
+    {
+        return $this->where('phone', $username)->first();
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

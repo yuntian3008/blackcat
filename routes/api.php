@@ -87,6 +87,20 @@ Route::group(['middleware' => 'auth:web_api'], function() {
 });
 Route::get('customer/carts','Api\Customer\CartsController@index');
 
+Route::group(['middleware' => 'auth:app_api'], function() {
+    Route::group([
+		'prefix' => '/app/customer',
+		'namespace' => 'Api\Customer',
+		'as' => 'app_api.',
+	], function () {
+		Route::get('test','TestController@test');
+		Route::resource('orders', 'OrdersController', ['except' => ['create', 'edit']]);
+		Route::resource('carts', 'CartsController', ['except' => ['create', 'edit']]);
+		Route::resource('reviews', 'ReviewsController', ['except' => ['create', 'edit']]);
+	}
+	);
+});
+
 Route::group([
 		'prefix' => '/public',
 		'namespace' => 'Api',
